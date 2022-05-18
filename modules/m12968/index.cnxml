@@ -1,0 +1,1013 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Programming in Processing</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>f014bf3a-e35f-4abc-8ae8-1179debda87a</md:uuid>
+</metadata>
+
+  <content>
+    <section id="intro">
+      <title> Introduction </title> <note id="idm2915504">This introduction is based on
+      <link url="http://www.shiffman.net/itp/classes/ppaint/"> Daniel
+      Shiffman's tutorial </link>.</note>
+      <para id="introp">
+	<term url="http://processing.org"> Processing </term> is a
+	language and development environment oriented toward <term url="http://en.wikipedia.org/wiki/Interaction_design">
+	interaction design </term>. In the course <term document="col10268"> Media
+	Processing in Processing (MPP)</term>, processing is one of
+	the main instruments used to introduce some fundamentals in
+	sound and image processing. Processing is an extension of Java
+	that supports many Java structures with a simplified syntax.
+      </para>
+      <para id="modi">
+	Processing can be used in three
+	<list id="modil" list-type="labeled-item">
+	  <title> Programming Modes </title> 
+	  
+	  <item><label> Basic </label>  Sequence of commands for simple
+	  drawing by graphic primitives. --
+
+	    <table frame="all" id="pinocchiononose_table" summary="">
+<tgroup cols="2" align="left" colsep="1" rowsep="1"><colspec colname="col1" colnum="1" colwidth="25"/>
+		<colspec colname="col2" colnum="2" colwidth="200"/>
+		<tbody>
+		  <row>
+		    <entry>
+		      <link resource="pinocchiononose.html">applet without nose</link>
+<!--
+	    <media type="application/x-java-applet" src='pinocchiononose.class'  >
+		  <param name="height" value="256"/>
+		  <param name="width" value="256"/>
+		  <param name="ARCHIVE" value="pinocchiononose.jar"/>
+	     </media>
+-->		     
+		    </entry>
+		    <entry>
+	    <code display="block" id="idm1578656">
+	      size(256,256);
+	      background(0);
+	      stroke(255);
+	      ellipseMode(CORNER);
+	      ellipse(72,100,110,130);
+	      triangle(88,100,168,100,128,50);
+	      stroke(140);
+	      strokeWeight(4);
+	      line(96,150,112,150);
+	      line(150,150,166,150);
+	      line(120,200,136,200);
+	    </code>
+		    </entry>
+		  </row>
+		</tbody>
+	      
+</tgroup>
+</table>
+	  </item>
+
+	  <item><label> Intermediate </label>  Procedural programming  -- 
+
+	    <table frame="all" id="pinocchionose_table" summary="">
+	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
+		<colspec colname="col1" colnum="1" colwidth="25"/>
+		<colspec colname="col2" colnum="2" colwidth="200"/>
+		<tbody>
+		  <row>
+		    <entry>
+		      <link resource="pinocchionose.html">applet with nose</link>
+<!--
+	    <media type="application/x-java-applet" src='pinocchionose.class'  >
+		  <param name="height" value="256"/>
+		  <param name="width" value="256"/>
+		  <param name="ARCHIVE" value="pinocchionose.jar"/>
+	     </media>	  
+-->
+		    </entry>
+		    <entry>
+	    <code display="block" id="idp2296224">
+	    void setup() {
+	      size(256,256);
+	      background(0);
+	    }
+  
+	    void draw() {
+	      stroke(255);
+	      strokeWeight(1);
+	      ellipseMode(CORNER);
+	      ellipse(72,100,110,130);
+	      triangle(88,100,168,100,128,50);
+	      stroke(140);
+	      beginShape(TRIANGLES); 
+	      vertex(114, 180); 
+	      vertex(mouseX, mouseY); 
+	      vertex(140, 180); 
+	      endShape(); 
+	      strokeWeight(4);
+	      line(96,150,112,150);
+	      line(150,150,166,150);
+	      line(120,200,136,200);
+	    }
+	    </code>
+		    </entry>
+		  </row>
+		</tbody>
+	      </tgroup>
+	    </table>
+	  </item>
+
+	  <item><label> Complex </label>  Object-Oriented Programming (Java) --
+	    <table frame="all" id="pinocchioclassy_table" summary="">
+	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
+		<colspec colname="col1" colnum="1" colwidth="25"/>
+		<colspec colname="col2" colnum="2" colwidth="200"/>
+		<tbody>
+		  <row>
+		    <entry>
+		      <link resource="pinocchioclassy.html">applet with colored nose</link>
+<!--
+	    <media type="application/x-java-applet" src='pinocchioclassy.class'  >
+		  <param name="height" value="256"/>
+		  <param name="width" value="256"/>
+		  <param name="ARCHIVE" value="pinocchioclassy.jar"/>
+	     </media>	  
+-->
+		    </entry>
+		    <entry>
+	    <code display="block" id="idp1300192">
+	   Puppet pinocchio;
+	   
+	   void setup() {
+	     size(256,256);
+	     background(0);
+	     color tempcolor = color(255,0,0);
+	     pinocchio = new Puppet(tempcolor);
+	   }
+	   void draw() {
+	     background(0);
+	     pinocchio.draw();
+	   }
+	   class Puppet  {
+	     color colore;
+	     Puppet(color c_) {
+	      colore = c_;	  
+	     }
+	     void draw () {
+	      stroke(255);        
+	      strokeWeight(1); 
+	      ellipseMode(CORNER);
+	      ellipse(72,100,110,130); 
+	      stroke(colore);
+	      beginShape(TRIANGLES); 
+	      vertex(114, 180);
+	      vertex(mouseX, mouseY); 
+	      vertex(140, 180); 
+	      endShape(); 
+	      strokeWeight(4);
+	      line(96,150,112,150);
+	      line(150,150,166,150);
+	     }
+	   }
+	    </code>
+		    </entry>
+		  </row>
+		</tbody>
+	      </tgroup>
+	    </table>
+	  </item>
+	</list>
+      </para>
+
+
+      <para id="webexport">The Processing programs can be converted into Java applets.
+	In order to do that, one just goes to the <emphasis>File
+	</emphasis> menu and chooses <emphasis>Export</emphasis>. As a
+	result, five files will be created and put in an <code>applet</code> folder:
+	<list id="fileprodotti"><item><label>index.html</label> html code to visualize the
+	  applet</item>
+
+	  <item><label>filename.jar</label> the compiled applet,
+	  including all data (images, sounds, etc.)
+	  </item>
+
+	  <item><label>filename.pde</label> the Processing source
+	  code</item>
+	  <item><label>filename.java</label> the Java code embedding the Processing source code</item>
+	  <item><label>loading.gif</label> an image to be displayed while the applet is being loaded.</item>
+	</list>
+	Moreover, by means of <emphasis>Export Application</emphasis>
+	it is possible to generate an executable application for
+	Linux, MacOS, or Windows platforms.
+</para>
+</section>
+
+    <section id="tipi_di_dati">
+      <title>Data Types</title>
+      <section id="variabili">
+	<title>Variables</title> <para id="variabile">A variable is a
+	pointer to a memory location, and it can refer either to
+	primitive values (<code>int</code>, <code>float</code>, ecc.)
+	or to objects and arrays (tables of primitive-type
+	elements). </para> <para id="copia">The operation of
+	assignment <code>b = a</code> produces
+	  <list id="tipi_di_copia">
+	    <item> The copy of the content of <code>a</code> into
+	    <code>b</code>, if the variables refer to primitive types. </item> <item> The creation of a new reference
+	    (pointer) to the same object or array, if the variables refer to
+	    objects or arrays.</item>
+	  </list>
+</para> <!-- --> <note id="idm2475168">To have a clear understanding of computer
+	science terms such as those that follow, we recommend looking
+	at <link url="http://wikipedia.org/">Wikipedia</link></note>
+	<definition id="scope">
+	  <term>scope</term> <meaning id="idm3544848">within a program, it is a region
+	  where a variable can be accessed and its value
+	  modified</meaning>
+	</definition>
+	<definition id="globalscope">
+	  <term>global scope</term> <meaning id="idm2858416">defined outside the
+	  methods setup() and draw(), the variable is visible and
+	  usable anywhere in the program</meaning>
+	</definition>
+	<definition id="localscope">
+	  <term>local scope</term> <meaning id="idm11929792">defined within a code
+	  block or a function, the variable takes values that are
+	  local to the block or function, and any values taken by a
+	  global variable having the same name are ignored.</meaning>
+	</definition>
+	<example id="idm1118352">
+	  <title>Array declaration and allocation</title>
+	  <code display="block" id="idm3083440">int[] arrayDiInteri = new int[10];</code>
+	</example>
+       </section>
+    </section>
+
+      <section id="strutture_di_programmazione">
+	<title>Programming Structures</title>
+        <section id="istruzioni_condizionali">
+	  <title>Conditional Instructions</title>
+	<list id="tipi_di_condizionali">
+	  <item>if: 
+	    <code display="block" id="idm342512">
+	      if (i == NMAX) {
+	         println("finished");
+	         }
+	      else {
+	         i++;
+	         }
+	    </code>
+	  </item>
+	</list>
+        </section>
+	<section id="iterazioni">
+	  <title>Iterations</title>
+	  <list id="tipi_di_iterazione">
+	    <item>while: 
+	      <code display="block" id="idm10799984">
+              
+		int i = 0; //integer counter
+		while (i &lt; 10) { //write numbers between 0 and 9
+		  println("i = "+ i); 
+		  i++;
+		}
+              
+	      </code>
+	    </item>
+	    <item>for: 
+	      <code display="block" id="idp1699008">
+              
+		for (int i = 0; i &lt; 10; i++) { //write numbers between 0 and 9
+		  println("i = "+ i);
+		} 
+	      
+              </code>
+	    </item>
+	  </list>
+	</section>
+	<example id="idm1182112">
+	  <title>Initializing a table of random numbers </title>
+	  <code display="block" id="idp4144656">
+            
+	  int MAX = 10;
+	  float[] tabella = new float[MAX];
+	  for (int i = 0; i &lt; MAX; i++)
+	     tabella[i] = random(1); //random numbers between 0 and 1
+	  println(tabella.length + " elements:");
+          println(tabella);
+            
+	  </code>
+	</example>
+      </section>
+
+    <section id="funzioni">
+      <title>Functions</title>
+      <para id="scopo_di_funzioni">
+	Functions allow a modular approach to programming. In
+	Processing, in the <emphasis>intermediate</emphasis>
+	programming mode, we can define functions other than
+	<code>setup()</code> and <code>draw()</code>, usable from
+	within <code>setup()</code> and <code>draw()</code>.
+      </para>
+      <example id="esempio_di_funzione">
+	<title>Example of function</title>
+	<code display="block" id="idp6456048">
+                 
+	  int raddoppia(int i) {
+	     return 2*i;
+	  }
+          
+	</code>
+      </example>
+      <para id="funzione_esemplificata">
+	A function is characterized by the entities (with reference to
+	the <link target-id="esempio_di_funzione">example</link>) :
+	<list id="entita_di_funzione"><item>return type (<code>int</code>)</item>
+	  <item>name (<code>raddoppia</code>)</item>
+	  <item>parameters (<code>i</code>)</item>
+	  <item>body (<code>return 2*i</code>)</item>
+	</list>
+      </para>
+   </section>
+
+    <section id="classi">
+      <title>Objects and Classes</title> 
+      <para id="definizioni_classi_oggetti">
+	A class is defined by a set of data and functions. An object
+	is an instance of a class. Vice versa, a class is the abstract
+	description of a set of objects.
+      </para>
+      <note id="idp3178080">For an introduction to the concepts of object and class see <link document="m11708">Objects and Classes</link>.</note>
+      <example id="esempio_di_classe">
+	<title>Example of class</title>
+	<code display="block" id="idp5314544">
+                 
+Dot myDot;
+void setup() {
+  size(300,20);
+  colorMode(RGB,255,255,255,100);
+  color tempcolor = color(255,0,0);
+  myDot = new Dot(tempcolor,0);
+}
+
+void draw() {
+  background(0);
+  myDot.draw(10);
+}
+
+class Dot
+{
+
+  color colore;
+  int posizione;
+
+  //****CONSTRUCTOR*****//
+  Dot(color c_, int xp) {
+    colore = c_;
+    posizione = xp;
+  }
+
+  void draw (int ypos) 	  {
+    rectMode(CENTER);
+    fill(colore);
+    rect(posizione,ypos,20,10);
+  }
+}
+          
+	</code>
+      </example>
+      <para id="classe_esemplificata">
+	A class is characterized by the following entities (with reference to the <link target-id="esempio_di_classe">example</link>) :
+	<list id="entita_di_classe">
+	  <item>name (<code>Dot</code>)</item>
+	  <item>data (<code>colore, posizione</code>)</item>
+	  <item>constructor (<code>Dot()</code>)</item>
+	  <item>functions (or methods, <code>draw()</code>)</item>
+	</list>
+      </para>
+      <para id="oggetto_esemplificato">
+	An object (instance of a class) is declared in the same way as
+	we declare a variable, but we have to allocate a space for it
+	(as we did for the arrays) by means of its constructor (with
+	reference to the <link target-id="esempio_di_classe">example</link>).
+	<list id="istanza_di_classe">
+	  <item>Declaration: (<code>Dot myDot;</code>)</item>
+	  <item>Allocation: (<code>myDot = new Dot(tempcolor,0)</code>)</item>
+	  <item>Use: (<code>myDot.draw(10);</code>)</item>
+	</list>
+      </para>
+      <note id="idp1611952">For a quick introduction to the Java syntax see  <link document="m11791">Java Syntax Primer</link></note>
+    </section>
+
+      <exercise id="mousegray">
+	<problem id="idp5468256">
+	<para id="mousegrayp"> With the following <code>draw()</code>
+	method we want to paint the window background with a gray
+	whose intensity depends on the horizontal position of the
+	mouse pointer.
+	  <code display="block" id="idp2957840">
+	  void draw() {
+	      background((mouseX/100)*255);
+	    }
+	  </code>
+	However, the code does not do what it is expected to do. Why?
+	  </para>
+	</problem>
+	<solution id="idp7407872">
+	<para id="mousegraysp">The variable <code>mouseX</code> is of
+	<code>int</code> type, and the division it is subject to is of
+	the integer type. It is necessary to perform a <term url="http://en.wikipedia.org/wiki/Cast_%28computer_science%29">type
+	casting</term> from <code>int</code> to <code>float</code> by means of the instruction
+	<code>(float)mouseX</code>. </para>
+	</solution>
+      </exercise>
+      <exercise id="pointers">
+	<problem id="idp7829248">
+	<para id="pointersp"> What does the following code fragment print out?
+	  <code display="block" id="idm13456">
+	    int[] a = new int[10];
+	    a[7] = 7;
+	    int[] b = a;
+	    println(b[7]);
+	    b[7] = 8;
+	    println(a[7]);
+	    int c = 7;
+	    int d = c;
+	    println(d);
+	    d = 8;
+	    println(c);
+	  </code>
+	  </para>
+	</problem>
+	<solution id="idm482384">
+	<para id="pointerss"><code display="block" id="idp9042832">
+7
+8
+7
+7
+</code></para>
+	</solution>
+      </exercise>
+
+     <exercise id="centoCerchi"> 
+	<problem id="idp78352">
+	  <para id="intersezionip"> The following sketch generates a
+	  set of 100 moving circles and draws all chords linking the
+	  intersection points of all couples of intersecting circles.
+    <code display="block" id="idp1772720">  
+/* 
+   
+   Structure 3 
+   
+   A surface filled with one hundred medium to small sized circles. 
+   Each circle has a different size and direction, but moves at the same slow rate. 
+   Display: 
+   A. The instantaneous intersections of the circles 
+   B. The aggregate intersections of the circles 
+ 
+   Implemented by Casey Reas &lt;http://groupc.net&gt; 
+   8 March 2004 
+   Processing v.68 &lt;http://processing.org&gt; 
+   
+   modified by Pietro Polotti
+   28 March, 2006
+   Processing v.107 &lt;http://processing.org&gt;  
+ 
+ 
+*/ 
+ 
+int numCircle = 100; 
+Circle[] circles = new Circle[numCircle]; 
+ 
+void setup() 
+{ 
+  size(800, 600); 
+  frameRate(50); 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i] = new Circle(random(width), 
+	      (float)height/(float)numCircle * i, 
+	      int(random(2, 6))*10, random(-0.25, 0.25), 
+	      random(-0.25, 0.25), i); 
+  } 
+  ellipseMode(CENTER_RADIUS); 
+  background(255); 
+} 
+ 
+ 
+void draw() 
+{ 
+  background(255); 
+  stroke(0); 
+  
+ 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].update(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].move(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].makepoint(); 
+  } 
+  noFill(); 
+} 
+ 
+ 
+class Circle 
+{ 
+  float x, y, r, r2, sp, ysp; 
+  int id; 
+ 
+  Circle( float px, float py, float pr, float psp, float pysp, int pid ) { 
+    x = px; 
+    y = py; 
+    r = pr; 
+    r2 = r*r; 
+    id = pid; 
+    sp = psp; 
+    ysp = pysp; 
+  } 
+  
+  void update() { 
+    for(int i=0; i&lt;numCircle; i++) { 
+      if(i != id) { 
+        intersect( this, circles[i] ); 
+      } 
+    } 
+  } 
+  
+  void makepoint() { 
+     stroke(0); 
+     point(x, y); 
+  } 
+  
+  void move() { 
+    x += sp; 
+    y += ysp; 
+    if(sp &gt; 0) { 
+      if(x &gt; width+r) { 
+        x = -r; 
+      }   
+    } else { 
+      if(x &lt; -r) { 
+        x = width+r; 
+      } 
+    } 
+    if(ysp &gt; 0) { 
+      if(y &gt; height+r) { 
+        y = -r; 
+      } 
+    } else { 
+      if(y &lt; -r) { 
+        y = height+r; 
+      } 
+    } 
+  } 
+} 
+ 
+void intersect( Circle cA, Circle cB ) 
+{ 
+  float dx = cA.x - cB.x; 
+  float dy = cA.y - cB.y; 
+  float d2 = dx*dx + dy*dy; 
+  float d = sqrt( d2 ); 
+ 
+  if ( d&gt;cA.r+cB.r || d&lt;abs(cA.r-cB.r) ) { 
+    return; // no solution 
+  } 
+  
+  //  calculate the two intersections between the two circles cA and cB, //
+  //  whose coordinates are (paX, paY) and (pbX, pbY), respectively.     //
+ 
+  stroke(255-dist(paX, paY, pbX, pbY)*4); 
+  line(paX, paY, pbX, pbY); 
+}
+ 
+      
+	      
+	    </code>
+
+
+	    <list id="intersezioniList" list-type="enumerated">
+	      <item> Complete the missing part that is expected to
+		compute the intersections of the circles, in such a
+		way to draw the chords linking the intersection
+		points. It is possible to use the computation of
+		intersection coordinates in a ad-hoc reference system
+		(<term url="http://mathworld.wolfram.com/Circle-CircleIntersection.html">
+		“Circle-Circle Intersection”</term>), then converting
+		the result into the Processing window coordinate
+		system.  </item>
+	      
+	      <item id="intersezioniItem"> Make the chords
+	      time-variable by giving different speeds to different
+	      circles. </item>
+	    </list>
+	    
+	  </para>
+	</problem>
+	<solution id="idp6298688">
+
+	  <para id="intersezioniSolp">
+
+	    <code display="block" id="idp2971904">       
+/* 
+   
+   Structure 3 
+   
+   A surface filled with one hundred medium to small sized circles. 
+   Each circle has a different size and direction, but moves at the same slow rate. 
+   Display: 
+   A. The instantaneous intersections of the circles 
+   B. The aggregate intersections of the circles 
+ 
+   Implemented by Casey Reas &lt;http://groupc.net&gt; 
+   8 March 2004 
+   Processing v.68 &lt;http://processing.org&gt; 
+   
+   modified by Pietro Polotti
+   28 March, 2006
+   Processing v.107 &lt;http://processing.org&gt;  
+ 
+ 
+*/ 
+ 
+int numCircle = 100; 
+Circle[] circles = new Circle[numCircle]; 
+ 
+void setup() 
+{ 
+  size(800, 600); 
+  frameRate(50); 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i] = new Circle(random(width), 
+	      (float)height/(float)numCircle * i, 
+	      int(random(2, 6))*10, random(-0.25, 0.25), 
+	      random(-0.25, 0.25), i); 
+  } 
+  ellipseMode(CENTER_RADIUS); 
+  background(255); 
+} 
+ 
+ 
+void draw() 
+{ 
+  background(255); 
+  stroke(0); 
+  
+ 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].update(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].move(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].makepoint(); 
+  } 
+  noFill(); 
+} 
+ 
+ 
+class Circle 
+{ 
+  float x, y, r, r2, sp, ysp; 
+  int id; 
+ 
+  Circle( float px, float py, float pr, float psp, float pysp, int pid ) { 
+    x = px; 
+    y = py; 
+    r = pr; 
+    r2 = r*r; 
+    id = pid; 
+    sp = psp; 
+    ysp = pysp; 
+  } 
+  
+  void update() { 
+    for(int i=0; i&lt;numCircle; i++) { 
+      if(i != id) { 
+        intersect( this, circles[i] ); 
+      } 
+    } 
+  } 
+  
+  void makepoint() { 
+     stroke(0); 
+     point(x, y); 
+  } 
+  
+  void move() { 
+    x += sp; 
+    y += ysp; 
+    if(sp &gt; 0) { 
+      if(x &gt; width+r) { 
+        x = -r; 
+      }   
+    } else { 
+      if(x &lt; -r) { 
+        x = width+r; 
+      } 
+    } 
+    if(ysp &gt; 0) { 
+      if(y &gt; height+r) { 
+        y = -r; 
+      } 
+    } else { 
+      if(y &lt; -r) { 
+        y = height+r; 
+      } 
+    } 
+  } 
+} 
+ 
+void intersect( Circle cA, Circle cB ) 
+{ 
+  float dx = cA.x - cB.x; 
+  float dy = cA.y - cB.y; 
+  float d2 = dx*dx + dy*dy; 
+  float d = sqrt( d2 ); 
+ 
+  if ( d&gt;cA.r+cB.r || d&lt;abs(cA.r-cB.r) ) { 
+    return; // no solution 
+  } 
+  
+  float a = (cA.r2 - cB.r2 + d2) / (2*d); 
+  float h = sqrt( cA.r2 - a*a ); 
+  float x2 = cA.x + a*(cB.x - cA.x)/d; 
+  float y2 = cA.y + a*(cB.y - cA.y)/d; 
+ 
+  float paX = x2 + h*(cB.y - cA.y)/d; 
+  float paY = y2 - h*(cB.x - cA.x)/d; 
+  float pbX = x2 - h*(cB.y - cA.y)/d; 
+  float pbY = y2 + h*(cB.x - cA.x)/d; 
+ 
+  stroke(255-dist(paX, paY, pbX, pbY)*4); 
+  line(paX, paY, pbX, pbY); 
+}
+	      
+	    </code>
+	  </para>
+	</solution>
+      </exercise>
+      <exercise id="centoCordeInt">
+	<problem id="idm318912">
+	  <para id="intersezionip2"> Make the sketch of <link target-id="centoCerchi"/> interactive. For example, make
+	  the circle displacement dependent on the horizontal position
+	  of the mouse.
+      </para>
+      </problem>
+	
+	<solution id="idm929232">
+	  <para id="intersezioniSolp2">
+	    
+	    <code display="block" id="idm297536">  
+     /* 
+   
+   Structure 3 
+   
+   A surface filled with one hundred medium to small sized circles. 
+   Each circle has a different size and direction, but moves at the same slow rate. 
+   Display: 
+   A. The instantaneous intersections of the circles 
+   B. The aggregate intersections of the circles 
+ 
+   Implemented by Casey Reas &lt;http://groupc.net&gt; 
+   8 March 2004 
+   Processing v.68 &lt;http://processing.org&gt; 
+   
+   modified by Pietro Polotti
+   28 March, 2006
+   Processing v.107 &lt;http://processing.org&gt;  
+ 
+ 
+*/ 
+ 
+int numCircle = 100; 
+Circle[] circles = new Circle[numCircle]; 
+ 
+void setup() 
+{ 
+  size(800, 600); 
+  frameRate(50); 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i] = new Circle(random(width), 
+	      (float)height/(float)numCircle * i, 
+	      int(random(2, 6))*10, random(-0.25, 0.25), 
+	      random(-0.25, 0.25), i); 
+  } 
+  ellipseMode(CENTER_RADIUS); 
+  background(255); 
+} 
+ 
+ 
+void draw() 
+{ 
+  background(255); 
+  stroke(0); 
+  
+  if(mousePressed){
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].sp = mouseX*random(-5, 5)/width;
+    
+  } 
+  }
+  
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].update(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].move(); 
+  } 
+  for(int i=0; i&lt;numCircle; i++) { 
+    circles[i].makepoint(); 
+  } 
+  noFill(); 
+} 
+ 
+ 
+class Circle 
+{ 
+  float x, y, r, r2, sp, ysp; 
+  int id; 
+ 
+  Circle( float px, float py, float pr, float psp, float pysp, int pid ) { 
+    x = px; 
+    y = py; 
+    r = pr; 
+    r2 = r*r; 
+    id = pid; 
+    sp = psp; 
+    ysp = pysp; 
+  } 
+  
+  void update() { 
+    for(int i=0; i&lt;numCircle; i++) { 
+      if(i != id) { 
+        intersect( this, circles[i] ); 
+      } 
+    } 
+  } 
+  
+  void makepoint() { 
+     stroke(0); 
+     point(x, y); 
+  } 
+  
+  void move() { 
+    x += sp; 
+    y += ysp; 
+    if(sp &gt; 0) { 
+      if(x &gt; width+r) { 
+        x = -r; 
+      }   
+    } else { 
+      if(x &lt; -r) { 
+        x = width+r; 
+      } 
+    } 
+    if(ysp &gt; 0) { 
+      if(y &gt; height+r) { 
+        y = -r; 
+      } 
+    } else { 
+      if(y &lt; -r) { 
+        y = height+r; 
+      } 
+    } 
+  } 
+} 
+ 
+void intersect( Circle cA, Circle cB ) 
+{ 
+  float dx = cA.x - cB.x; 
+  float dy = cA.y - cB.y; 
+  float d2 = dx*dx + dy*dy; 
+  float d = sqrt( d2 ); 
+ 
+  if ( d&gt;cA.r+cB.r || d&lt;abs(cA.r-cB.r) ) { 
+    return; // no solution 
+  } 
+  
+  float a = (cA.r2 - cB.r2 + d2) / (2*d); 
+  float h = sqrt( cA.r2 - a*a ); 
+  float x2 = cA.x + a*(cB.x - cA.x)/d; 
+  float y2 = cA.y + a*(cB.y - cA.y)/d; 
+ 
+  float paX = x2 + h*(cB.y - cA.y)/d; 
+  float paY = y2 - h*(cB.x - cA.x)/d; 
+  float pbX = x2 - h*(cB.y - cA.y)/d; 
+  float pbY = y2 + h*(cB.x - cA.x)/d; 
+ 
+  stroke(255-dist(paX, paY, pbX, pbY)*4); 
+  line(paX, paY, pbX, pbY); 
+}
+	      
+	    </code>
+	  </para>
+	</solution>
+	
+	
+      </exercise>
+
+
+<!-- cut out
+<section id='esempi_vari'>
+      <name>Esempi vari di cnx</name>
+      <para id="citationp">
+	And now I can cite some references translated to
+	<term>bibtexml </term> using the <term>bibtex2ml.py </term>
+	translator found in the <term
+	src='http://bibtexml.sourceforge.net'> bibtexml </term>
+	project. Some manual adjustment is needed (replacing the
+	prefix, closing the tag fields, <emphasis>reordering the fields</emphasis>, etc.). An excellent HCI <cite
+	src='#AccotZhai99'> article </cite>.
+      </para>
+
+
+    <section>
+      <name> Esempio di Matematica </name>
+      <equation id='esempiodiequazione'> 
+<m:math>
+ <m:apply>
+  <m:int/>
+  <m:bvar>
+   <m:ci>x</m:ci>
+  </m:bvar>
+  <m:apply>
+   <m:power/>
+   <m:apply>
+    <m:plus/>
+    <m:ci>a</m:ci>
+    <m:apply>
+     <m:times/>
+     <m:ci>b</m:ci>
+     <m:apply>
+      <m:cosh/>
+      <m:apply>
+       <m:times/>
+       <m:ci>c</m:ci>
+       <m:apply>
+        <m:power/>
+        <m:ci>x</m:ci>
+        <m:cn type='integer'>3</m:cn>
+       </m:apply>
+      </m:apply>
+     </m:apply>
+    </m:apply>
+   </m:apply>
+   <m:cn type='rational'>1<m:sep/>2</m:cn>
+  </m:apply>
+ </m:apply>
+</m:math>
+      </equation>
+    </section>
+
+   <section>
+      <name> Esempio di tabella </name>
+<table id='tabella' frame="all">
+	<name> Table </name>
+  <tgroup cols="3" align="left" colsep="1" rowsep="1">
+    <thead valign="top">
+      <row>
+        <entry>
+	  O
+        </entry>
+        <entry>
+	  quante
+        </entry>
+        <entry>
+	  belle
+        </entry>
+      </row>
+    </thead>
+    <tbody valign="top">
+      <row>
+        <entry>
+	  figlie
+        </entry>
+        <entry>
+	  madama
+        </entry>
+        <entry>
+	  dor&#233;
+        </entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+    </section>
+
+    </section>
+</content>
+
+  <bib:file>
+<bib:entry id="AccotZhai99">
+<bib:inproceedings>
+<bib:author>J. Accot and S. Zhai</bib:author>
+<bib:title>Performance Evaluation of Input Devices in Trajectory-based Tasks: An Application of Steering Law</bib:title>
+<bib:booktitle>CHI</bib:booktitle>
+<bib:year> 1999 </bib:year>
+<bib:pages>466-472</bib:pages>
+<bib:address>Pittsburgh, PA</bib:address>
+</bib:inproceedings>
+</bib:entry>
+  </bib:file>
+ -->
+  </content>
+</document>

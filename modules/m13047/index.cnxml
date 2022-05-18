@@ -1,0 +1,1089 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Signal Processing in Processing: Elementary Filters</title>
+  <metadata>
+  <md:content-id>m13047</md:content-id><md:title>Signal Processing in Processing: Elementary Filters</md:title>
+  <md:abstract>The fundamental filters for 1D and 2D signals are introduced and examples are given in Processing.</md:abstract>
+  <md:uuid>59297a15-3910-4dbf-a751-1bf54ae3efab</md:uuid>
+</metadata>
+  <content>
+    <section id="id1171967263010">
+      <title>FIR filters</title> <para id="firp">The <term>Finite
+      Impulse Response</term> (FIR) filters are all those filters
+      characterised by an impulse response with a finite number of
+      samples. They are realized by the operation of <link document="m12809" target-id="convolution"> convolution</link>. For
+      each sample of the convolution product a weighted sum of a
+      finite number of input samples is computed.</para>
+      <section id="id1171966043845">
+	<title>Averaging filter</title> <para id="averagingp">The
+	simplest non trivial FIR filter is the filter that computes
+	the running average of two contiguous samples, and the corresponding
+	convolution can be expressed as <equation id="convmedia">
+<m:math type="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:mn>0.5</m:mn>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:mn>0.5</m:mn>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:mn>1</m:mn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> </equation>. The impulse response has values
+ <m:math> <m:ci>0.5</m:ci> </m:math> at instants <m:math>
+ <m:ci>0</m:ci> </m:math> and <m:math> <m:ci>1</m:ci> </m:math>, and
+ zero anywhere else.
+	</para>
+	<para id="averagingfrp">
+	 If we put a sinusoidal signal into the filter, the output
+      will still be a sinusoidal signal scaled in amplitude and
+      delayed in phase according to the <link document="m12809" target-id="freqrespp"> frequency response </link>, which is 
+	  <equation id="freqrespmedia">
+	  <m:math type="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+	      <m:apply>
+		<m:cos/>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>ω</m:ci>
+		  <m:mn>2</m:mn>
+		</m:apply>
+	      </m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>ω</m:ci>
+			<m:mn>2</m:mn>
+		      </m:apply>		      
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> </equation> and its magnitude and phase are
+	  represented in <link target-id="averagingresponse"/>.  </para>
+	<figure id="averagingresponse">
+	  <title>Magnitude and phase response for the averaging filter</title>
+	   <media id="id1171966057322" alt=""><image src="../../media/fir1.png" mime-type="image/png"/></media> </figure> <para id="averagingdiscp">The one just
+	presented is a first-order (or lenght
+	<m:math><m:ci>2</m:ci></m:math>) filter, because it uses only
+	one sample of the past sequence of input. From <link target-id="averagingresponse"/> we see that the frequency
+	response is of the <term>low-pass</term> kind, because the
+	high frequencies are attenuated as compared to the low
+	frequencies. Attenuating high frequencies means smoothing the
+	rapid signal variations. If one wants a steeper frequency
+	response from an FIR filter, the order must be increased or,
+	in other words, more samples of the input signal have to be
+	processed by the convolution operator to give one sample of
+	output.</para>
+      </section>
+      <section id="id1171966057357">
+	<title>Symmetric second-order FIR filter</title> <para id="fir2p"> A symmetric second-order FIR filter has an impulse
+	response whose form is <m:math>
+	    <m:list>
+	      <m:ci><m:msub>
+		  <m:mi>a</m:mi>
+		  <m:mn>0</m:mn>
+		</m:msub>
+	      </m:ci>
+	      <m:ci><m:msub>
+		  <m:mi>a</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub>
+	      </m:ci>
+	      <m:ci><m:msub>
+		  <m:mi>a</m:mi>
+		  <m:mn>0</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:list>
+	  </m:math>, and the frequency response turns out to be
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:mn>2</m:mn>
+		    <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mn>0</m:mn>
+		      </m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:cos/>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+			<m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>. 
+Convolution can be expressed as <equation id="convfir2">
+<m:math type="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		    <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>0</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		    <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:mn>1</m:mn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		    <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>0</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:mn>2</m:mn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> </equation>
+	  In the special case where <m:math>
+	    <m:apply>
+	      <m:eq/>		    
+	      <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mn>0</m:mn>
+		      </m:msub>
+		    </m:ci>
+	      <m:mn>0.17654</m:mn>
+	    </m:apply>
+	  </m:math> and <m:math>
+	    <m:apply>
+	      <m:eq/>		    
+	      <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub>
+		    </m:ci>
+	      <m:mn>0.64693</m:mn>
+	    </m:apply>
+	  </m:math> the frequency response (magnitude and phase) is represented in 
+	  <link target-id="fir2response"/>.
+	</para>  
+	<figure id="fir2response"> 
+	  <title>Magnitude and phase response of a second-order FIR filter
+	  </title>
+	   <media id="id1171966056422" alt=""><image src="../../media/fir2.png" mime-type="image/png"/></media> 
+	</figure> 
+      </section>
+      <section id="hp12">
+	<title>High-pass filters</title> <para id="hipassp">Given the
+	 simple low-pass filters that we have just seen, it is
+	 sufficient to change sign to a coefficient to obtain a
+	 <term>high-pass</term> kind of response, i.e. to emphasize
+	 high frequencies as compared to low frequencies. For example,
+	 the <link target-id="resp12hp"/> displays the magnitude of the
+	 frequency responses of high-pass FIR filters of the first and
+	 second order, whose impulse responses are, respectively
+<m:math>
+	    <m:list>
+	      <m:mn>0.5</m:mn>
+	      <m:apply>
+		<m:minus/>
+		<m:mn>0.5</m:mn>
+	      </m:apply>
+	    </m:list>
+	  </m:math> and
+<m:math>
+	    <m:list>
+	      <m:mn>0.17654</m:mn>
+	      <m:apply>
+		<m:minus/>
+		<m:mn>0.64693</m:mn>
+	      </m:apply>
+	      <m:mn>0.17654</m:mn>
+	    </m:list>
+	  </m:math>.
+ 	<figure id="resp12hp" orient="horizontal">
+	  <title>Frequency response (magnitude) of first- (left) and
+	  second- (right) order high-pass FIR filter.</title>
+	    <subfigure id="id1171966056520">
+	      <media id="id1171966056523" alt=""><image src="../../media/fir1hp2.png" mime-type="image/png"/></media>  
+	    </subfigure>  
+	    <subfigure id="id1171966056533">
+	  <media id="id1171966056536" alt=""><image src="../../media/fir2hp2.png" mime-type="image/png"/></media> 
+	    </subfigure>  
+	</figure> 
+	</para>	 
+
+	<para id="hipasstransp">
+	  To emphasize high frequencies means to make rapid variations
+	  of signal more evident, being those variations time
+	  transients in the case of sounds, or contours in the case of
+	  images.
+	</para>
+      </section>
+      <section id="id1171966056558">
+	<title>FIR filters in 2D</title>
+	<para id="fir2dp">
+	  In 2D, the impulse response of an FIR filter is a
+	  convolution mask with a finite number of elements, i.e. a
+	  matrix. In particular, the <term>averaging filter </term>
+	  can be represented, for example, by the convolution matrix
+	  <m:math type="block" id="maskmean">
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:mn>1</m:mn>
+		<m:mn>9</m:mn>
+	      </m:apply>
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	    </m:apply>
+	</m:math>.
+	</para>
+
+	<example id="noise_cleaning">
+	  <title>Noise cleaning</title>
+	  <para id="noisecleaningp">
+	    The low-pass filters (and, in particular, the smoothing
+	    filters) perform some sort of <term>smoothing</term> of
+	    the input signal, in the sense that the resulting signal
+	    has a smoother design, where abrupt discontinuities are
+	    less evident. This can serve the purpose of reducing the
+	    perceptual effect of noises added to audio signals or
+	    images. For example, the code <link target-id="noise_cleaning_code"> reported below </link> loads
+	    an image, it corrupts with white noise, and then it
+	    filters half of it with an averaging filter, thus
+	    obtaining <link target-id="smoothingf"/>. </para>
+
+	<figure id="smoothingf">
+	  <title>Smoothing</title>
+	  <media id="id1171967268538" alt=""><image src="../../media/vetroRottoSporco.gif" mime-type="image/gif"/></media> 
+	</figure> 
+
+	<para id="noise_cleaning_code">
+<!--	<table id="glass_table" frame="all">
+	<tgroup cols="1" align="left" colsep="0" rowsep="0">
+	<colspec colname="col1" colnum="1" colwidth="400"/> -->
+	<!-- <colspec colname="col2" colnum="2" colwidth="400"/> -->
+<!--	<tbody>
+	<row> -->
+<!--	<entry> 
+	  <media type="image/gif" src="vetroRottoSporco.gif">
+		      </media> 
+	</entry> -->
+<!--	<entry> -->
+	<code id="id1171967268570" display="block">// smoothed_glass
+// smoothing filter, adapted from REAS:
+// http://processing.org/learning/topics/blur.html
+
+size(210, 170); 
+PImage a;  // Declare variable "a" of type PImage 
+a = loadImage("vetro.jpg"); // Load the images into the program 
+image(a, 0, 0); // Displays the image from point (0,0) 
+ 
+// corrupt the central strip of the image with random noise 
+float noiseAmp = 0.2;
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=width/4; j&lt;width*3/4; j++) { 
+    int rdm = constrain((int)(noiseAmp*random(-255, 255) + 
+	      red(pixels[i*width + j])), 0, 255); 
+    pixels[i*width + j] = color(rdm, rdm, rdm);
+  } 
+} 
+updatePixels(); 
+  
+int n2 = 3/2; 
+int m2 = 3/2; 
+float  val = 1.0/9.0;
+int[][] output = new int[width][height]; 
+float[][] kernel = { {val, val, val}, 
+                     {val, val, val}, 
+                     {val, val, val} }; 
+  
+// Convolve the image 
+for(int y=0; y&lt;height; y++) { 
+  for(int x=0; x&lt;width/2; x++) { 
+    float sum = 0; 
+    for(int k=-n2; k&lt;=n2; k++) { 
+      for(int j=-m2; j&lt;=m2; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        if (xp &lt; 0) { 
+          xp = xp + width; 
+        } else if (x-j &gt;= width) { 
+          xp = xp - width; 
+        } 
+        // Reflect y-k to not exceed array boundary 
+        if (yp &lt; 0) { 
+          yp = yp + height; 
+        } else if (yp &gt;= height) { 
+          yp = yp - height; 
+        } 
+        sum = sum + kernel[j+m2][k+n2] * red(get(xp, yp)); 
+      } 
+    } 
+    output[x][y] = int(sum);  
+  } 
+} 
+ 
+// Display the result of the convolution 
+// by copying new data into the pixel buffer 
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=0; j&lt;width/2; j++) { 
+    pixels[i*width + j] = 
+	      color(output[j][i], output[j][i], output[j][i]);
+  } 
+} 
+updatePixels(); 
+         
+	</code>
+<!--    </entry>
+      </row>
+      </tbody>
+      </tgroup>
+      </table> -->
+</para>
+	</example>
+	<para id="gaussianfilterp">For the purpose of smoothing, it is common to create a
+	convolution mask by reading the values of a Gaussian bell in
+	two variables. A property of gaussian functions is that their Fourier transform is itself gaussian. Therefore, impulse response and frequency response have the same shape. However, the transform of a thin bell is a large bell, and vice versa. The larger the bell, the more evident the
+	smoothing effect will be, with consequential loss of
+	details. In visual terms, a gaussian filter produces an effect similar to that of an opalescent glass superimposed over the image. An example of Gaussian bell is
+	  	  <m:math type="block" id="maskgauss">
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:mn>1</m:mn>
+		<m:mn>273</m:mn>
+	      </m:apply>
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>4</m:mn>
+		  <m:mn>7</m:mn>
+		  <m:mn>4</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>4</m:mn>
+		  <m:mn>16</m:mn>
+		  <m:mn>26</m:mn>
+		  <m:mn>16</m:mn>
+		  <m:mn>4</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>7</m:mn>
+		  <m:mn>26</m:mn>
+		  <m:mn>41</m:mn>
+		  <m:mn>26</m:mn>
+		  <m:mn>7</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>4</m:mn>
+		  <m:mn>16</m:mn>
+		  <m:mn>26</m:mn>
+		  <m:mn>16</m:mn>
+		  <m:mn>4</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>4</m:mn>
+		  <m:mn>7</m:mn>
+		  <m:mn>4</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	    </m:apply>
+	</m:math>.
+	</para>
+	<para id="crispp">
+	  Conversely, if the purpose is to make the contours and
+	  salient tracts of an image more evident (<term>edge
+	  crispening</term> or sharpening), we have to perform a
+	  high-pass filtering. Similarly to what we saw in <link target-id="hp12"/> this can be done with a convolution matrix
+	  whose central value has opposite sign as compared to
+	  surrounding values. For instance, the convolution matrix
+<m:math type="block">
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>-1</m:mn>
+		  <m:mn>9</m:mn>
+		  <m:mn>-1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-1</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	</m:math>
+	  produces the effect of <link target-id="crispenf"/>.
+	</para> 
+	<figure id="crispenf">
+	  <title>Edge crispening</title>
+	    <media id="id1171967268818" alt=""><image src="../../media/vetroSharpened.gif" mime-type="image/gif"/></media> 
+	</figure>
+	<section id="id1171967268828">
+	  <title>Non-linear filtering: median filter</title>
+	  <para id="medianfilterp">
+	    A filter whose convolution mask is signal-dependent looses
+	    its characteristics of linearity. Median filters use the
+	    mask to select a set of pixels of the input images, and
+	    replace the central pixel of the mask with the median
+	    value of the selected set. Given a set of <m:math>
+	    <m:mn>N</m:mn> </m:math> (odd) numbers, the median element
+	    of the set is the one that separates <m:math>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:minus/>
+		  <m:mi>N</m:mi>
+		  <m:ci>1</m:ci>
+		</m:apply>
+		<m:ci>2</m:ci>
+	      </m:apply>
+	    </m:math> smaller elements from  <m:math>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:minus/>
+		  <m:mi>N</m:mi>
+		  <m:ci>1</m:ci>
+		</m:apply>
+		<m:ci>2</m:ci>
+	      </m:apply>
+	    </m:math> larger elements. A typical median filter mask is
+	    cross-shaped. For example, a <m:math>
+	      <m:apply>
+		<m:vectorproduct/>
+		<m:mn>3</m:mn>
+		<m:mn>3</m:mn>
+	      </m:apply>
+	    </m:math> mask can cover, when applied to a certain image
+	    point, the pixels with values
+	  <m:math type="block" id="maskcross">
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:ci>x</m:ci>
+		  <m:mn>4</m:mn>
+		  <m:mn>x</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>7</m:mn>
+		  <m:mn>99</m:mn>
+		  <m:mn>12</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>x</m:mn>
+		  <m:mn>9</m:mn>
+		  <m:mn>x</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	    </m:math>, thus replacing the value <m:math>
+	      <m:mn>99</m:mn> </m:math> with the mean value <m:math>
+	      <m:mn>9</m:mn> </m:math>.
+	  </para>
+	</section>
+      </section>
+      <exercise id="audiofiltering">
+	<problem id="id1171967268989">
+	  <para id="audiofilteringpp">Rewrite the filtering operation
+	  <code>filtra()</code> of the <link document="m12983" target-id="sound_chooser">Sound Chooser</link> presented in the
+	  module <link document="m12983">Media Representation in
+	  Processing</link> in such a way that it implements the FIR
+	  filter whose frequency response is represented in <link target-id="fir2response"/>. What happens if the filter is
+	  applied more than once?</para>
+	</problem>
+	<solution id="id1171967269037">
+	  <para id="audiofilteringsp">
+
+<code id="id1171967269050" display="block">
+          
+ //filtra = new function
+void filtra(float[] DATAF, float[] DATA, float a0, float a1) {
+
+  for(int i = 3; i &lt; DATA.length; i++){
+    DATAF[i] = a0*DATA[i]+a1*DATA[i-1]+a0*DATA[i-2];//Symmetric FIR filter of the second order
+  }
+}
+ 
+ 	      
+	    </code>
+          </para>
+<para id="audiofilteringsp2">
+	    By writing a <code>for</code> loop that repeats the
+	      filtering operation a certain number of times, one can
+	      verify that the effect of filtering is emphasized. This
+	      intuitive result is due to the fact that, as far as the
+	      signal is concerned, going through <m:math>
+	      <m:ci>m</m:ci>
+	    </m:math>
+	    filters of order <m:math>
+	      <m:ci>N</m:ci>
+	    </m:math>
+	    (in our case <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>N</m:ci>
+		<m:mn>2</m:mn>
+	      </m:apply>
+	    </m:math>
+) is equivalent to going through a single filter of order <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:ci>m</m:ci>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:math>
+</para>  
+	</solution>
+
+
+      </exercise>
+      <exercise id="imagefiltering">
+	<problem id="id1171967269135">
+	  <para id="imagefilteringpp">Considered the Processing code
+	  of the <link url="http://processing.org/learning/topics/blur.html">blurring
+	  example</link> contained in the <link url="http://processing.org/learning/topics/">Processing
+	  examples</link>, modify it so that it performs a Gaussian
+	  filtering.
+	  </para>
+	</problem> 
+	<solution id="id1171967269168"> 	  
+	  <para id="imagefilteringsp">
+	<code id="id1171967269181" display="block">// smoothing Gaussian filter, adapted from REAS:
+// http://processing.org/learning/topics/blur.html
+
+size(200, 200); 
+PImage a;  // Declare variable "a" of type PImage 
+a = loadImage("vetro.jpg"); // Load the images into the program 
+image(a, 0, 0); // Displays the image from point (0,0) 
+ 
+int n2 = 5/2; 
+int m2 = 5/2; 
+int[][] output = new int[width][height]; 
+float[][] kernel = { {1, 4, 7, 4, 1}, 
+                     {4, 16, 26, 16, 4}, 
+                     {7, 26, 41, 26, 7}, 
+                     {4, 16, 26, 16, 4},
+                     {1, 4, 7, 4, 1} }; 
+ 
+for (int i=0; i&lt;5; i++)
+  for (int j=0; j&lt; 5; j++)
+    kernel[i][j] = kernel[i][j]/273; 
+// Convolve the image 
+for(int y=0; y&lt;height; y++) { 
+  for(int x=0; x&lt;width/2; x++) { 
+    float sum = 0; 
+    for(int k=-n2; k&lt;=n2; k++) { 
+      for(int j=-m2; j&lt;=m2; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        if (xp &lt; 0) { 
+          xp = xp + width; 
+        } else if (x-j &gt;= width) { 
+          xp = xp - width; 
+        } 
+        // Reflect y-k to not exceed array boundary 
+        if (yp &lt; 0) { 
+          yp = yp + height; 
+        } else if (yp &gt;= height) { 
+          yp = yp - height; 
+        } 
+        sum = sum + kernel[j+m2][k+n2] * red(get(xp, yp)); 
+      } 
+    } 
+    output[x][y] = int(sum);  
+  } 
+} 
+ 
+// Display the result of the convolution 
+// by copying new data into the pixel buffer 
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=0; j&lt;width/2; j++) { 
+    pixels[i*width + j] = color(output[j][i], output[j][i], output[j][i]); 
+  } 
+} 
+updatePixels(); 
+ 	      
+	    </code>
+	  </para>
+	</solution> 
+      </exercise> 
+      <exercise id="noise_cleaningex">
+	<problem id="id1171967269202">
+	  <para id="noisecleaningexp">
+	    Modify the code of <link target-id="noise_cleaning"/> so that the effects of the 
+	    <link target-id="maskmean"> averaging filter </link> mask and
+	    the
+	  <m:math type="block">
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:mn>1</m:mn>
+		<m:mn>10</m:mn>
+	      </m:apply>
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>2</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	    </m:apply>
+	</m:math> are compared. What happens if the central value of
+	the convolution mask is increased further? Then, try to
+	implement the median filter with a <m:math>
+	      <m:apply>
+		<m:vectorproduct/>
+		<m:mn>3</m:mn>
+		<m:mn>3</m:mn>
+	      </m:apply>
+	    </m:math> cross-shaped mask.
+	  </para>
+	</problem>
+	<solution id="id1171967269328">
+	  <para id="noisecleaningexsolp">
+Median filter:
+	<code id="id1171967269342" display="block">
+          
+// smoothed_glass
+// smoothing filter, adapted from REAS:
+// http://www.processing.org/learning/examples/blur.html
+
+size(210, 170); 
+PImage a;  // Declare variable "a" of type PImage 
+a = loadImage("vetro.jpg"); // Load the images into the program 
+image(a, 0, 0); // Displays the image from point (0,0) 
+ 
+// corrupt the central strip of the image with random noise 
+float noiseAmp = 0.1;
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=width/4; j&lt;width*3/4; j++) { 
+    int rdm = constrain((int)(noiseAmp*random(-255, 255) + 
+      red(pixels[i*width + j])), 0, 255); 
+    pixels[i*width + j] = color(rdm, rdm, rdm);
+  } 
+} 
+updatePixels(); 
+  
+int[][] output = new int[width][height]; 
+int[] sortedValues = {0, 0, 0, 0, 0};
+int grayVal;
+  
+// Convolve the image 
+for(int y=0; y&lt;height; y++) { 
+  for(int x=0; x&lt;width/2; x++) { 
+    int indSort = 0;
+    for(int k=-1; k&lt;=1; k++) { 
+      for(int j=-1; j&lt;=1; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        if (xp &lt; 0) { 
+          xp = xp + width; 
+        } else if (x-j &gt;= width) { 
+          xp = xp - width;  
+        } 
+        // Reflect y-k to not exceed array boundary 
+        if (yp &lt; 0) { 
+          yp = yp + height; 
+        } else if (yp &gt;= height) { 
+          yp = yp - height; 
+        } 
+        if ((((k != j) &amp;&amp; (k != (-j))) ) || (k == 0)) { //cross selection
+          grayVal = (int)red(get(xp, yp)); 
+          indSort = 0;
+          while (grayVal &lt; sortedValues[indSort]) {indSort++; }          
+          for (int i=4; i&gt;indSort; i--) sortedValues[i] = sortedValues[i-1];
+          sortedValues[indSort] = grayVal;
+        } 
+      } 
+    } 
+    output[x][y] = int(sortedValues[2]);  
+    for (int i=0; i&lt; 5; i++) sortedValues[i] = 0;
+  } 
+} 
+ 
+// Display the result of the convolution 
+// by copying new data into the pixel buffer 
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=0; j&lt;width/2; j++) { 
+    pixels[i*width + j] = 
+      color(output[j][i], output[j][i], output[j][i]);
+  } 
+} 
+updatePixels(); 
+          
+</code>
+	  </para>
+	</solution>
+      </exercise>
+    </section>
+    <section id="id1171967269355">
+      <title>IIR Filters</title>
+      <para id="recursivediffeq">
+	The filtering operation represented by <link target-id="convmedia"/> is a particular case of <term>difference
+	equation</term>, where a sample of output is only function of
+	the input samples. More generally, it is possible to construct
+	<term>recursive</term> difference equations, where any sample
+	of output is a function of one or more other output samples.
+	<equation id="iirdiffeq">
+<m:math type="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:mn>0.5</m:mn>
+		  <m:apply>
+		    <m:ci type="fn">y</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		    <m:mn>1</m:mn>
+		  </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:mn>0.5</m:mn>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		      <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> 	 
+	</equation>
+	allows to compute (causally) each sample of the output by only
+	knowing the output at the previous instant and the input at
+	the same instant. It is easy to realize that by feeding the
+	system represented by <link target-id="iirdiffeq"/> with an
+	impulse, we obtain the infinite-length sequence <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>y</m:ci>
+	    <m:list>
+	      <m:mn>0.5</m:mn>
+	      <m:mn>0.25</m:mn>
+	      <m:mn>0.125</m:mn>
+	      <m:mn>0.0625</m:mn>
+	      <m:ci>...</m:ci>
+	    </m:list>
+	  </m:apply>
+	</m:math>. For this purpose, filters of this kind are called
+	<term>Infinite Impulse Response</term> (IIR) filters. The
+	<term>order</term> of an IIR filter is equal to the number of
+	past output samples that it has to store for processing, as
+	dictated by the difference equation. Therefore, the filter of
+	<link target-id="iirdiffeq"/> is a first-order filter. For a
+	given filter order, IIR filters allow frequency responses that
+	are steeper than those of FIR filters, but phase distortions
+	are always introduced by IIR filters. In other words, the
+	different spectral components are delayed by different time
+	amounts. For example, <link target-id="iir1response"/> shows the
+	magnitude and phase responses for the first-order IIR filter
+	represented by the difference equation <link target-id="iirdiffeq"/>. Called <m:math> <m:ci>a</m:ci>
+	</m:math> the coefficient that weights the dependence on the
+	output previous value (<m:math> <m:mn>0.5</m:mn> </m:math> in
+	the specific <link target-id="iirdiffeq"/>), the impulse
+	response takes the form <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>a</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>. The more <m:math> <m:ci>a</m:ci> </m:math> is
+	  closer to <m:math> <m:mn>1</m:mn> </m:math>, the more
+	  sustained is the impulse response in time, and the frequency
+	  response increases its steepness, thus becoming emphasizing
+	  its low-pass character. Obviously, values of <m:math>
+	  <m:ci>a</m:ci> </m:math> larger than <m:math> <m:mn>1</m:mn>
+	  </m:math> gives a divergent impulse response and, therefore,
+	  an <term>unstable</term> behavior of the filter.  </para>
+	<figure id="iir1response">
+	  <title>Magnitude and phase response of the IIR first-order filter</title>
+	   <media id="id1171967269683" alt=""><image src="../../media/iir1resp.png" mime-type="image/png"/></media> 
+	</figure>
+      <para id="iiraudio">
+	IIR filters are widely used for one-dimensional signals, like
+	audio signals, especially for real-time sample-by-sample
+	processing. Vice versa, it doesn't make much sense to extend
+	recursive processing onto two dimensions. Therefore, in image
+	processing FIR filters are mostly used.
+      </para>
+      <section id="id1171967269707">
+	<title>Resonant filter</title> 
+	<para id="iir2">
+	In the audio field, second-order IIR filters are particularly
+	important, because they realize an elementary resonator. Given
+	the difference equation
+	<equation id="iir2diffeq">
+<m:math type="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">y</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		    <m:mn>1</m:mn>
+		  </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>2</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">y</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		    <m:mn>2</m:mn>
+		  </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:ci><m:msub>
+		      <m:mi>b</m:mi>
+		      <m:mn>0</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		      <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> </equation> one can verify that it produces the
+	  frequency response of <link target-id="iir2response"/>. The
+	  coefficients that gives dependence on the past can be
+	  expressed as <m:math>
+	    <m:apply>
+	      <m:eq/>
+ 		  <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub>
+		  </m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:mn>2</m:mn>
+		<m:ci>r</m:ci>
+		<m:apply>
+		  <m:cos/>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mn>0</m:mn>
+		    </m:msub>
+		  </m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> and <m:math>
+	    <m:apply>
+	      <m:eq/>
+ 		  <m:ci><m:msub>
+		      <m:mi>a</m:mi>
+		      <m:mn>2</m:mn>
+		    </m:msub>
+		  </m:ci>	
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		<m:power/>
+		<m:ci>r</m:ci>
+		<m:mn>2</m:mn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>, where <m:math>		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mn>0</m:mn>
+		    </m:msub>
+		  </m:ci>
+	  </m:math> is the frequency of the resonance peak and <m:math>
+	    <m:ci>r</m:ci>
+	  </m:math> gives peaks that gets narrower when approaching <m:math>
+	    <m:mn>1</m:mn>
+	  </m:math>.
+	</para> 
+	<figure id="iir2response">
+	  <title>Magnitude and phase response of the second-order IIR filter </title>
+	    <media id="id1171967270007" alt=""><image src="../../media/iir2.png" mime-type="image/png"/></media> 
+	</figure>
+      </section>
+      <exercise id="audiofiltering2">
+	<problem id="id1171967270028">
+	  <para id="audiofiltering2pp">Verify that the filtering
+	  operation <code>filtra()</code> of the <link document="m12983" target-id="sound_chooser">Sound
+	  Chooser</link> presented in module <link document="m12983">Media Representation in Processing</link>
+	  implements an IIR resonant filter. What is the relation
+	  between <m:math> <m:ci>r</m:ci> </m:math> and the mouse
+	  position along the small bars?
+	  </para>
+	</problem>
+      </exercise>
+    </section>
+  </content> 
+</document>

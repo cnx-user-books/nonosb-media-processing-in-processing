@@ -1,0 +1,11 @@
+size(256,256);
+background(0);
+stroke(255);
+ellipseMode(CORNER);
+ellipse(72,100,110,130);
+triangle(88,100,168,100,128,50);
+stroke(140);
+strokeWeight(4);
+line(96,150,112,150);
+line(150,150,166,150);
+line(120,200,136,200);

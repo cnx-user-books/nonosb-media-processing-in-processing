@@ -1,0 +1,652 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Convolution - Discrete time</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>febae08d-0391-4973-a2e1-fcac232bcb1c</md:uuid>
+</metadata>
+
+  <content>
+      <section id="s1">
+      <title>Introduction</title>
+      <para id="s1p3">
+	The idea of <term>discrete-time convolution</term> is exactly
+	the same as that of <link document="m10085">continuous-time convolution</link>.  For this
+	reason, it may be useful to look at both versions to help your
+	understanding of this extremely important concept.
+        Convolution is a very powerful tool in determining a
+	system's output from knowledge of an arbitrary input and the
+	system's impulse response.
+      </para>
+      <para id="s1p4">
+        It also helpful to see convolution graphically, i.e. by using transparencies or Java Applets.
+        <link url="http://www.jhu.edu">Johns Hopkins University</link> has an excellent
+	<link url="http://www.jhu.edu/signals"> Discrete time convolution</link> applet.
+	Using this resource will help understanding this crucial concept.
+      </para>
+    </section>
+
+     <section id="s2">
+      <title>Derivation of the convolution sum</title>
+      <para id="s2p1">
+	We know that any discrete-time signal can be represented by a
+	summation of scaled and shifted discrete-time impulses, see
+	<link document="m11476" target-id="s3s1"/>. Since
+	we are assuming the system to be linear and time-invariant, it
+	would seem to reason that an input signal comprised of the sum
+	of scaled and shifted impulses would give rise to an output
+	comprised of a sum of scaled and shifted impulse responses.
+	This is exactly what occurs in <term>convolution</term>.
+	Below we present a more rigorous and mathematical look at the
+	derivation:
+      </para>
+
+      <para id="s2p2">
+	Letting <m:math><m:ci>ℋ</m:ci></m:math> be a discrete time LTI
+	system, we start with the folowing equation and work our way
+	down the the convoluation sum.
+
+	<equation id="conv_der">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci>y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci>ℋ</m:ci>
+		<m:apply>
+		  <m:ci>x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci>ℋ</m:ci>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci>x</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci>δ</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		  <m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:ci>ℋ</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci>x</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci>δ</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		  <m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci>x</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci>ℋ</m:ci>
+		    <m:apply>
+		      <m:ci>δ</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>k</m:ci></m:bvar>
+		<m:uplimit><m:infinity/></m:uplimit>
+		<m:lowlimit><m:apply><m:minus/><m:infinity/></m:apply></m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci>x</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci>h</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	Let us take a quick look at the steps taken in the above
+	derivation.  After our initial equation we rewrite the function
+	<m:math>
+	  <m:apply>
+	    <m:ci>x</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>
+	as a sum of the function times the unit impulse.  Next, we can
+	move around the ℋ operator and the summation because
+	<m:math>
+	  <m:apply>
+	    <m:ci>ℋ</m:ci>
+	    <m:ci>˙</m:ci>
+	  </m:apply>
+	</m:math> is a linear, DT system. Because of this linearity
+	and the fact that
+	<m:math>
+	  <m:apply>
+	    <m:ci>x</m:ci>
+	    <m:ci>k</m:ci>
+	  </m:apply>
+	</m:math> is a constant, we pull the constant out and simply multiply it by
+	<m:math>
+	  <m:apply>
+	    <m:ci>ℋ</m:ci>
+	    <m:ci>˙</m:ci>
+	  </m:apply>
+	</m:math>.  Finally, we use the fact that
+	<m:math>
+	  <m:apply>
+	    <m:ci>ℋ</m:ci>
+	    <m:ci>˙</m:ci>
+	  </m:apply>
+	</m:math> is time invariant in order to reach our final state
+	- the convolution sum!
+      </para><!--end para s2p2-->
+
+      <para id="s2p3">
+          Above the summation is taken over all integers. Howerer, in many practical
+	  cases either
+	  <m:math>
+	      <m:apply>
+	          <m:ci>x</m:ci>
+		  <m:ci>n</m:ci>
+	      </m:apply>
+	  </m:math> or
+	  <m:math>
+	      <m:apply>
+	          <m:ci>h</m:ci>
+		  <m:ci>n</m:ci>
+	      </m:apply>
+	  </m:math> or both
+	  are finite, for which case the summations will be limited.
+	  The convolution equations are simple tools which, in principle, can be used
+	  for all input signals. Following is an example to demonstrate convolution;
+	  how it is calculated and how it is interpreted.
+	  
+
+      </para>
+      <section id="s2s1">
+          <title>Graphical illustration of convolution properties</title>
+      <para id="s2s1p1">
+	A quick graphical example may help in demonstrating why
+	convolution works.
+      </para>
+
+      <figure id="figx">
+	<media id="idm1741600" alt=""><image src="../../media/dconv1b.png" mime-type="image/png"/></media>
+	<caption>
+	  A single impulse input yields the system's impulse response.
+	</caption>
+      </figure>
+
+      <figure id="figx2">
+	<media id="idm1739440" alt=""><image src="../../media/dconv2b.png" mime-type="image/png"/></media>
+	<caption>
+	  A scaled impulse input yields a scaled response, due to
+	  the scaling property of the system's linearity.
+	</caption>
+      </figure>
+
+      <figure id="figx3">
+	<media id="idm1058848" alt=""><image src="../../media/dconv3b.png" mime-type="image/png"/></media>
+	<caption>
+	  We now use the time-invariance property of the system to
+	  show that a delayed input results in an output of the same
+	  shape, only delayed by the same amount as the input.
+	</caption>
+      </figure>
+
+      <figure id="figx4">
+	<media id="idm1056496" alt=""><image src="../../media/dconv4b.png" mime-type="image/png"/></media>
+	  <caption>
+	  We now use the additivity portion of the linearity
+	  property of the system to complete the picture.  Since any
+	  discrete-time signal is just a sum of scaled and shifted
+	  discrete-time impulses, we can find the output from
+	  knowing the input and the impulse response.
+	</caption>
+      </figure>
+      </section>
+    </section>
+
+
+
+
+    <section id="s3">
+      <title>Convolution Sum</title>
+      <para id="s3p1">
+	As mentioned above, the convolution sum provides a concise,
+	mathematical way to express the output of an LTI system based
+	on an arbitrary discrete-time input signal and the system's
+	response.  The <term>convolution sum</term> is expressed
+	as
+
+	<equation id="eqn2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci>y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci>x</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci>h</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	As with continuous-time, convolution is represented by the
+	symbol *, and can be written as
+
+	<equation id="eqn3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci>y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/>
+		<m:apply>
+		  <m:ci>x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci>h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	By making a simple change of variables into the convolution
+	sum,
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>k</m:ci>
+	    <m:apply>
+	      <m:minus/>
+	      <m:ci>n</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>,
+	we can easily show that convolution is
+	<term>commutative</term>:
+
+	<equation id="eqn4">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+	          <m:ci>y</m:ci>
+		  <m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/>
+		<m:apply>
+		  <m:ci>x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci>h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/>
+		<m:apply>
+		  <m:ci>h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci>x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	From <link target-id="eqn4"/> we get a convolution sum that is equivivalent to the
+	sum in <link target-id="eqn2"/>:
+	<equation id="eqn5">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci>y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci>h</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci>x</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+
+
+	For more information on the characteristics of convolution,
+	read about the <link document="m10088">Properties
+	of Convolution</link>.
+      </para>
+    </section>
+
+    <section id="s4">
+      <title>Convolution Through Time (A Graphical Approach)</title>
+      <para id="s4p1">
+	In this section we will develop a second graphical
+	interpretation of discrete-time convolution.  We will begin
+	this by writing the convolution sum allowing
+	<m:math display="inline">
+	  <m:ci>x</m:ci>
+	</m:math>
+	to be a causal, length-m signal and
+	<m:math display="inline">
+	  <m:ci>h</m:ci>
+	</m:math>
+	to be a causal, length-k, LTI system.  This gives us the finite
+	summation,
+
+	<equation id="eq_eg2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci>y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>l</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply><m:minus/><m:ci>m</m:ci><m:cn>1</m:cn></m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci>x</m:ci>
+		    <m:ci>l</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci>h</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	Notice that for any given
+	<m:math display="inline">
+	  <m:ci>n</m:ci>
+	</m:math>
+	we have a sum of the <m:math><m:ci>m</m:ci></m:math> products of
+	<m:math>
+	  <m:apply>
+	    <m:ci>x</m:ci>
+	    <m:ci>l</m:ci>
+	  </m:apply>
+	</m:math>
+	and a time-delayed
+	<m:math>
+	    <m:apply>
+	        <m:ci>h</m:ci>
+	        <m:apply> 
+	            <m:minus/>  
+		    <m:ci>n</m:ci>
+		    <m:ci>l</m:ci>
+	        </m:apply>
+	    </m:apply>
+	</m:math>.  
+	This is to say that we multiply the terms of
+	<m:math display="inline">
+	  <m:ci>x</m:ci>
+	</m:math>
+	by the terms of a time-reversed
+	<m:math display="inline">
+	  <m:ci>h</m:ci>
+	</m:math>
+	and add them up.
+      </para>
+
+      <para id="p8">
+	Going back to the previous example:
+      </para>
+
+      <figure id="eg2_fig1">
+	<media id="idp7737936" alt=""><image src="../../media/dconv5b.png" mime-type="image/png"/></media>
+	<caption>
+	  This is the end result that we are looking to
+	    find.
+	</caption>
+      </figure>
+
+      <figure id="eg2_fig2">
+	<media id="idp7740096" alt=""><image src="../../media/dconv6b.png" mime-type="image/png"/></media>
+	<caption>
+	  Here we reverse the impulse response,
+	  <m:math display="inline">
+	    <m:ci>h</m:ci>
+	  </m:math>
+	  , and begin its traverse at time
+	  <m:math display="inline">
+	    <m:cn>0</m:cn>
+	  </m:math>.
+	</caption>
+      </figure>
+
+      <figure id="eg2_fig3">
+	<media id="idm88000" alt=""><image src="../../media/dconv7b.png" mime-type="image/png"/></media>
+	<caption>
+	  We continue the traverse. See that at time
+	  <m:math display="inline">
+	      <m:cn>1</m:cn>
+	  </m:math>, 
+	  we are multiplying two elements of the input signal by
+	  two elements of the impulse respone.
+	</caption>
+      </figure>
+
+      <figure id="eg2_fig4a">
+	<media id="idm84720" alt=""><image src="../../media/dconv8b_2.png" mime-type="image/png"/></media>
+      </figure>
+
+      <figure id="eg2_fig4b">
+	<media id="idm83072" alt=""><image src="../../media/dconv8b_3.png" mime-type="image/png"/></media>
+	<caption>
+	  If we follow this through to one more step,
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>n</m:ci>
+	      <m:ci>4</m:ci>
+	    </m:apply>
+	  </m:math>, then we can see that we produce the same output
+	  as we saw in the intial example.
+	</caption>
+      </figure>
+
+      <!--
+      <figure id='eg2_fig4c'>
+	<media type="image/png" src="dconv8b_3.png"/>
+	<caption>
+	  See how this method follows through to produce the same
+	  output we saw in the initial example.
+	</caption>
+      </figure>
+      -->
+
+      <para id="p8a">
+	What we are doing in the above demonstration is reversing the
+	impulse response in time and "walking it across" the input
+	signal.  Clearly, this yields the same result as scaling,
+	shifting and summing impulse responses.
+      </para>
+
+      <para id="p9">
+	This approach of time-reversing, and sliding across is a
+	common approach to presenting convolution, since it
+	demonstrates how convolution builds up an output through time.
+      </para>
+    </section>
+   <!-- <section id='s5'>
+        <para id='s5p1'>
+	    Go to? 
+	    <list id='l1' type='inline'>
+	        <item><cnxn document='m11542'>Introduction</cnxn></item>
+	        <item><cnxn document='m11540'>Convolution - Analog signals</cnxn></item>
+	        <item><cnxn document='m10088'>Properties of convolution</cnxn></item>
+	    </list>
+	</para>
+	
+    </section> -->
+  </content>
+  
+</document>
