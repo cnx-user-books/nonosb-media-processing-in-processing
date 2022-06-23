@@ -1,0 +1,902 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:bib="http://bibtexml.sf.net/">
+  <title>Signal Processing in Processing: Campionamento e Quantizzazione</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m12751</md:content-id>
+  <md:title>Signal Processing in Processing: Campionamento e Quantizzazione</md:title>
+  <md:abstract>Elementi di campionamento, ricostruzione, e quantizzazione di segnali 1D (suoni) e 2D (immagini), con riferimento al linguaggio Processing.</md:abstract>
+  <md:uuid>a980344e-8b7d-4c2d-8f1b-c96ca3f28e0a</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="http://cnx.rice.edu/content/m13045/latest/" strength="3">English version</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    <section id="campionamento">
+      <title>Campionamento</title>
+      <para id="intro_campionamento">
+	I suoni e le immagini possono essere considerati segnali,
+	rispettivamente a una e due dimensioni. Il suono si può
+	pensare come una fluttuazione di pressione acustica nel tempo,
+	mentre le immagini si possono pensare come distribuzioni nello
+	spazio di valori di luminanza o di colore, quest'ultimo nelle
+	sue componenti RGB o HSB. I segnali, per poter essere trattati
+	da dispositivi numerici di calcolo, debbono essere ridotti a
+	sequenze di <emphasis>campioni</emphasis> discreti, e ciascun
+	campione deve essere rappresentato da un numero finito di
+	bit. La prima operazione si chiama <term>campionamento</term>,
+	mentre la seconda rappresenta una <term>quantizzazione</term>
+	del dominio dei numeri reali.
+      </para>
+      <section id="campionamento1D">
+	<title>1-D: Suoni</title>
+	<para id="campionamento1Dp">
+	  Il campionamento, per i segnali mono-dimensionali è
+	  l'operazione che trasforma un segnale a tempo continuo
+	  (quale è ad esempio la fluttuazione di pressione atmosferica
+	  all'ingresso del nostro padiglione auricolare) in un segnale
+	  a tempo discreto, cioè in una sequenza di numeri. Esso
+	  restituisce i valori del segnale a tempo continuo letti a
+	  intervalli di <m:math> <m:ci>T</m:ci> </m:math> secondi. Il
+	  reciproco dell'intervallo di campionamento è detto
+	  <term>frequenza di campionamento</term> <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>s</m:mn>
+		</m:msub>
+	      </m:ci>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:ci>T</m:ci>
+	    </m:apply>
+	    </m:apply>
+	  </m:math>. In questa sede non esponiamo la teoria del
+	  campionamento ma cerchiamo solo di descriverne le
+	  manifestazioni. Per una trattazione più estesa, ma ancora
+	  accessibile, si rimanda a <cite target-id="rocISP"><cite-title>Introduction
+	  to Sound Processing</cite-title></cite>.  Per i nostri scopi, il
+	  campionamento di segnali 1-D può essere ridotto a tre fatti
+	  e un teorema.
+	</para>
+	<list id="fatti">
+	  <item><label>Fatto 1</label> La <link document="m0046">Trasformata di Fourier</link> di un
+	      segnale a tempo discreto è una funzione (detta
+	      <term>spettro</term>) di variabile continua <m:math>
+	      <m:ci>ω</m:ci> </m:math>, periodica di periodo
+	      <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:ci>π</m:ci>
+	      </m:apply>
+ 	      </m:math>. Per un dato valore di
+	      <m:math><m:ci>ω</m:ci> </m:math>, la trasformata
+	      di Fourier restituisce un numero complesso che si può
+	      interpretare come ampiezza e fase (traslazione nel
+	      tempo) della componente di segnale sinusoidale a tale
+	      frequenza. 
+	  </item>
+	  <item><label>Fatto 2</label>Il campionamento di un segnale a
+	  tempo continuo <m:math>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:math>
+	    con intervallo <m:math>
+	      <m:ci>T</m:ci> 
+	    </m:math> produce il segnale a tempo discreto <m:math>
+	      <m:apply>
+		<m:eq/>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>n</m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+	      </m:apply>		
+	      </m:apply>
+	    </m:math>, funzione della variabile discreta <m:math>
+	      <m:ci>n</m:ci>
+	    </m:math>.
+	  </item>
+	  <item><label>Fatto 3</label> Il campionamento con frequenza
+	  <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>s</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> di un segnale a tempo continuo produce un
+segnale a tempo discreto il cui spettro è la ripetizione periodica con
+periodo <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>s</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> dello spettro del segnale originale. La
+	    variabile di Fourier <m:math> <m:ci>ω</m:ci>
+	    </m:math> corrisponde alla frequenza in Hertz (o cicli al
+	    secondo) rappresentata dalla variabile <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>f</m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>ω</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>π</m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+	</list>
+	<para id="spettro_esp">
+	  La <link target-id="repeti"/> mostra un esempio di spettro di segnale campionato con frequenza <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>s</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math>. Nell'esempio, il segnale a tempo continuo aveva tutte e sole le componenti in frequenza comprese tra <m:math>
+	    <m:apply>
+	      <m:minus/>
+	      <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>b</m:mn>
+		</m:msub>
+	      </m:ci> </m:apply> </m:math> e <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>b</m:mn>
+		</m:msub>
+	      </m:ci>
+	  </m:math>. Le repliche dello spettro originale sono a volte
+	  chiamate <emphasis>immagini</emphasis>.
+	</para>
+	<figure id="repeti">
+	  <title>Spettro di un segnale campionato</title>
+	  <media id="id1168464908346" alt=""><image src="../../media/repeti.png" mime-type="image/png"/></media>
+	</figure>
+	<para id="teorema_campp">
+	  Premessi i <link target-id="fatti">fatti</link>, si può avere
+	  una comprensione intuitiva del Teorema del Campionamento,
+	  storicamente legato ai nomi degli scienziati Nyquist e
+	  Shannon.
+	</para>
+	<rule id="teorema_campionamento" type="theorem">
+	  <title>Teorema del Campionamento</title>
+	  <statement id="id7543698">
+	    <para id="campiona_statement">
+	    Un segnale a tempo continuo <m:math>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:math>, il cui contenuto spettrale è limitato a
+	    frequenze inferiori a <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>b</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> (cioè limitato in banda a <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>b</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math>) si può ricostruire a partire dalla sua versione
+		campionata <m:math> <m:apply> <m:ci type="fn">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> se la frequenza di campionamento è superiore a
+	      due volte la banda (cioè se <m:math>
+		<m:apply>
+		  <m:gt/>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>s</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>b</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>)
+	    </para>
+	  </statement>
+	</rule>
+	<para id="camp_rico">La ricostruzione non può che avvenire mediante un filtro che
+	  elimini le immagini spettrali diverse da quella direttamente
+	  proveniente dal segnale a tempo continuo originale, cioè le
+	  immagini le cui componenti in frequenza siano in valore
+	  assoluto superiori alla <term>frequenza di Nyquist</term>
+	  definita come <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci><m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>s</m:mn>
+		</m:msub>
+	      </m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>. La condizione imposta dal <link target-id="teorema_campionamento">teorema del campionamento</link>
+equivale a richiedere che non ci siano sovrapposizioni tra le immagini
+spettrali. Se sovrapposizioni ci fossero, non sarebbe possibile
+realizzare un filtro atto a eliminare le copie dello spettro del
+segnale originale. Un filtro che tagliasse tutte le frequenze
+superiori alla frequenza di Nyquist produrrebbe un segnale che,
+rispetto al segnale originale, risulta affetto da
+<term>aliasing</term>. Il concetto di aliasing è ben illustrato nella
+<link document="m11448"> Aliasing Applet</link>, dove una sinusoide a
+tempo continuo è soggetta a campionamento. Se la frequenza della
+sinusoide è troppo alta rispetto alla frequenza di campionamento, si
+vede che che la sinusoide ricostruita a partire dai campioni è ben
+diversa, e di frequenza bassa. Abbiamo tutti familiarità con
+l'aliasing per come esso si manifesta nelle immagini in movimento, ad
+esempio quando le ruote della diligenza nei film western sembrano
+girare al contrario. In quel caso la frequenza di campionamento è il
+<term>frame rate</term>, o numero di immagini al secondo, e va messa
+in relazione alla velocità di rotazione delle ruote. Questo si inquadra tra i fenomeni  <link url="http://www.michaelbach.de/ot/mot_strob/">stroboscopici
+</link>.
+	</para>
+
+
+
+<para id="applet_aliasing">Nel caso del suono, per rendersi conto di quali siano le conseguenze
+del fatto che lo spettro di un segnale discreto sia periodico di
+periodo
+ 
+<m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:ci>π</m:ci>
+	      </m:apply>
+ 	      </m:math> 
+
+(vedi <link target-id="repeti"/>) e di cosa avvenga nel caso di
+violazione del teorema del campionamento, esaminiamo un caso
+semplice. Consideriamo un suono generato da una somma di sinusoidi in
+rapporto armonico tra loro (ovvero, le cui frequenze sono multiple
+intere della frequenza più bassa, detta fondamentale). Lo spettro del
+suono così ottenuto sarà costituito da picchi in corrispondenza
+della frequenza fondamentale e dei suoi multipli interi. Tanto per
+fissare le idee, poniamo di lavorare ad una frequenza di campionamento
+di 44100 Hz e di voler sommare 10 sinusoidi. Dal teorema di
+campionamento sappiamo che, nel nostro caso, potremmo rappresentare
+correttamente (senza incorrere nel fenomeno dell'aliasing) tutte le
+frequenze fino a 22050 Hz. Quindi, onde evitare l'aliasing, la
+fondamentale del suono sintetico prodotto dovrà essere inferiore o
+uguale a 2205 Hz. Il codice Processing (con la libreria Beads) riportato nella
+tabella <link target-id="aliasingTab"/> realizza un generatore di suoni
+costituiti da 10 sinusoidi in rapporto armonico tra loro. Per produrre
+i suoni è sufficiente cliccare con il mouse in un punto qualsiasi
+della schermata. L'ascissa del punto corrisponderà alla frequenza
+della fondamentale e sulla schermata compariranno i picchi spettrali
+corrispondenti alle sinusoidi generate e sommate. Quando clicchiamo su
+di un punto approssimativamente di ascissa maggiore di 1/10 della
+larghezza della finestra, continuiamo a vedere dieci picchi
+spettrali. Abbiamo violato il teorema del campionamento e l'aliasing
+ha fatto capolino nella nostra rappresentazione.
+</para>
+
+
+<table id="aliasingTab" frame="all" summary="Applet and its realization in processing + beads">
+<tgroup cols="2" align="left" colsep="1" rowsep="1"><colspec colname="col1" colnum="1" colwidth="60"/> 
+		<colspec colname="col2" colnum="2" colwidth="340"/>
+		<tbody>
+		  <row>
+		    <entry>
+		      <link resource="./index.html"> Aliasing test: Applet che
+permette di verificare l'effetto dell'aliasing su suoni ottenuti mediante somma di 10 sinusoidi con frequenze in rapporto armonico </link>
+		    </entry> 
+		    <entry>
+	    <code id="id1168467370152" display="block"> 
+import beads.*; // import the beads library
+import beads.Buffer;
+import beads.BufferFactory;
+
+AudioContext ac; 
+PowerSpectrum ps;
+
+WavePlayer wavetableSynthesizer;
+Glide frequencyGlide;
+Envelope gainEnvelope;
+Gain synthGain;
+
+int L = 16384; // buffer size
+int H = 10; //number of harmonics
+float freq = 10.00; // fundamental frequency [Hz]
+Buffer dSB;
+
+void setup() {
+  size(1024,200);
+
+  frameRate(20);
+
+  ac = new AudioContext();  // initialize AudioContext and create buffer
+ 
+  frequencyGlide = new Glide(ac, 200, 10); // initial freq, and transition time
+  dSB = new DiscreteSummationBuffer().generateBuffer(L, H, 0.5);
+  wavetableSynthesizer = new WavePlayer(ac, frequencyGlide, dSB);
+  
+  gainEnvelope = new Envelope(ac, 0.0); // standard gain control of AudioContext
+  synthGain = new Gain(ac, 1, gainEnvelope); 
+  synthGain.addInput(wavetableSynthesizer); 
+  ac.out.addInput(synthGain);
+   
+  // Short-Time Fourier Analysis
+  ShortFrameSegmenter sfs = new ShortFrameSegmenter(ac);
+  sfs.addInput(ac.out);
+  FFT fft = new FFT();
+  sfs.addListener(fft);
+  ps = new PowerSpectrum();
+  fft.addListener(ps);
+  ac.out.addDependent(sfs);
+
+  ac.start(); // start audio processing
+  gainEnvelope.addSegment(0.8, 50); // attack envelope
+}
+
+void mouseReleased(){
+  println("mouseX = " + mouseX);
+}
+
+void draw()
+{
+  background(0); 
+  
+  text("click and move the pointer", 800, 20); 
+  frequencyGlide.setValue(float(mouseX)/width*22050/10); // set the fundamental frequency
+                                                         // the 10 factor is empirically found
+  float[] features = ps.getFeatures(); // from Beads analysis library  
+  // It will contain the PowerSpectrum: 
+  // array with the power of 256 spectral bands.
+  if (features != null) { // if any features are returned
+    for (int x = 0; x &lt; width; x++){
+      int featureIndex = (x * features.length) / width;
+      int barHeight = Math.min((int)(features[featureIndex] * 0.05 *
+        height), height - 1);
+      stroke(255);
+      line(x, height, x, height - barHeight);
+    }
+  }
+}
+
+public class DiscreteSummationBuffer extends BufferFactory {
+  public Buffer generateBuffer(int bufferSize) { //Beads generic buffer
+    return generateBuffer(bufferSize, 10, 0.9f); //default values
+  }
+  public Buffer generateBuffer(int bufferSize, int numberOfHarmonics, float amplitude)
+  {
+    Buffer b = new Buffer(bufferSize);
+
+    double amplitudeCoefficient = amplitude / (2.0 * (double)numberOfHarmonics);
+    double theta = 0.0;
+    for (int k = 0; k &lt;= numberOfHarmonics; k++) { //additive synthesis
+      for (int i = 0; i &lt; b.buf.length; i++) {
+        b.buf[i] = b.buf[i] + (float)Math.sin(i*2*Math.PI*freq*k/b.buf.length)/20;
+      }
+    }
+    return b;
+  }
+  public String getName() { //mandatory method implementation
+    return "DiscreteSummation";
+  }
+}
+ </code>
+		    </entry>
+		  </row>
+		</tbody>
+	      
+
+</tgroup>
+</table>
+
+
+      </section>
+
+      <section id="campionaimmagini">
+	<title>2-D: Immagini</title>
+	<para id="campionamento2Dp">
+	  Supponiamo di avere una distribuzione continua, su un piano,
+	    di valori di luminanza cioè, più semplicemente, una
+	    immagine. Per poterla trattare con un calcolatore dobbiamo
+	    ridurla ad una sequenza di numeri, mediante
+	    campionamento. Ci sono molti modi per campionare una
+	    immagine, cioè per leggerne i valori di luminanza in punti
+	    discreti. Il più semplice dei modi è la lettura dei valori
+	    secondo una griglia regolare, con maglie di larghezza
+	    <m:math> <m:ci>X</m:ci> </m:math> e <m:math>
+	    <m:ci>Y</m:ci> </m:math>. In modo analogo a quanto fatto per i suoni, si definiscono le frequenza spaziali di campionamento  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:ci>X</m:ci>
+	    </m:apply>
+	    </m:apply>
+	  </m:math> e  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:ci>Y</m:ci>
+	    </m:apply>
+	    </m:apply>
+	  </m:math>.  Come nel caso monodimensionale, anche per i
+segnali bidimensionali, o immagini, il campionamento può essere
+descritto mediante tre fatti e un teorema.
+	</para>
+	<list id="fatti2D">
+	  <item><label>Fatto 1</label> La Trasformata di Fourier di un
+	      segnale a spazio discreto è una funzione (detta
+	      <term>spettro</term>) di due variabili continue <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> </m:math> e <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> </m:math>, periodica in due dimensioni con periodi
+	      <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:ci>π</m:ci>
+	      </m:apply>
+ 	      </m:math>. Per una data coppia di valori <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> </m:math> e <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> </m:math>, la trasformata di Fourier restituisce
+	      un numero complesso che si può interpretare come
+	      ampiezza e fase (traslazione nello spazio) della componente
+	      di segnale sinusoidale a tali frequenze spaziali.
+	  </item>
+	  <item><label>Fatto 2</label>Il campionamento di un segnale a
+	  spazio continuo <m:math>
+	      <m:apply>
+		<m:ci type="fn">s</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	    </m:math>
+	    con griglia di maglia <m:math>
+	      <m:ci>X</m:ci> 
+	    </m:math>, <m:math>
+	      <m:ci>Y</m:ci> 
+	    </m:math>, produce il segnale a spazio discreto <m:math>
+	      <m:apply>
+		<m:eq/>
+	      <m:apply>
+		<m:ci type="fn">s</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">s</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>m</m:ci>
+		    <m:ci>X</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>n</m:ci>
+		    <m:ci>Y</m:ci>
+		  </m:apply>
+	      </m:apply>		
+	      </m:apply>
+	    </m:math>, funzione delle variabili discrete <m:math>
+	      <m:ci>m</m:ci>
+	    </m:math> e <m:math>
+	      <m:ci>n</m:ci>
+	    </m:math>.
+	  </item>
+	  <item><label>Fatto 3</label> Il campionamento con frequenze spaziali
+	  <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> e <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> di un segnale a spazio continuo produce un
+segnale a spazio discreto il cui spettro è la ripetizione periodica secondo la griglia di maglia  <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> per <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> dello spettro del segnale originale. Le
+	    variabili di Fourier <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> </m:math> e <m:math>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> </m:math>  corrispondono alle frequenze in cicli per metro rappresentate dalle variabili <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci><m:msub>
+		    <m:mi>f</m:mi>
+		    <m:mn>X</m:mn>
+		  </m:msub> </m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci><m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub></m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>π</m:ci>
+		    <m:ci>X</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math> e <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci><m:msub>
+		    <m:mi>f</m:mi>
+		    <m:mn>Y</m:mn>
+		  </m:msub> </m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci><m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub></m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>π</m:ci>
+		    <m:ci>Y</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+	</list>
+	<para id="spettro_es2Dp">
+	  La <link target-id="repeti2D"/> mostra un esempio di spettro di
+	  segnale bidimensionale campionato. Nell'esempio, il segnale
+	  a spazio continuo aveva tutte e sole le componenti in
+	  frequenza comprese nell'esagono centrato sullo zero. La
+	  forma esagonale del supporto spettrale (regione con energia
+	  spettrale non nulla) è meramente esemplificativa.  Le
+	  repliche dello spettro originale sono a volte chiamate
+	  <emphasis>immagini</emphasis> spettrali.
+	</para>
+      <figure id="repeti2D">
+	  <title>Spettro di una immagine campionata</title>
+	  <media id="id1168465069470" alt=""><image src="../../media/repeti2D.png" mime-type="image/png"/></media>
+	</figure>
+	<para id="teorema_campp2D">
+	  Premessi i <link target-id="fatti2D">fatti</link>, si può avere
+	  una comprensione intuitiva del Teorema del Campionamento.
+	</para>
+	<rule id="teorema_campionamento2D" type="theorem">
+	  <title>Teorema del Campionamento (in 2D)</title>
+	  <statement id="id1168468105875">
+	    <para id="campiona_statement2D">
+	    Un segnale a spazio continuo <m:math>
+	      <m:apply>
+		<m:ci type="fn">s</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	    </m:math>, il cui contenuto spettrale è limitato a
+	    frequenze spaziali contenute nel rettangolo di semilati <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>bX</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> e <m:math> <m:ci>
+		<m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>bY</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:math> (cioè limitato in banda) si può ricostruire a
+		partire dalla sua versione campionata <m:math>
+		<m:apply> <m:ci type="fn">s</m:ci> <m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> se le frequenze di campionamento spaziale sono superiori a
+	      due volte le rispettive bande (cioè se <m:math>
+		<m:apply>
+		  <m:gt/>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>X</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>bX</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math> e <m:math>
+		<m:apply>
+		  <m:gt/>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>Y</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>F</m:mi>
+		      <m:mn>bY</m:mn>
+		    </m:msub>
+		  </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>)
+	    </para>
+	  </statement>
+	</rule>
+	<para id="camp_rico2D">
+	  In pratica, la maglia di campionamento non può essere più
+	  larga di un semi-periodo della più fine frequenza spaziale
+	  (cioè del più fine dettaglio) che è rappresentato
+	  nell'immagine.  La ricostruzione non può che avvenire
+	  mediante un filtro che elimini le immagini spettrali diverse
+	  da quella direttamente proveniente dal segnale a spazio
+	  continuo originale, cioè le immagini le cui componenti in
+	  frequenza siano in valore assoluto superiori alla
+	  <term>frequenza di Nyquist</term> definita come <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci><m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math> e <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci><m:msub>
+		  <m:mi>F</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math> lungo le due direzioni. La condizione imposta dal
+	  <link target-id="teorema_campionamento2D">teorema del
+	  campionamento</link> equivale a richiedere che non ci siano
+	  sovrapposizioni tra le immagini spettrali. Se
+	  sovrapposizioni ci fossero, non sarebbe possibile realizzare
+	  un filtro atto a eliminare le copie dello spettro del
+	  segnale originale. Un filtro che tagliasse tutte le
+	  frequenze superiori alla frequenza di Nyquist produrrebbe un
+	  segnale che, rispetto al segnale originale, risulta affetto
+	  da aliasing. 
+	</para>
+	<para id="resampling2D">
+	  Si fa notare come si possa produrre aliasing per
+	  sotto-campionamento (o decimazione) di una immagine
+	  campionata. Cioè, a partire da una immagine a spazio
+	  discreto, utilizzare solo una parte dei campioni selezionati
+	  secondo una griglia regolare corrisponde a creare
+	  ripetizioni periodiche delle immagini spettrali, che quindi
+	  possono finire con il sovrapporsi.
+	</para>
+	<para id="applet_samplingp">
+	  Per esplorare in maniera visuale i concetti di
+	  campionamento, sotto-campionamento, e aliasing, si consideri
+	  la <link resource="resampling_ellipse.html">applet che disegna ellissi
+	  </link>. Con le frecce si possono raddoppiare o dimezzare i
+	  passi di sotto-campionamento orizzontale e verticale.
+	</para>
+      </section>
+
+      <para id="image_proc_basics">Una semplicissima introduzione a
+concetti elementari di elaborazione di immagini si trova in <link document="m10973"> Digital Image Processing Basics</link>. </para>
+    </section>
+    <section id="quantizzazione">
+      <title>Quantizzazione</title>
+      <para id="quantizzazionep">
+	Con gli aggettivi "numerico" ovvero "digitale" indichiamo
+	sistemi che lavorano su segnali rappresentati mediante numeri,
+	con la precisione (finita) consentita dai sistemi di
+	calcolo. Fino ad ora abbiamo considerato i segnali a tempo
+	discreto o spazio discreto come se fossero collezioni di
+	numeri a precisione infinita, o numeri reali. Purtroppo, con i
+	calcolatori si possono rappresentare al più sottoinsiemi
+	finiti dei numeri razionali. Ciò significa che i nostri
+	segnali vengono quantizzati.
+      </para>
+      <para id="quantlinp">
+	Per i nostri scopi, la quantizzazione più interessante è
+	  quella lineare che si verifica, ad esempio, nel processo di
+	  conversione di un segnale analogico in segnale digitale. Se
+	  la parola di memoria che rappresenta un numero è fatta di
+	  <m:math> <m:ci>b</m:ci> </m:math> bit, allora il campo di
+	  variazione di tale numero può essere discretizzato in
+	  <m:math>
+	  <m:apply>
+	    <m:power/>
+	    <m:mn>2</m:mn>
+	    <m:ci>b</m:ci>
+	  </m:apply>
+	</m:math> livelli di quantizzazione. Ogni valore compreso tra
+	  due livelli di quantizzazione può essere approssimato per
+	  troncamento o arrotondamento al livello più vicino. La <link target-id="ottoquanti"/> mostra un esempio di quantizzazione con
+	  rappresentazione su <m:math> <m:cn>3</m:cn> </m:math> bit in
+	  <link document="m10808"> complemento a due</link>.
+      </para>
+	<figure id="ottoquanti">
+	  <title>Campionamento e quantizzazione di un segnale analogico</title>
+	  <media id="id7139984" alt=""><image src="../../media/quant.png" mime-type="image/png"/></media>
+	</figure>
+      <para id="quanterrorp">
+	L'approssimazione introdotta dalla quantizzazione si manifesta
+	in forma di rumore, detto appunto <term>rumore di
+	quantizzazione</term>. Spesso, per l'analisi dei circuiti di
+	elaborazione del suono, tale rumore si assume essere bianco e
+	non correlato al segnale, ma nella realtà fenomenica esso è
+	percettivamente assai legato al segnale stesso, tanto che la
+	quantizzazione può essere percepita come un effetto.
+      </para>
+      <para id="applet_quant">Per esplorare in maniera visuale e uditiva il fenomeno della
+	quantizzazione, si consideri la <link resource="quantagondoleBeads.html"> applet </link> che consente di
+	variare tra <m:math> <m:cn>1</m:cn> </m:math> e <m:math>
+	<m:cn>8</m:cn> </m:math> il numero di bit dedicati alla
+	rappresentazione di ciascuno dei tre canali RGB con cui si
+	rappresenta il colore. Lo stesso numero di bit è anche
+	dedicato alla rappresentazione di un segnale audio abbinato
+	all'immagine. L'effetto visuale che si ottiene riducendo il
+	numero dei bit è simile a una <term>solarizzazione</term>.
+	</para>
+    </section>
+    <exercise id="estensioni_aliasing">
+      <problem id="id1168469022787">
+	<para id="estensionip">
+	  Si estenda il codice dell'applet <link target-id="aliasingTab"/>, in modo da aggiungere alcune modalità interattive:
+	  <list id="estensionil"><item>Si renda la generazione dei suoni automatica
+	    variando ad ogni frame la frequenza fondamentale in modo
+	    casuale (si veda la <link url="http://www.processing.org/reference/random_.html"><code>random()</code></link>).</item>
+
+	    <item>Si renda dipendente dalla posizione orizzontale del
+	    mouse (<code>mouseX</code>) il frame rate (e quindi il
+	    metronomo con cui vengono generate le note). </item>
+
+	    <item>Si renda dipendente dalla posizione verticale del
+	    mouse (<code>mouseY</code>) il numero delle armoniche
+	    presenti nel suono (e quindi la ricchezza spettrale,
+	    ovvero la brillantezza, delle note generate).</item>
+
+	    <item>Si colori la finestra di background in modo che, da
+	    sinistra a destra, si passi progressivamente dal blu al
+	    rosso. In questo modo al colore blu corrisponderà un
+	    metronomo lento e al colore rosso un metronomo
+	    veloce.</item> 
+
+	    <item>Si renda il valore di saturazione dei
+	    colori della finestra dipendente dalla posizione verticale
+	    del mouse. In questo modo ad un suono con poche armoniche
+	    (timbro poco brillante) corrisponderà un colore tendente
+	    al grigio, mentre ad un timbro ricco di armoniche (timbro
+	    brillante) corrisponderà una colore intenso.</item>
+
+	    <item>Si aggiunga un controllo per interrompere il calcolo
+	    dello spettro e creare un effetto di fermo immagine,
+	    mentre il suono continua ad essere generato (per esempio
+	    un click tenuto del mouse).</item> 
+
+	    <item>Si aggiunga un controllo tale che, in caso di fermo
+	    immagine (mouse premuto) si interrompa anche la
+	    generazione di nuove note e si abbia un effetto di "fermo
+	    nota", ovvero di nota tenuta (per esempio la pressione di
+	    un tasto preciso della tastiera). </item>
+ </list>
+	</para>
+      </problem>
+      <solution id="id1168466074507">
+	<para id="estensionis">Le estensioni proposte sono realizzate nel <link resource="./aliasingfermoDBeads.pde"> codice Processing</link>.
+	</para>
+      </solution>
+    </exercise>
+  </content>
+  
+<bib:file>
+<bib:entry id="rocISP">
+<bib:book>
+<bib:author>Davide Rocchesso</bib:author> <bib:title>Introduction to
+Sound Processing</bib:title> <bib:publisher>Mondo
+Estremo</bib:publisher> <bib:year>2003</bib:year>
+<bib:note> http://profs.sci.univr.it/~rocchess/SP/sp.pdf 
+</bib:note>
+</bib:book>
+</bib:entry>
+</bib:file>
+
+</document>

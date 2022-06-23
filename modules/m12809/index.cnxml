@@ -1,0 +1,703 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Signal Processing in Processing: Convoluzione e Filtraggio</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m12809</md:content-id>
+  <md:title>Signal Processing in Processing: Convoluzione e Filtraggio</md:title>
+  <md:abstract>Sistemi a tempo (spazio) discreto e relativa descrizione mediante risposta all'impulso. L'operatore di convoluzione. Filtraggio.</md:abstract>
+  <md:uuid>b331a5a9-f265-465e-9202-d28677369aa7</md:uuid>
+</metadata>
+  <content>
+    <section id="systems">
+      <title>Sistemi</title> <para id="systemsp">Per i nostri scopi, un
+      sistema è un qualsiasi blocco di elaborazione che, presa in
+	ingresso una sequenza di campioni <m:math>
+	  <m:apply>
+	      <m:ci type="fn">x</m:ci>
+	      <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>, produce in uscita una sequenza di campioni <m:math>
+	  <m:apply>
+	      <m:ci type="fn">y</m:ci>
+	      <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>. Se i campioni vengono da una serie temporale si
+      parla di <term>sistemi a tempo discreto</term>. In questo modulo
+      non ci occuperemo di elaborazione nel tempo continuo, anche se i
+      principi descritti si possono generalizzare anche al caso di
+      segnali di variabile continua. Invece, la sequenza di numeri può
+      provenire dal campionamento di una immagine, e in questo caso
+      sarà opportuno parlare di <term>sistemi a spazio discreto</term>
+      e usare due indici <m:math> <m:ci>m</m:ci> </m:math> e <m:math>
+      <m:ci>n</m:ci> </m:math> se il campionamento avviene mediante
+      griglia rettangolare di righe e colonne.  </para>
+
+      <para id="linearsysp">In questo modulo ci occupiamo soltanto di
+      <term>sistemi lineari</term>, intendendo con questo che vale il
+      <definition id="superposition"> <term>Principio di
+      sovrapposizione degli effetti</term> <meaning id="id1170575558816">Se <m:math>
+	      <m:msub>
+	      <m:ci type="fn">y</m:ci>
+		<m:mn>1</m:mn>
+	      </m:msub>
+	</m:math> e <m:math>
+	      <m:msub>
+	      <m:ci type="fn">y</m:ci>
+		<m:mn>2</m:mn>
+	      </m:msub>
+	</m:math> sono le risposte del sistema agli ingressi <m:math>
+	      <m:msub>
+	      <m:ci type="fn">x</m:ci>
+		<m:mn>1</m:mn>
+	      </m:msub>
+	</m:math> e <m:math>
+	      <m:msub>
+	      <m:ci type="fn">x</m:ci>
+		<m:mn>2</m:mn>
+	      </m:msub>
+	  </m:math> allora la risposta all'ingresso composito <m:math>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:msub>
+		    <m:ci>a</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:msub>
+		  <m:msub>
+		    <m:ci>x</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:msub>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:msub>
+		    <m:ci>a</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:msub>
+		  <m:msub>
+		    <m:ci>x</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:msub>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+è l'uscita composita
+<m:math>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:msub>
+		    <m:ci>a</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:msub>
+		  <m:msub>
+		    <m:ci>y</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:msub>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:msub>
+		    <m:ci>a</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:msub>
+		  <m:msub>
+		    <m:ci>y</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:msub>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </meaning>
+	</definition>
+</para>
+      <para id="invariancep">Un altro concetto importante è quello
+      della invarianza rispetto al tempo ovvero, analogamente,
+      rispetto allo spazio.
+	<definition id="invarianced">
+	  <term>Invarianza rispetto al tempo</term> <meaning id="id1170576814608">Un
+	  sistema è invariante rispetto al tempo se la traslazione
+	  temporale di <m:math> <m:ci>D</m:ci> </m:math> campioni del
+	  segnale di ingresso produce una identica traslazione nel
+	  segnale di uscita, cioè <m:math> <m:apply> <m:ci type="fn">x</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>n</m:ci>
+		  <m:ci>D</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math> produce in uscita <m:math>	  <m:apply>
+	      <m:ci type="fn">y</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>n</m:ci>
+		  <m:ci>D</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>.
+	  </meaning>
+	</definition>
+Casi di non invarianza si riscontrano laddove il sistema cambia le
+proprie caratteristiche nel tempo (o nello spazio), per esempio per
+effetto di controllo umano. Sono non invarianti anche quei sistemi per
+i quali la frequenza di campionamento del segnale di ingresso è
+diversa da quella del segnale di uscita. Ad esempio, i decimatori sono
+sistemi varianti nel tempo.
+</para>
+      <para id="chain">Una connessione in serie di blocchi lineari e
+	invarianti rispetto al tempo (<term>Linear
+	Time-Invariant</term> - LTI) è essa stessa un sistema lineare
+	e invariante rispetto al tempo, e l'ordine dei blocchi può
+	essere variato senza che cambi il comportamento
+	ingresso-uscita complessivo.</para> <para id="lti">I sistemi
+	LTI possono essere descritti completamente dalla risposta che
+	forniscono ad un impulso di ampiezza unitaria.</para> 
+      <definition id="impulsed">
+	<term>Impulso nel tempo (nello spazio) discreto</term>
+	<meaning id="id2432225">è il segnale <m:math>
+	    <m:ci>δ</m:ci>
+	  </m:math>
+ che vale <m:math> <m:cn>1</m:cn> </m:math>
+	  all'istante zero (nel punto di coordinate <m:math>
+	    <m:list>	    <m:cn>0</m:cn> 
+	    <m:cn>0</m:cn> 
+	    </m:list>
+	  </m:math>), e <m:math> <m:cn>0</m:cn> </m:math> in ogni altro istante (punto).
+      </meaning>
+      </definition>
+    </section>
+    <section id="convolution">
+      <title>Risposta all'impulso e convoluzione</title> <para id="impulserespp">Chiamiamo <m:math> <m:ci>h</m:ci> </m:math> il
+      segnale di uscita di un sistema LTI il cui ingresso sia
+      costituito da un impulso. Tale segnale di uscita viene detto
+      <term>risposta all'impulso</term>.  Dal momento che qualsiasi
+      segnale a tempo (spazio) discreto si può pensare come costituito
+      dalla somma pesata di impulsi traslati, ogni campione che si
+      presenta in ingresso <emphasis>attiva</emphasis> una risposta
+      all'impulso con una certa ampiezza determinata dal valore del
+      campione stesso.  Dal momento che le risposte all'impulso si
+      attivano a distanza di un campione l'una dall'altra ed hanno una
+      estensione di svariati campioni, l'effetto di ciascun campione
+      di input si protrae nel tempo, ovvero si estende su un certo
+      numero di campioni successivi del segnale di output. Vista la
+      linearità e l'invarianza temporale del sistema, le successive
+      risposte all'impulso sommano i loro effetti. In altri
+      termini, il sistema mantiene memoria dei campioni passati, cioè
+      immessi in precedenza nel sistema, e usa questa memoria per
+      influenzare il presente.</para>
+      <para id="piattop">
+	Per avere una analogia fisica, si può pensare alla percussione
+	a intervalli regolari di un piatto musicale. La risposta ad
+	ogni singolo colpo si protrae nel tempo e si sovrappone alle
+	risposte ad ogni colpo successivo.
+      </para>
+      <example id="xexa">
+	<para id="xexamp">Si consideri il segnale <m:math>
+	    <m:ci>x</m:ci>
+	  </m:math> che sia nullo ovunque esclusi gli istanti <m:math>
+	    <m:apply>
+	      <m:minus/>
+	      <m:mn>1</m:mn>
+	    </m:apply>
+	  </m:math>, <m:math>
+	    <m:mn>0</m:mn>
+	  </m:math>, e <m:math>
+	    <m:mn>1</m:mn>
+	  </m:math> in cui vale, rispettivamente <m:math>
+	    <m:mn>1</m:mn>
+	  </m:math>, <m:math>
+	    <m:mn>0.5</m:mn>
+	  </m:math>, e <m:math>
+	    <m:mn>0.25</m:mn>
+	  </m:math>. In ogni istante <m:math>
+	    <m:ci>n</m:ci>
+	  </m:math>, <m:math><m:apply>
+	      <m:ci type="fn">x</m:ci>
+	      <m:ci>n</m:ci>
+	  </m:apply>
+	  </m:math> si può esprimere come <m:math>
+	      <m:apply>
+		<m:plus/>
+	      <m:apply>
+		<m:times/>
+		<m:cn>1</m:cn>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci>n</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>0.5</m:cn>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>0.25</m:cn>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>n</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	      </m:apply>
+	  </m:math>. Per linearità l'uscita si può quindi ottenere per composizione di risposte all'impulso opportunamente traslate e pesate: <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+	      <m:apply>
+		<m:times/>
+		<m:cn>1</m:cn>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci>n</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>0.5</m:cn>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>0.25</m:cn>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>n</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.
+	</para>
+      </example>
+      <para id="xexampp">Per generalizzazione dell'esempio <link target-id="xexa"/> si può definire l'operazione di
+      <term>convoluzione</term>.</para>
+      <definition id="convolutiond">
+	<term>Convoluzione di due segnali <m:math>
+	    <m:ci>h</m:ci>
+	  </m:math> e <m:math>
+	    <m:ci>x</m:ci>
+	  </m:math>
+	</term>
+	<meaning id="id1170576506237"> <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">h * x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>m</m:ci>
+		</m:bvar>
+		<m:lowlimit><m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+ 	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>m</m:ci>
+	      </m:apply>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+
+	  </m:math>
+</meaning>
+      </definition>
+
+      <para id="invito_conv">L'operazione di convoluzione può essere
+      pienamente intesa attraverso la costruzione esplicita di qualche
+      esempio di prodotto di convoluzione. Il modulo <link document="m10087">Discrete-Time Convolution</link> offre la
+      costruzione grafica di un esempio e rimanda a ulteriori esempi
+      disponibili in rete. </para>
+      <section id="id1170583945364">
+	<title>Proprietà</title> <para id="proprietap">Le proprietà
+	dell'operazione di convoluzione sono ben illustrate nel modulo
+	<link document="m10088">Properties of
+	Convolution</link>. Quella più interessante in questa
+	sede è la estensione:</para>
+	<rule id="estensione_conv" type="property"><label>Property</label>
+	  <statement id="id1170575634461">
+	   <para id="estensionepp">
+	      Se <m:math> <m:apply> <m:ci type="fn">x</m:ci>
+	    <m:ci>n</m:ci>
+	      </m:apply>
+	      </m:math> è estesa su <m:math>
+		<m:msub>
+		  <m:ci>M</m:ci>
+		  <m:mn>1</m:mn>
+		</m:msub>
+	      </m:math> campioni, e <m:math> <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      </m:math> è estesa su <m:math> <m:msub> <m:ci>M</m:ci>
+<m:mn>2</m:mn> </m:msub> 	      </m:math> campioni, allora il prodotto di convoluzione <m:math> <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      </m:math> è esteso su <m:math>
+		<m:apply>
+		  <m:plus/>		<m:msub>
+		  <m:ci>M</m:ci>
+		  <m:mn>1</m:mn>
+		</m:msub>
+		<m:msub>
+		  <m:ci>M</m:ci>
+		  <m:mn>2</m:mn>
+		</m:msub>
+                </m:apply>
+		  <m:apply>
+		    <m:minus/>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+	      </m:math> campioni.
+	    </para>
+	  </statement>
+	</rule>
+	<para id="lungop">Quindi il segnale prodotto di convoluzione
+	sarà più lungo sia del segnale di ingresso sia della risposta
+	all'impulso.</para> <para id="commutap">Un'altra proprietà
+	interessante è la commutatività dell'operatore di
+	convoluzione, secondo la quale segnale di ingresso
+	e risposta all'impulso possono scambiare i loro ruoli senza
+	che cambi il segnale di uscita.</para>
+      </section>
+    </section>
+    <section id="id1170575381894">
+      <title>Risposta in Frequenza e Filtraggio</title>
+      <para id="freqrespp">La <link document="m0046">trasformata di Fourier</link> della risposta all'impulso viene chiamata <term>Risposta in Frequenza</term> e si indica con <m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>. La trasformata di Fourier dell'uscita del sistema
+	si ottiene dalla trasformata di Fourier dell'ingresso mediante
+	moltiplicazione per la risposta in frequenza, cioè <m:math>
+	  <m:apply>
+	    <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">Y</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	    <m:apply>
+	      <m:times/>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.
+ </para>
+      <para id="sagomap">
+	La risposta in frequenza sagoma, in maniera moltiplicativa, lo
+	spettro del segnale di ingresso o, in altri termini, opera un
+	<term>filtraggio</term> esaltando talune frequenze ed
+	attenuandone altre. Il filtraggio può operare anche sulla fase
+	delle componenti spettrali, ritardandole in misura diversa.
+      </para>
+      <para id="filtraggio">
+	Il filtraggio può avvenire nel <emphasis>dominio del
+	tempo</emphasis> (o dello spazio), mediante operazione di
+	convoluzione, o nel <emphasis>dominio delle
+	frequenze</emphasis> mediante moltiplicazione per la risposta
+	in frequenza.
+      </para>
+      <exercise id="primofiltro">
+	<problem id="id1170576830206">
+	  <para id="primofiltropp">Si utilizzi la risposta all'impulso  nulla ovunque esclusi gli istanti <m:math>
+	    <m:apply>
+	      <m:minus/>
+	      <m:mn>1</m:mn>
+	    </m:apply>
+	  </m:math>, <m:math> <m:mn>0</m:mn> </m:math>, e <m:math>
+	    <m:mn>1</m:mn> </m:math> in cui valga, rispettivamente
+	    <m:math> <m:mn>1</m:mn> </m:math>, <m:math>
+	    <m:mn>0.5</m:mn> </m:math>, e <m:math> <m:mn>0.25</m:mn>
+	    </m:math>, per ridefinire l'operazione di filtraggio
+	    <code>filtra()</code> del <link document="m12664" target-id="sound_chooser">Sound Chooser</link> presentato nel
+	    modulo <link document="m12664">Media Representation in
+	    Processing</link>. In questo caso il filtraggio è
+	    realizzato nel dominio del tempo mediante convoluzione
+	    diretta.
+	  </para>
+	</problem>
+	<solution id="id1170574539315">
+	  <code id="id1170573370692" display="block">
+                 
+	  void filtra(float[] DATAF, float[] DATA, float WC, float RO) {
+	    //WC and R0 are useless, here kept only to avoid rewriting other
+	    //parts of code
+	    for(int i = 2; i &lt; DATA.length-1; i++){
+	      DATAF[i] = DATA[i+1] + 0.5*DATA[i] + 0.25*DATA[i-1];
+	      }
+	    }
+             	      
+	  </code>
+	</solution>
+      </exercise>
+      <section id="id2436628">
+	<title>Causalità</title>
+	<para id="causalityp">La nozione di causalità è piuttosto intuitiva: essa
+	  corrisponde all'esperienza di stimolare un sistema ed
+	  ottenere una risposta a tale stimolazione solo per istanti
+	  del tempo futuro. Per sistemi LTI a tempo discreto, ciò può
+	  corrispondere ad avere la risposta all'impulso nulla per
+	  istanti di tempo (discreto) negativi. Sistemi LTI causali
+	  possono produrre senza ritardo un'uscita campione per
+	  campione, in quanto la convoluzione va ad elaborare solo
+	  valori dell'ingresso passato e presente. Nell'<link target-id="primofiltro"/> la risposta all'impulso è non
+	  causale, ma ciò non costituisce un problema perché è già a
+	  disposizione l'intero segnale di ingresso e l'elaborazione
+	  opera sull'intero blocco di campioni.
+	</para>
+      </section>
+    </section>
+    <section id="id1170575504757">
+      <title>Filtraggio in 2D</title> 
+      <para id="imgprcp">
+	Le nozioni di risposta all'impulso, convoluzione, risposta in
+	frequenza, e filtraggio si estendono in maniera naturale dal
+	1D al 2D, e costituiscono concetti fondamentali
+	dell'elaborazione di immagini. 
+      </para>
+      <para id="convolve2D"><definition id="convolution2dd">
+	<term>Convoluzione di due segnali 2D (immagini)</term>
+	  <meaning id="id2397946">
+	    <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">h * x</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:lowlimit><m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>l</m:ci>
+		</m:bvar>
+		<m:lowlimit><m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+ 	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>k</m:ci>
+		<m:ci>l</m:ci>
+	      </m:apply>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>m</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>l</m:ci>
+		      </m:apply>
+		</m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    </m:apply>
+	  </m:math>
+	  </meaning>
+	</definition>
+	Se <m:math> <m:ci>x</m:ci> </m:math> è l'immagine di
+	  interesse, è facile rendersi conto che la convoluzione
+	  avviene tramite moltiplicazione e traslazione nello spazio
+	  di una <term>maschera di convoluzione</term> o
+	  <term>kernel</term> <m:math> <m:ci>h</m:ci> </m:math> (la
+	  risposta all'impulso del sistema di elaborazione).  Così
+	  come nel caso 1D il filtraggio può essere pensato come una
+	  combinazione di un gruppo di campioni contigui (dove la
+	  estensione del gruppo dipende dalla estensione della
+	  risposta all'impulso del filtro) che viene ripetuta nel
+	  tempo, campione per campione, così nello spazio il
+	  filtraggio può essere visto come una combinazione di una
+	  porzione di campioni (insieme di pixel contigui), la cui
+	  estensione è data dalla maschera di convoluzione. Quella che
+	  nel tempo era un effetto della memoria del sistema, nel caso
+	  delle immagini diventa una <emphasis>influenza a
+	  distanza</emphasis>.  </para> <para id="freqresp2Dp">Come
+	  nel caso 1D, la trasformata di Fourier della risposta
+	  all'impulso viene chiamata <term>Risposta in
+	  Frequenza</term> e si indica con <m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> 
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> 
+	  </m:apply>
+	</m:math>. La trasformata di Fourier dell'uscita del sistema
+	si ottiene dalla trasformata di Fourier dell'ingresso mediante
+	moltiplicazione per la risposta in frequenza, cioè <m:math>
+	  <m:apply>
+	    <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">Y</m:ci>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> 
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> 
+	  </m:apply>
+	    <m:apply>
+	      <m:times/>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> 
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> 
+	  </m:apply>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>X</m:mn>
+		</m:msub>
+	      </m:ci> 
+	      <m:ci>		<m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>Y</m:mn>
+		</m:msub>
+	      </m:ci> 
+	  </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.
+ </para>    
+      <exercise id="convolve2dprob">
+	<problem id="id8436700">
+	  <para id="convolve2dprobp">Considerato il codice Processing
+	  dell'<link url="http://processing.org/learning/topics/blur.html">esempio
+	  di blurring</link>, si isolino le linee che
+	  realizzano l'operazione di convoluzione.
+	  </para>
+	</problem>
+	<solution id="id1170572566785">
+	  <code id="id1170573710440" display="block">
+                 
+for(int y=0; y&lt;height; y++) { 
+  for(int x=0; x&lt;width/2; x++) { 
+    float sum = 0; 
+    for(int k=-n2; k&lt;=n2; k++) { 
+      for(int j=-m2; j&lt;=m2; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        //... omissis ...
+	//auxiliary code to deal with image boundaries   
+        sum = sum + kernel[j+m2][k+n2] * red(get(xp, yp)); 
+      } 
+    } 
+    output[x][y] = int(sum);  
+  } 
+} 
+             	      
+	  </code>
+	</solution>
+      </exercise>
+</section>
+  </content>
+  
+</document>

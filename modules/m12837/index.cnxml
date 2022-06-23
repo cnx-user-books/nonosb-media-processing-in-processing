@@ -1,0 +1,412 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Texture in Processing</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m12837</md:content-id>
+  <md:title>Texture in Processing</md:title>
+  <md:abstract>Una breve guida al texture mapping in Processing</md:abstract>
+  <md:uuid>556fb2ad-4f1e-4b99-91d9-d222f538dc00</md:uuid>
+</metadata>
+  <content>
+    <section id="color_interpolation">
+      <title>Interpolazione di colori</title>
+      <para id="color_interpolationp">
+	Come visto in <link document="m12665">Graphic Composition in
+	Processing</link>, si possono ottenere superfici come
+	collezioni di poligoni mediante definizione di vertici
+	all'interno della coppia <code>beginShape()</code> -
+	<code>endShape()</code>. E' possibile attribuire un colore a
+	uno o più vertici, in modo da rendere variazioni continue di
+	colore (<term>gradiente</term>). Ad esempio, si provi ad eseguire il codice 
+	<code id="id1168720739473" display="block"> 
+	  size(200,200,P3D);
+          beginShape(TRIANGLE_STRIP);
+          fill(240,   0, 0); vertex(20,31, 33);
+          fill(240, 150, 0); vertex(80, 40, 38);
+          fill(250, 250, 0); vertex(75, 88, 50);
+                             vertex(49, 85, 74);
+          endShape();</code>
+	per ottenere una sfumatura continua dal rosso al giallo nella strip di due triangoli.
+      </para>
+      <section id="bilinear">
+	<title>Interpolazione bilineare</title>
+      <para id="bilinearp">
+	Il sistema grafico opera una interpolazione dei valori di
+	  colore attribuiti ai vertici. Questo tipo di  <term>interpolazione
+	bilineare</term> è definita come segue:
+	<list id="bilinearlist">
+	  <item>Per ogni poligono della collezione</item>
+	  <item><list id="bilinearlist1"><item>Per ogni lato del poligono si attribuisce ad ogni punto sul segmento il colore ottenuto per interpolazione lineare dai colori dei vertici <m:math>
+		  <m:ci>i</m:ci>
+		</m:math> e <m:math>
+		  <m:ci>j</m:ci>
+		</m:math> che delimitano il poligono: 
+		  <m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		    <m:ci type="fn">
+		    <m:msub>
+		      <m:mi>C</m:mi>
+		      <m:mn>ij</m:mn>
+		    </m:msub>
+		    </m:ci>
+		    <m:ci>α</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		     <m:apply>
+		      <m:times/>
+<!--		      <m:apply>
+			<m:minus/> -->
+			<m:mn>(1</m:mn>
+                        <m:mo>-</m:mo>
+			<m:ci>α)</m:ci>
+<!--		      </m:apply> -->
+		      <m:msub>
+			<m:mi>C</m:mi>
+			<m:mn>i</m:mn>
+		      </m:msub>
+		     </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>α</m:ci>
+		      <m:msub>
+			<m:mi>C</m:mi>
+			<m:mn>j</m:mn>
+		      </m:msub>
+		    </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </item>
+	    </list>
+	  </item>
+	  <item>
+	    <list id="bilinearlist2"><item>Una <term>scan line</term> spazzola il poligono (o meglio, la sua proiezione sulla finestra immagine) intersecando ad ogni passo due lati in due punti <m:math>
+		    <m:ci>l</m:ci>
+		  </m:math> ed <m:math>
+		    <m:ci>r</m:ci>
+		  </m:math>
+i cui colori sono già stati individuati come <m:math>
+		  <m:msub>
+		    <m:mi>C</m:mi>
+		    <m:mn>l</m:mn>
+		  </m:msub>
+		</m:math> e <m:math>
+		  <m:msub>
+		    <m:mi>C</m:mi>
+		    <m:mn>r</m:mn>
+		  </m:msub>
+		</m:math>. In ogni punto della linea di scan il colore è determinato per interpolazione lineare <m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		    <m:ci type="fn">
+		    <m:msub>
+		      <m:mi>C</m:mi>
+		      <m:mn>lr</m:mn>
+		    </m:msub>
+		    </m:ci>
+		      <m:ci>β</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		     <m:apply>
+		      <m:times/>
+<!--		      <m:apply>
+			<m:minus/> -->
+			<m:mn>(1</m:mn>
+                        <m:mo>-</m:mo>
+			<m:ci>β)</m:ci>
+<!--		      </m:apply> -->
+		      <m:msub>
+			<m:mi>C</m:mi>
+			<m:mn>l</m:mn>
+		      </m:msub>
+		     </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>β</m:ci>
+		      <m:msub>
+			<m:mi>C</m:mi>
+			<m:mn>r</m:mn>
+		      </m:msub>
+		    </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+</item>
+	    </list>
+	  </item>
+	</list>
+      </para>
+      <para id="colorint_examplep">Un esempio significativo di interpolazione di colori associati
+	  ai vertici di un cubo si trova negli <link url="http://processing.org/learning/3d/">esempi di
+	  Processing</link>, nel codice <link url="http://processing.org/learning/3d/rgbcube.html">
+	  RGB Cube</link>.
+      </para>
+    </section>
+    </section>
+    <section id="texture">
+      <title>Texture</title>
+      <para id="texture1p">
+	Nella modellizzazione di scene complesse per composizione di
+	elementi grafici semplici non si può superare una certa soglia
+	di complessità. Si pensi ad esempio alla modellizzazione di
+	una scena campestre nella quale si debbano rappresentare i
+	singoli elementi di vegetazione, ivi compresi i fili d'erba
+	del prato. E' impensabile svolgere manualmente questo
+	compito. Potrebbe essere possibile collocare e controllare i
+	fili d'erba per via algoritmica, ed è un strada simile che si
+	segue, ad esempio, per rendere realistica la capigliatura o la
+	pelle dei personaggi nei più sofisticati film di animazione
+	(si veda ad esempio, <link url="http://www.computerarts.co.uk/in_depth/features/inside_the_incredibles">the
+	Incredibles</link>). Oppure, in special modo se sono richieste
+	prestazioni di grafica interattiva, bisogna ricorrere
+	all'artificio delle <term>texture</term>. In sostanza, si
+	tratta di immagini che rappresentano la tessitura visiva delle
+	superfici e che vengono mappate sui poligoni che modellano gli
+	oggetti della scena. Ai fini della resa qualitativa delle
+	superfici ha senso limitare il livello di dettaglio a
+	frammenti non più piccoli di un pixel, e quindi il
+	<term>texture mapping</term> viene inserito nella catena di
+	rendering a livello di <term>rastering</term> delle primitive
+	grafiche, cioè laddove si passa da descrizioni geometriche in
+	3D a illuminazione di pixel sul display. E' a questo livello
+	che avviene anche la rimozione delle facce nascoste, i soli
+	frammenti di interesse essendo quelli visibili.
+      </para>
+      <para id="texturep">
+	In Processing, una texture viene definita all'interno di un
+	blocco <code>beginShape()</code> - <code>endShape()</code>
+	mediante la funzione <code>texture()</code> che ha come unico
+	parametro una variabile di tipo <code>PImage</code>. Le
+	successive chiamate a <code>vertex()</code> possono contenere,
+	come ultima coppia di parametri, il punto della texture al
+	quale si vuole associare il vertice. Infatti, ogni immagine di
+	texture è parametrizzata in due variabili <m:math>
+	<m:ci>u</m:ci> </m:math> e <m:math> <m:ci>v</m:ci> </m:math>,
+	che possono riferirsi direttamente alla riga e colonna di un
+	<term>texel</term> (pixel della texture) ovvero essere
+	normalizzate tra <m:math> <m:mn>0</m:mn> </m:math> e <m:math>
+	<m:mn>1</m:mn> </m:math>, in maniera da poter ignorare la
+	dimensione nonché la larghezza e altezza della texture
+	stessa. L'interpretazione da attribuire ai parametri <m:math>
+	<m:ci>u</m:ci> </m:math> e <m:math> <m:ci>v</m:ci> </m:math>
+	viene fissata dalla direttiva <code>textureMode()</code> con
+	parametro <code>IMAGE</code> o <code>NORMALIZED</code>.
+      </para>
+      <example id="chimeraex">
+	<para id="chimeraexp">Nel codice che segue l'immagine di <link resource="./vetro.jpg"> vetro rotto </link> viene
+		      usata come texture e affiancata
+		      all'interpolazione dei colori, nonché
+		      all'illuminazione di default. Lo
+		      <term>shading</term> delle superfici, prodotto
+		      dall'illuminazione e dai colori, viene modulato
+		      in maniera moltiplicativa dai colori della
+		      texture.
+	  <code id="id5116220" display="block">
+            size(400,400,P3D);
+            PImage a = loadImage("vetro.jpg");
+            lights();
+            textureMode(NORMALIZED);
+            beginShape(TRIANGLE_STRIP);
+            texture(a);
+            fill(240,   0, 0); vertex(40,61, 63, 0, 0);
+            fill(240, 150, 0); vertex(340, 80, 76, 0, 1);
+            fill(250, 250, 0); vertex(150, 176, 100, 1, 1);
+                               vertex(110, 170, 180, 1, 0);
+            endShape();
+	  </code>
+	</para>
+      </example>
+    </section>
+    <section id="texture_mapping">
+      <title>Texture mapping</title>
+      <para id="texture_mappingp">
+	E' evidente che l'operazione di mappatura da immagine texture
+	  a superficie oggetto, di forma arbitraria, implica una
+	  qualche forma di interpolazione. In modo analogo a quanto
+	  avviene per i colori, soltanto i vertici che delimitano la
+	  superficie sono messi in corrispondenza con punti esatti
+	  dell'immagine texture. Quello che avviene per i punti
+	  interni deve essere stabilito in qualche modo. In effetti,
+	  Processing e OpenGL si comportano secondo quanto illustrato
+	  in <link target-id="bilinear"/>, cioè per interpolazione
+	  bilineare: una prima interpolazione lineare su ogni segmento
+	  del contorno è seguita da interpolazione lineare su scan
+	  line. Se <m:math> <m:ci>u</m:ci> </m:math> e <m:math>
+	  <m:ci>v</m:ci> </m:math> eccedono i limiti dell'immagine
+	  texture, il sistema (Processing) può assumere che questa sia
+	  ripetuta periodicamente ovvero fissarla ai valori assunti
+	  alla frontiera. 
+      </para>
+      <para id="aliasingp">
+	Un problema che si verifica è che raramente un pixel su
+	display corrisponde esattamente a un texel. Su un pixel
+	possono essere mappati più texel o, viceversa, un texel può
+	mapparsi su più pixel. Il primo caso corrisponde ad un
+	sottocampionamento (o decimazione) che, come visto in
+	<link document="m12751">Sampling and Quantization</link>, può dare
+	luogo ad aliasing. L'effetto dell'aliasing si può attenuare
+	mediante filtraggio passa-basso dell'immagine texture. Il
+	secondo caso corrisponde ad un sovracampionamento,
+	interpretabile in frequenza come un allontanamento delle
+	immagini spettrali.
+      </para>
+    </section>
+    <section id="texturegen">
+      <title>Generazione di texture</title>
+      <para id="texturegenp">
+      Le texture, oltre che importate da immagini, possono anche
+      essere generate per via algoritmica, ciò è particolarmente
+      indicato quando si vogliano generare dei pattern regolari o
+      pseudo casuali. Ad esempio, il pattern di una scacchiera si può
+      generare con il codice
+      <code id="id1168720497283" display="block">
+
+PImage textureImg = loadImage("vetro.jpg"); // dummy image
+colorMode(RGB,1);
+
+int biro = 0;
+int bbiro = 0;
+int scacco = 5;
+for (int i=0; i&lt;textureImg.width; i+=scacco) {
+   bbiro = (bbiro + 1)%2; biro = bbiro;
+   for (int j=0; j&lt;textureImg.height; j+=scacco) {
+     for (int r=0; r&lt;scacco; r++)
+       for (int s=0; s&lt;scacco; s++)
+        textureImg.set(i+r,j+s, color(biro));
+    biro = (biro + 1)%2; 
+  }
+}
+image(textureImg, 0, 0);
+
+      </code>
+      </para>
+      <para id="randomfilterp">L'uso della funzione random, combinato con filtri di vario
+	tipo, consente una ampia versatilità nella produzione di
+	texture. Ad esempio, in <link target-id="expattern"/> è
+	rappresentato un pattern ottenuto da una variazione del codice
+	di generazione della scacchiera. In particolare, è stata
+	aggiunta l'istruzione <code>scacco=floor(2+random(5));</code>
+	all'interno del <code>for</code> più esterno, e si è eseguito un
+	filtraggio di media.
+      <figure id="expattern">
+	<title>Pattern generato per via algoritmica</title>
+ 	<media id="id1168714905922" alt=""><image src="../../media/expattern.png" mime-type="image/png"/></media>
+     </figure>
+      </para>
+    </section>
+    <exercise id="ingrandimentop">
+      <problem id="id1168722165281">
+	<para id="ingrandimentopp">
+	  Come si modifica il codice di <link target-id="chimeraex"/> in
+	  modo da rendere le fratture del vetro più grandi?
+	</para>
+      </problem>
+      <solution id="id1168714612540">
+	<para id="ingrandimentops">
+	  Basta considerare solo un pezzo della texture, con chiamate
+	  del tipo <code>vertex(150, 176, 0.3, 0.3);</code>
+	</para>
+      </solution>
+    </exercise>
+    <exercise id="patternrico">
+      <problem id="id8534247">
+	<para id="patternricop">
+	  Si modifichi il codice del generatore di scacchiera di <link target-id="texturegen"/> in modo che generi la texture di
+	  <link target-id="expattern"/>
+	</para>
+      </problem>
+    </exercise>
+    <exercise id="checker">
+      <problem id="id1168725629483">
+	<para id="checkerp">
+	  Si esegua e si analizzi il codice seguente. Si provi inoltre
+	  a variare la dimensione dei quadratini e il tipo di
+	  filtraggio.
+	  <code id="id3778810" display="block">
+            
+
+size(200, 100, P3D);
+
+PImage textureImg = loadImage("vetro.jpg"); // dummy image
+colorMode(RGB,1);
+
+int biro = 0;
+int bbiro = 0;
+int scacco = 5;
+for (int i=0; i&lt;textureImg.width; i+=scacco) {
+   // scacco=floor(2+random(5));
+   bbiro = (bbiro + 1)%2; biro = bbiro;
+   for (int j=0; j&lt;textureImg.height; j+=scacco) {
+     for (int r=0; r&lt;scacco; r++)
+       for (int s=0; s&lt;scacco; s++)
+        textureImg.set(i+r,j+s, color(biro));
+    biro = (biro + 1)%2; 
+  }
+}
+image(textureImg, 0, 0);
+textureMode(NORMALIZED);
+beginShape(QUADS);
+  texture(textureImg);
+  vertex(20, 20, 0, 0);
+  vertex(80, 25, 0, 0.5);
+  vertex(90, 90, 0.5, 0.5);
+  vertex(20, 80, 0.5, 0);
+endShape();
+
+// ------ filtraggio -------
+
+PImage tImg = loadImage("vetro.jpg"); // dummy image
+float val = 1.0/9.0;
+float[][] kernel = { {val, val, val}, 
+                     {val, val, val}, 
+                     {val, val, val} }; 
+int n2 = 1; 
+int m2 = 1;
+colorMode(RGB,255);
+// Convolve the image 
+for(int y=0; y&lt;textureImg.height; y++) { 
+  for(int x=0; x&lt;textureImg.width/2; x++) { 
+    float sum = 0; 
+    for(int k=-n2; k&lt;=n2; k++) { 
+      for(int j=-m2; j&lt;=m2; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        if (xp &lt; 0) { 
+          xp = xp + textureImg.width; 
+        } else if (x-j &gt;= textureImg.width) { 
+          xp = xp - textureImg.width; 
+        } 
+        // Reflect y-k to not exceed array boundary 
+        if (yp &lt; 0) { 
+          yp = yp + textureImg.height; 
+        } else if (yp &gt;= textureImg.height) { 
+          yp = yp - textureImg.height; 
+        } 
+        sum = sum + kernel[j+m2][k+n2] * red(textureImg.get(xp, yp)); 
+      } 
+    } 
+    tImg.set(x,y, color(int(sum)));
+  } 
+} 
+ 
+translate(100, 0);
+beginShape(QUADS);
+  texture(tImg);
+  vertex(20, 20, 0, 0);
+  vertex(80, 25, 0, 0.5);
+  vertex(90, 90, 0.5, 0.5);
+  vertex(20, 80, 0.5, 0);
+endShape();
+
+	  </code>
+	</para>
+      </problem>
+    </exercise>
+  </content>
+  
+</document>

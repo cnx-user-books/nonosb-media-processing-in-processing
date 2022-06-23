@@ -1,37 +1,38 @@
 <document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
-  <title>Programming in Processing</title>
-  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>f014bf3a-e35f-4abc-8ae8-1179debda87a</md:uuid>
+  <title>Programmare in Processing</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>0643e320-dea8-4136-91b6-847ea4dbf46b</md:uuid>
 </metadata>
 
   <content>
     <section id="intro">
-      <title> Introduction </title> <note id="idm2915504">This introduction is based on
-      <link url="http://www.shiffman.net/itp/classes/ppaint/"> Daniel
-      Shiffman's tutorial </link>.</note>
-      <para id="introp">
-	<term url="http://processing.org"> Processing </term> is a
-	language and development environment oriented toward <term url="http://en.wikipedia.org/wiki/Interaction_design">
-	interaction design </term>. In the course <term document="col10268"> Media
-	Processing in Processing (MPP)</term>, processing is one of
-	the main instruments used to introduce some fundamentals in
-	sound and image processing. Processing is an extension of Java
-	that supports many Java structures with a simplified syntax.
+      <title> Introduzione </title> <note id="idm3316304">Questa introduzione è basata
+      sul <link url="http://www.shiffman.net/itp/classes/ppaint/">
+      tutorial di Daniel Shiffman </link>.</note>
+      <para id="introp"><term url="http://processing.org"> Processing </term> è un
+	linguaggio ed un ambiente di sviluppo orientato all' <term url="http://en.wikipedia.org/wiki/Interaction_design">
+	interaction design </term>. Nel corso <term document="col10299"> Elaborazione di
+	Media in Processing</term>, Processing è uno degli strumenti
+	principali utilizzati per introdurre elementi di elaborazione
+	di suoni e immagini. Processing è una estensione di Java che
+	supporta molte delle strutture Java con una sintassi
+	semplificata.
       </para>
       <para id="modi">
-	Processing can be used in three
+	Processing può essere utilizzato in tre:
 	<list id="modil" list-type="labeled-item">
-	  <title> Programming Modes </title> 
+	  <title> Modi di Programmazione </title> 
 	  
-	  <item><label> Basic </label>  Sequence of commands for simple
-	  drawing by graphic primitives. --
+	  <item><label> Basic </label>  Sequenza di comandi per il
+	  disegno di primitive grafiche --
 
 	    <table frame="all" id="pinocchiononose_table" summary="">
-<tgroup cols="2" align="left" colsep="1" rowsep="1"><colspec colname="col1" colnum="1" colwidth="25"/>
+	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
+		<colspec colname="col1" colnum="1" colwidth="25"/>
 		<colspec colname="col2" colnum="2" colwidth="200"/>
 		<tbody>
 		  <row>
 		    <entry>
-		      <link resource="pinocchiononose.html">applet without nose</link>
+		      <link resource="pinocchiononose.html">applet senza naso</link>
 <!--
 	    <media type="application/x-java-applet" src='pinocchiononose.class'  >
 		  <param name="height" value="256"/>
@@ -41,7 +42,7 @@
 -->		     
 		    </entry>
 		    <entry>
-	    <code display="block" id="idm1578656">
+	    <code display="block" id="idm1330992">
 	      size(256,256);
 	      background(0);
 	      stroke(255);
@@ -57,12 +58,11 @@
 		    </entry>
 		  </row>
 		</tbody>
-	      
-</tgroup>
-</table>
+	      </tgroup>
+	    </table>
 	  </item>
 
-	  <item><label> Intermediate </label>  Procedural programming  -- 
+	  <item><label> Intermediate </label>  Programmazione procedurale  -- 
 
 	    <table frame="all" id="pinocchionose_table" summary="">
 	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
@@ -71,7 +71,7 @@
 		<tbody>
 		  <row>
 		    <entry>
-		      <link resource="pinocchionose.html">applet with nose</link>
+		      <link resource="pinocchionose.html">applet con naso</link>
 <!--
 	    <media type="application/x-java-applet" src='pinocchionose.class'  >
 		  <param name="height" value="256"/>
@@ -81,7 +81,7 @@
 -->
 		    </entry>
 		    <entry>
-	    <code display="block" id="idp2296224">
+	    <code display="block" id="idm4775632">
 	    void setup() {
 	      size(256,256);
 	      background(0);
@@ -112,7 +112,8 @@
 	    </table>
 	  </item>
 
-	  <item><label> Complex </label>  Object-Oriented Programming (Java) --
+	  <item><label> Complex </label>  Programmazione Orientata agli
+	  Oggetti (Java) --
 	    <table frame="all" id="pinocchioclassy_table" summary="">
 	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
 		<colspec colname="col1" colnum="1" colwidth="25"/>
@@ -120,7 +121,7 @@
 		<tbody>
 		  <row>
 		    <entry>
-		      <link resource="pinocchioclassy.html">applet with colored nose</link>
+		      <link resource="pinocchioclassy.html">applet con naso colorato</link>
 <!--
 	    <media type="application/x-java-applet" src='pinocchioclassy.class'  >
 		  <param name="height" value="256"/>
@@ -130,7 +131,7 @@
 -->
 		    </entry>
 		    <entry>
-	    <code display="block" id="idp1300192">
+	    <code display="block" id="idp2056656">
 	   Puppet pinocchio;
 	   
 	   void setup() {
@@ -175,78 +176,80 @@
       </para>
 
 
-      <para id="webexport">The Processing programs can be converted into Java applets.
-	In order to do that, one just goes to the <emphasis>File
-	</emphasis> menu and chooses <emphasis>Export</emphasis>. As a
-	result, five files will be created and put in an <code>applet</code> folder:
-	<list id="fileprodotti"><item><label>index.html</label> html code to visualize the
-	  applet</item>
+      <para id="webexport">I programmi Processing possono essere convertiti in applet
+	Java. Per fare ciò è sufficiente andare nel menu
+	<emphasis>File </emphasis> e scegliere <emphasis>Export
+	</emphasis>. Il risultato finale sarà dunque la creazione di
+	cinque file, inseriti nel folder <code>applet</code>:
+	<list id="fileprodotti"><item><label>index.html</label> sorgente html per visualizzare
+	  la applet</item>
 
-	  <item><label>filename.jar</label> the compiled applet,
-	  including all data (images, sounds, etc.)
-	  </item>
+	  <item><label>filename.jar</label> la applet compilata,
+	  completa di tutti i dati (immagini, suoni, ecc.)
+	  necessari</item>
 
-	  <item><label>filename.pde</label> the Processing source
-	  code</item>
-	  <item><label>filename.java</label> the Java code embedding the Processing source code</item>
-	  <item><label>loading.gif</label> an image to be displayed while the applet is being loaded.</item>
-	</list>
-	Moreover, by means of <emphasis>Export Application</emphasis>
-	it is possible to generate an executable application for
-	Linux, MacOS, or Windows platforms.
-</para>
-</section>
+	  <item><label>filename.pde</label> il codice sorgente
+	  Processing</item>
+	
+<item><label>filename.java</label> il codice Java che incorpora il codice sorgente 
+	  Processing</item>
+	
+<item><label>loading.gif</label> un'immagine che viene mostrata mentre si attende il caricamento della applet.</item></list>
+	Inoltre, mediante <emphasis>Export Application</emphasis> è
+	possibile generare una applicazione eseguibile per piattaforma
+	Linux, MacOS, o Windows.
+      </para>
+    </section>
 
     <section id="tipi_di_dati">
-      <title>Data Types</title>
+      <title>Tipi di Dati</title>
       <section id="variabili">
-	<title>Variables</title> <para id="variabile">A variable is a
-	pointer to a memory location, and it can refer either to
-	primitive values (<code>int</code>, <code>float</code>, ecc.)
-	or to objects and arrays (tables of primitive-type
-	elements). </para> <para id="copia">The operation of
-	assignment <code>b = a</code> produces
+	<title>Variabili</title> <para id="variabile">Una variabile è un
+	puntatore a una locazione di memoria, e può riferirsi a valori
+	primitivi (<code>int</code>, <code>float</code>, ecc.) oppure
+	ad oggetti o array (tabelle di elementi di un tipo primitivo). </para>
+	<para id="copia">L'operazione di assegnamento <code>b = a</code> produce
 	  <list id="tipi_di_copia">
-	    <item> The copy of the content of <code>a</code> into
-	    <code>b</code>, if the variables refer to primitive types. </item> <item> The creation of a new reference
-	    (pointer) to the same object or array, if the variables refer to
-	    objects or arrays.</item>
+	    <item>Se le variabili si riferiscono a tipi primitivi, la
+	    copia del contenuto di <code>a</code> in
+	    <code>b</code>.</item> 
+	    <item>Se le variabili si
+	    riferiscono a oggetti o array, la creazione di un nuovo
+	    riferimento allo stesso oggetto o array.</item>
 	  </list>
-</para> <!-- --> <note id="idm2475168">To have a clear understanding of computer
-	science terms such as those that follow, we recommend looking
-	at <link url="http://wikipedia.org/">Wikipedia</link></note>
+</para>	<!--  -->
+	<note id="idp99184">Per avere chiaro il significato di termini informatici quali, ad esempio, quelli che seguono, si consiglia di cercare in <link url="http://wikipedia.org/">Wikipedia</link></note>
 	<definition id="scope">
-	  <term>scope</term> <meaning id="idm3544848">within a program, it is a region
-	  where a variable can be accessed and its value
-	  modified</meaning>
+	  <term>scope</term>
+	  <meaning id="idm1882176">all'interno di un programma, regione in cui si può accedere ad una variabile e modificarne il valore</meaning>
 	</definition>
 	<definition id="globalscope">
-	  <term>global scope</term> <meaning id="idm2858416">defined outside the
-	  methods setup() and draw(), the variable is visible and
-	  usable anywhere in the program</meaning>
+	  <term>global scope</term>
+	  <meaning id="idm11443296">definita fuori da setup() e draw(), la variabile è visibile e usabile ovunque nel programma</meaning>
 	</definition>
 	<definition id="localscope">
-	  <term>local scope</term> <meaning id="idm11929792">defined within a code
-	  block or a function, the variable takes values that are
-	  local to the block or function, and any values taken by a
-	  global variable having the same name are ignored.</meaning>
+	  <term>local scope</term> <meaning id="idp2780000">definita all'interno di un
+	  blocco di codice o di una funzione, la variabile assume
+	  valori locali al blocco o alla funzione, ed eventuali valori
+	  assunti da una variabile globale omonima vengono
+	  ignorati</meaning>
 	</definition>
-	<example id="idm1118352">
-	  <title>Array declaration and allocation</title>
-	  <code display="block" id="idm3083440">int[] arrayDiInteri = new int[10];</code>
+	<example id="idp762096">
+	  <title>Dichiarazione e allocazione di un array</title>
+	  <code display="block" id="idp672016">int[] arrayDiInteri = new int[10];</code>
 	</example>
        </section>
     </section>
 
       <section id="strutture_di_programmazione">
-	<title>Programming Structures</title>
+	<title>Strutture di Programmazione</title>
         <section id="istruzioni_condizionali">
-	  <title>Conditional Instructions</title>
+	  <title>Istruzioni Condizionali</title>
 	<list id="tipi_di_condizionali">
 	  <item>if: 
-	    <code display="block" id="idm342512">
+	    <code display="block" id="idm4348368">
 	      if (i == NMAX) {
-	         println("finished");
+	         println("finito");
 	         }
 	      else {
 	         i++;
@@ -256,13 +259,13 @@
 	</list>
         </section>
 	<section id="iterazioni">
-	  <title>Iterations</title>
+	  <title>Iterazioni</title>
 	  <list id="tipi_di_iterazione">
 	    <item>while: 
-	      <code display="block" id="idm10799984">
+	      <code display="block" id="idp8687472">
               
-		int i = 0; //integer counter
-		while (i &lt; 10) { //write numbers between 0 and 9
+		int i = 0; //contatore intero
+		while (i &lt; 10) { //scrivi i numeri da 0 a 9
 		  println("i = "+ i); 
 		  i++;
 		}
@@ -270,9 +273,9 @@
 	      </code>
 	    </item>
 	    <item>for: 
-	      <code display="block" id="idp1699008">
+	      <code display="block" id="idp2794560">
               
-		for (int i = 0; i &lt; 10; i++) { //write numbers between 0 and 9
+		for (int i = 0; i &lt; 10; i++) { //scrivi i numeri da 0 a 9
 		  println("i = "+ i);
 		} 
 	      
@@ -280,15 +283,15 @@
 	    </item>
 	  </list>
 	</section>
-	<example id="idm1182112">
-	  <title>Initializing a table of random numbers </title>
-	  <code display="block" id="idp4144656">
+	<example id="idp3025168">
+	  <title>Inizializzazione di una tabella di numeri casuali</title>
+	  <code display="block" id="idm3990048">
             
 	  int MAX = 10;
 	  float[] tabella = new float[MAX];
 	  for (int i = 0; i &lt; MAX; i++)
 	     tabella[i] = random(1); //random numbers between 0 and 1
-	  println(tabella.length + " elements:");
+	  println(tabella.length + " elementi:");
           println(tabella);
             
 	  </code>
@@ -296,17 +299,18 @@
       </section>
 
     <section id="funzioni">
-      <title>Functions</title>
+      <title>Funzioni</title>
       <para id="scopo_di_funzioni">
-	Functions allow a modular approach to programming. In
-	Processing, in the <emphasis>intermediate</emphasis>
-	programming mode, we can define functions other than
-	<code>setup()</code> and <code>draw()</code>, usable from
-	within <code>setup()</code> and <code>draw()</code>.
+	Le funzioni consentono un approccio modulare alla
+	programmazione. In Processing, in modalità di programmazione
+	<emphasis>intermediate</emphasis>, si possono definire
+	funzioni oltre alla <code>setup()</code> e
+	<code>draw()</code>, usabili all'interno della
+	<code>setup()</code> e della <code>draw()</code>.
       </para>
       <example id="esempio_di_funzione">
-	<title>Example of function</title>
-	<code display="block" id="idp6456048">
+	<title>Esempio di Funzione</title>
+	<code display="block" id="idm313088">
                  
 	  int raddoppia(int i) {
 	     return 2*i;
@@ -315,27 +319,28 @@
 	</code>
       </example>
       <para id="funzione_esemplificata">
-	A function is characterized by the entities (with reference to
-	the <link target-id="esempio_di_funzione">example</link>) :
-	<list id="entita_di_funzione"><item>return type (<code>int</code>)</item>
-	  <item>name (<code>raddoppia</code>)</item>
-	  <item>parameters (<code>i</code>)</item>
-	  <item>body (<code>return 2*i</code>)</item>
+	Una funzione è caratterizzata dalle seguenti entità (con riferimento all'<link target-id="esempio_di_funzione">esempio</link>) :
+	<list id="entita_di_funzione">
+	  <item>tipo di ritorno (<code>int</code>)</item>
+	  <item>nome di funzione (<code>raddoppia</code>)</item>
+	  <item>parametri (<code>i</code>)</item>
+	  <item>corpo della funzione (<code>return 2*i</code>)</item>
 	</list>
       </para>
    </section>
 
     <section id="classi">
-      <title>Objects and Classes</title> 
+      <title>Classi e Oggetti</title> 
       <para id="definizioni_classi_oggetti">
-	A class is defined by a set of data and functions. An object
-	is an instance of a class. Vice versa, a class is the abstract
-	description of a set of objects.
+	Una classe è definita da un insieme di dati e funzioni. Un
+	oggetto è una istanza di una classe. Viceversa, una classe è
+	una descrizione astratta di un insieme di oggetti.
       </para>
-      <note id="idp3178080">For an introduction to the concepts of object and class see <link document="m11708">Objects and Classes</link>.</note>
+      <note id="idp1026432">Per una introduzione ai concetti di oggetto e di classe si
+      veda <link document="m11708">Objects and Classes</link>.</note>
       <example id="esempio_di_classe">
-	<title>Example of class</title>
-	<code display="block" id="idp5314544">
+	<title>Esempio di Classe</title>
+	<code display="block" id="idp6341776">
                  
 Dot myDot;
 void setup() {
@@ -372,54 +377,54 @@ class Dot
 	</code>
       </example>
       <para id="classe_esemplificata">
-	A class is characterized by the following entities (with reference to the <link target-id="esempio_di_classe">example</link>) :
-	<list id="entita_di_classe">
-	  <item>name (<code>Dot</code>)</item>
-	  <item>data (<code>colore, posizione</code>)</item>
-	  <item>constructor (<code>Dot()</code>)</item>
-	  <item>functions (or methods, <code>draw()</code>)</item>
+	Una classe è caratterizzata dalle seguenti entità  (con riferimento all'<link target-id="esempio_di_classe">esempio</link>) :
+	<list id="entita_di_classe"><item>nome di classe (<code>Dot</code>)</item>
+	  <item>dati (<code>colore, posizione</code>)</item>
+	  <item>costruttore (<code>Dot()</code>)</item>
+	  <item>funzioni (o metodi, <code>draw()</code>)</item>
 	</list>
       </para>
       <para id="oggetto_esemplificato">
-	An object (instance of a class) is declared in the same way as
-	we declare a variable, but we have to allocate a space for it
-	(as we did for the arrays) by means of its constructor (with
-	reference to the <link target-id="esempio_di_classe">example</link>).
+	Un oggetto (istanza di una classe) è dichiarato nello stesso
+	modo in cui si dichiara una variabile, ma ad esso va poi
+	allocato uno spazio (come si è visto per gli array) tramite il
+	suo costruttore (con riferimento all'<link target-id="esempio_di_classe">esempio</link>).
 	<list id="istanza_di_classe">
-	  <item>Declaration: (<code>Dot myDot;</code>)</item>
-	  <item>Allocation: (<code>myDot = new Dot(tempcolor,0)</code>)</item>
-	  <item>Use: (<code>myDot.draw(10);</code>)</item>
+	  <item>Dichiarazione: (<code>Dot myDot;</code>)</item>
+	  <item>Allocazione: (<code>myDot = new Dot(tempcolor,0)</code>)</item>
+	  <item>Utilizzazione: (<code>myDot.draw(10);</code>)</item>
 	</list>
       </para>
-      <note id="idp1611952">For a quick introduction to the Java syntax see  <link document="m11791">Java Syntax Primer</link></note>
+      <note id="idm3132416">Per una introduzione alla sintassi Java si veda <link document="m11791">Java Syntax Primer</link></note>
     </section>
 
       <exercise id="mousegray">
-	<problem id="idp5468256">
-	<para id="mousegrayp"> With the following <code>draw()</code>
-	method we want to paint the window background with a gray
-	whose intensity depends on the horizontal position of the
-	mouse pointer.
-	  <code display="block" id="idp2957840">
+	<problem id="idm482256">
+	<para id="mousegrayp"> Con il metodo <code>draw()</code>
+	seguente si vuole dipingere lo sfondo della finestra di un
+	grigio la cui intensità dipenda dalla posizione orizzontale
+	del puntatore del mouse. 
+	  <code display="block" id="idm3196816">
 	  void draw() {
 	      background((mouseX/100)*255);
 	    }
 	  </code>
-	However, the code does not do what it is expected to do. Why?
+	  Il codice però non fa quello che ci
+	si aspetta. Perché?
 	  </para>
 	</problem>
-	<solution id="idp7407872">
-	<para id="mousegraysp">The variable <code>mouseX</code> is of
-	<code>int</code> type, and the division it is subject to is of
-	the integer type. It is necessary to perform a <term url="http://en.wikipedia.org/wiki/Cast_%28computer_science%29">type
-	casting</term> from <code>int</code> to <code>float</code> by means of the instruction
-	<code>(float)mouseX</code>. </para>
+	<solution id="idp78096">
+	<para id="mousegraysp">La variabile <code>mouseX</code> è di
+	tipo <code>int</code>, e quindi la divisione a cui è
+	sottoposta è di tipo intero. E' necessario fare un <term url="http://en.wikipedia.org/wiki/Cast_%28computer_science%29">type
+	casting</term> da <code>int</code> a <code>float</code>
+	mediante <code>(float)mouseX</code>. </para>
 	</solution>
       </exercise>
       <exercise id="pointers">
-	<problem id="idp7829248">
-	<para id="pointersp"> What does the following code fragment print out?
-	  <code display="block" id="idm13456">
+	<problem id="idp3099696">
+	<para id="pointersp"> Cosa stampa il seguente frammento di codice?
+	  <code display="block" id="idp1701472">
 	    int[] a = new int[10];
 	    a[7] = 7;
 	    int[] b = a;
@@ -434,8 +439,8 @@ class Dot
 	  </code>
 	  </para>
 	</problem>
-	<solution id="idm482384">
-	<para id="pointerss"><code display="block" id="idp9042832">
+	<solution id="idm319168">
+	<para id="pointerss"><code display="block" id="idp3133696">
 7
 8
 7
@@ -444,12 +449,15 @@ class Dot
 	</solution>
       </exercise>
 
-     <exercise id="centoCerchi"> 
-	<problem id="idp78352">
-	  <para id="intersezionip"> The following sketch generates a
-	  set of 100 moving circles and draws all chords linking the
-	  intersection points of all couples of intersecting circles.
-    <code display="block" id="idp1772720">  
+      <exercise id="centoCerchi"> 
+	<problem id="idm2740928">
+	  <para id="intersezionip">Il seguente sketch si pone
+	  l'obbiettivo di generare un set di 100 cerchi in movimento e
+	  di disegnare nella finestra di Processing tutte le corde
+	  congiungenti i due punti di intersezione di tutte le coppie
+	  di cerchi a intersezione non nulla.
+
+    <code display="block" id="idm2336528">  
 /* 
    
    Structure 3 
@@ -583,29 +591,27 @@ void intersect( Circle cA, Circle cB )
 	    </code>
 
 
-	    <list id="intersezioniList" list-type="enumerated">
-	      <item> Complete the missing part that is expected to
-		compute the intersections of the circles, in such a
-		way to draw the chords linking the intersection
-		points. It is possible to use the computation of
-		intersection coordinates in a ad-hoc reference system
+	    <list id="intersezioniList" list-type="enumerated"><item> Completare la parte mancante inerente il calcolo
+		delle intersezioni dei cerchi, per poter disegnare le
+		corde congiungenti le coppie di punti intersezione. E'
+		possibile basarsi sul calcolo delle coordinate delle
+		intersezioni in un sistema di riferimento ad hoc
 		(<term url="http://mathworld.wolfram.com/Circle-CircleIntersection.html">
-		“Circle-Circle Intersection”</term>), then converting
-		the result into the Processing window coordinate
-		system.  </item>
+		“Intersezione cerchio-cerchio”</term>) e poi
+		riportare il risultato nelle coordinate della finestra
+		di Processing.  </item>
 	      
-	      <item id="intersezioniItem"> Make the chords
-	      time-variable by giving different speeds to different
-	      circles. </item>
+	      <item id="intersezioniItem"> Rendere le corde variabili nel tempo
+		dando diverse velocità di spostamento ai cerchi. </item> 
 	    </list>
 	    
 	  </para>
 	</problem>
-	<solution id="idp6298688">
+	<solution id="idm297664">
 
 	  <para id="intersezioniSolp">
 
-	    <code display="block" id="idp2971904">       
+	    <code display="block" id="idp2975024">       
 /* 
    
    Structure 3 
@@ -746,17 +752,18 @@ void intersect( Circle cA, Circle cB )
 	</solution>
       </exercise>
       <exercise id="centoCordeInt">
-	<problem id="idm318912">
-	  <para id="intersezionip2"> Make the sketch of <link target-id="centoCerchi"/> interactive. For example, make
-	  the circle displacement dependent on the horizontal position
-	  of the mouse.
+	<problem id="idp2013808">
+	<para id="intersezionip2"> Rendere interattivo lo sketch di
+	  <link target-id="centoCerchi"/>, facendo per esempio
+	  dipendere la quantità di spostamento dei cerchi dalla
+	  posizione lungo l'asse x del mouse.
       </para>
       </problem>
 	
-	<solution id="idm929232">
+	<solution id="idm4296592">
 	  <para id="intersezioniSolp2">
 	    
-	    <code display="block" id="idm297536">  
+	    <code display="block" id="idp7003008">  
      /* 
    
    Structure 3 

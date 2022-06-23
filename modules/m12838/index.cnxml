@@ -1,0 +1,889 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Signal Processing in Processing: Miscellanea</title>
+  <metadata>
+  <md:content-id>m12838</md:content-id><md:title>Signal Processing in Processing: Miscellanea</md:title>
+  <md:abstract>Argomenti vari ed effetti nell'elaborazione di immagini e suoni.</md:abstract>
+  <md:uuid>144df4f0-50b8-4888-af1a-2dc92bbc1eba</md:uuid>
+</metadata>
+  <content>
+    <section id="palette_dithering">
+      <title>Rappresentazioni economiche del colore</title>
+      <para id="palette_tablep">
+	In <link document="m12664">Media Representation in
+	  Processing</link> abbiamo visto come vengano riservati
+	  <m:math> <m:mn>8</m:mn>
+	</m:math>
+ bit a ciascun canale corrispondente ad un colore primario. Se a
+	  questi si aggiunge il canale alpha, abbiamo un totale di
+	  <m:math> <m:mn>32</m:mn>
+	</m:math>
+ bit per pixel. Non sempre ci possiamo permettere una così elevata
+ occupazione di memoria per i colori, e quindi si ricorre a diverse
+ strategie per ridurre il numero di bit per pixel.
+      </para>
+      <section id="palette_t">
+	<title>Palette</title>
+	<para id="palette_tp">
+	  Una prima soluzione viene dall'osservazione che in una immagine sono raramente presenti tutti i <m:math>
+	    <m:apply>
+	      <m:power/>
+	      <m:mn>2</m:mn>
+	      <m:mn>24</m:mn>
+	    </m:apply>
+	  </m:math> colori rappresentabili. Supponendo che i colori
+	    utili per una immagine siano in numero non superiore a
+	    <m:math> <m:mn>256</m:mn> </m:math>, si può pensare di
+	    memorizzarne le codifiche in una tabella
+	    (<term>palette</term>, o tavolozza), ai cui elementi si
+	    può accedere mediante un indice di soli <m:math>
+	    <m:mn>8</m:mn> </m:math> bit. Quindi l'immagine avrà una
+	    occupazione di memoria pari a <m:math> <m:mn>8</m:mn>
+	    </m:math> bit per pixel più lo spazio necessario per la
+	    palette. Per un esempio e ulteriori delucidazioni si veda
+	    <link url="http://en.wikipedia.org/wiki/Color_depth">color
+	    depth</link> in Wikipedia.
+	</para>
+      </section>
+      <section id="dithering">
+	<title>Dithering</title>
+	<para id="ditheringp">
+	  In alternativa, per mantenere basso il numero di bit per
+	  pixel, si può applicare un artificio di elaborazione,
+	  chiamato <term>dithering</term>. L'idea è quella di ottenere
+	  la mescolanza dei colori per via percettiva, per prossimità
+	  di piccoli punti di colore diverso. Una esauriente
+	  presentazione del fenomeno è presente alla <link url="http://en.wikipedia.org/wiki/Dithering">voce
+	  dithering</link> della Wikipedia.
+	</para>
+      </section>
+      <section id="floyd_steinberg">
+	<title>Dithering di Floyd-Steinberg</title>
+	<para id="floyd_steinbergp">
+	  L'algoritmo di Floyd-Steinberg è una delle tecniche più
+	  popolari per la distribuzione di pixel colorati a scopo di
+	  dithering. Esso minimizza gli artefatti visivi mediante un
+	  processo di errore-diffusione. L'algoritmo si può riassumere
+	  come segue:
+	  <list id="floyd_steinbergalgo">
+	    <item>Procedendo dall'alto al basso, e da sinistra a destra, per ogni pixel considerato</item>
+	    <item><list id="fsalgo1">
+		<item>Si calcoli la differenza tra il colore che si vuole e il più vicino colore rappresentabile (errore)</item>
+		<item>Si diffonda l'errore sui pixel adiacenti secondo la maschera 	  <m:math type="block" id="fsmask">
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:mn>1</m:mn>
+		<m:mn>16</m:mn>
+	      </m:apply>
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>X</m:mn>
+		  <m:mn>7</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>3</m:mn>
+		  <m:mn>5</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	    </m:apply>
+		  </m:math>. Cioè, al pixel alla destra di quello considerato <m:math>
+		    <m:ci>X</m:ci>
+		  </m:math> si aggiungano <m:math>
+		    <m:apply>
+		      <m:divide/>
+		      <m:mn>7</m:mn>
+		      <m:mn>16</m:mn>
+		    </m:apply>
+		  </m:math> dell'errore, al pixel sotto a sinistra si aggiungano  <m:math>
+		    <m:apply>
+		      <m:divide/>
+		      <m:mn>3</m:mn>
+		      <m:mn>16</m:mn>
+		    </m:apply>
+		  </m:math> dell'errore, eccetera.
+		</item>
+	      </list>
+	    </item>
+	  </list>
+Con questo algoritmo è possibile riprodurre una immagine a diversi
+	  livelli di grigio mediante un dispositivo in grado di
+	  produrre solo punti bianchi e neri.  La maschera
+	  dell'algoritmo di Floyd-Steinberg è stata scelta in modo che
+	  una distribuzione uniforme di grigio di intensità <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:mn>1</m:mn>
+	      <m:mn>2</m:mn>
+	    </m:apply>
+	  </m:math> produce un pattern a scacchiera. 
+	</para>
+      </section>
+    <exercise id="lena_dither">
+      <problem id="id2436021">
+	<para id="lena_ditherp">
+	  Si realizzi, mediante un programma Processing che elabori il
+	  <link resource="lena.jpg">file</link>, una versione in bianco e
+	  nero "dithered" della celebre <link url="http://en.wikipedia.org/wiki/Lenna">Lena</link>. L'immagine,
+	  elaborata solo nella metà di sinistra, dovrebbe risultare
+	  quella di <link target-id="lena_dithered"/>
+	  <figure id="lena_dithered">
+	    <media id="id3672855" alt=""><image src="../../media/lena_dithered.png" mime-type="image/png"/></media>
+	  </figure>
+	</para>
+      </problem>
+      <solution id="id6266272">
+	<para id="lena_dithers">
+	  <code id="id4717515" display="block">
+
+size(300, 420); 
+PImage a;  // Declare variable "a" of type PImage 
+a = loadImage("lena.jpg"); // Load the images into the program 
+image(a, 0, 0); // Displays the image from point (0,0) 
+ 
+int[][] output = new int[width][height]; 
+for (int i=0; i&lt;width; i++)
+  for (int j=0; j&lt;height; j++) {
+    output[i][j] = (int)red(get(i, j)); 
+    }
+int grayVal;
+float errore;
+float val = 1.0/16.0;
+float[][] kernel = { {0, 0, 0}, 
+                     {0, -1, 7*val}, 
+                     {3*val, 5*val, val }}; 
+
+for(int y=0; y&lt;height; y++) { 
+  for(int x=0; x&lt;width; x++) { 
+    grayVal = output[x][y];// (int)red(get(x, y));
+    if (grayVal&lt;128) errore=grayVal;
+      else errore=grayVal-256;
+    for(int k=-1; k&lt;=1; k++) { 
+      for(int j=-1; j&lt;=0 /*1*/; j++) { 
+        // Reflect x-j to not exceed array boundary 
+        int xp = x-j; 
+        int yp = y-k; 
+        if (xp &lt; 0) { 
+          xp = xp + width; 
+        } else if (x-j &gt;= width) { 
+          xp = xp - width;  
+        } 
+        // Reflect y-k to not exceed array boundary 
+        if (yp &lt; 0) { 
+          yp = yp + height; 
+        } else if (yp &gt;= height) { 
+          yp = yp - height; 
+      }
+      output[xp][yp] = (int)(output[xp][yp] + errore * kernel[-j+1][-k+1]);
+      } 
+    } 
+  } 
+} 
+ 
+for(int i=0; i&lt;height; i++)  
+  for(int j=0; j&lt;width; j++) 
+    if (output[j][i] &lt; 128) output[j][i] = 0;
+    else output[j][i] = 255; 
+    
+// Display the result of dithering on half image
+loadPixels(); 
+for(int i=0; i&lt;height; i++) { 
+  for(int j=0; j&lt;width/2; j++) { 
+    pixels[i*width + j] = 
+      color(output[j][i], output[j][i], output[j][i]);
+  } 
+} 
+updatePixels(); 
+
+</code>
+	</para>
+      </solution>
+    </exercise>
+    </section>
+<section id="audio_quant">
+<title>Rappresentazioni economiche del suono</title>
+      <para id="pitched_noise">
+Nel caso di segnali audio, l'uso del dithering ha lo scopo di ridurre
+l'effetto percettivo dell'errore prodotto dai cambiamenti di
+quantizzazione, che normalmente si effettuano quando si registrano e
+poi si elaborano dei segnali audio. Per esempio, quando si registra
+della musica, lo si fa solitamente con una quantizzazione superiore ai
+16-bit. Inoltre le eventuali operazioni matematiche (anche delle
+semplici variazioni di dinamica) applicate al segnale richiedono un
+ulteriore aumento della profondità in bit, ovvero del numero di bit
+impiegati. Nel momento in cui però si giunge al prodotto finale, il CD
+audio, il numero di bit di quantizzazione deve essere ridotto a 16. In
+questi processi successivi di ri-quantizzazione si introduce ogni
+volta un errore, che si accumula. Nel caso di una riduzione del numero
+di bit, si può ricorrere ad un troncamento (nel caso in cui le cifre
+decimali vengano trascurate e messe a zero) oppure ad un
+arrotondamento (nel caso in cui il numero decimale sia approssimato
+con la cifra intera più vicina). In entrambi i casi si introduce
+dell'errore.  In particolare, quando si ha a che fare con segnali con
+un <term>pitch</term> (altezza) ben definito (come nel caso della
+musica), l'errore diventa di tipo periodico. Nell'esempio della <link url="http://en.wikipedia.org/wiki/Dithering">voce dithering</link>
+della Wikipedia risulta chiaro quale sia il motivo di questa aggiunta
+di rumore periodico, ovvero armonico. Dal punto di vista percettivo
+questa distorsione dà luogo ad un ronzio che "segue" il pitch del
+suono, che risulta piuttosto fastidioso all'ascolto. 
+</para>
+<para id="audio_dithering">Nel caso
+dell'audio, quindi, il dithering ha la funzione di trasformare questo
+ronzio in un rumore di fondo di tipo fruscio, meno fastidioso
+all'ascolto. In <link target-id="clar"/> viene riportato l'esempio di
+alcuni periodi della forma d'onda di un clarinetto quantizzata a 16
+bit. Il risultato di una riduzione del numero di bit a 8 è riportato
+in <link target-id="clar8"/>. Si vede chiaramente come le riduzione dei
+livelli di quantizzazione determina dei tratti ad ampiezza
+costante. L'applicazione del dithering determina un'ulteriore
+trasformazione che, come si vede in <link target-id="clar8dith"/> "rompe"
+i tratti costanti mediante introduzione di rumore bianco. Le <link target-id="FT-clar"/>, <link target-id="FT-clar8"/> ed <link target-id="FT-clar8dith"/> rappresentano le trasformate di Fourier
+rispettivamente dei suoni di <link target-id="clar"/>, <link target-id="clar8"/> e <link target-id="clar8dith"/>. Anche nella
+rappresentazione in frequenza è visibile come il passaggio ad una
+quantizzazione a 8 bit introduca delle armoniche spurie (<link target-id="FT-clar8"/>) rispetto al suono a 16 bit (<link target-id="FT-clar"/>), che vengono cancellate dall'effetto del dithering
+(<link target-id="FT-clar8dith"/>).
+
+<figure id="clar">
+	    <media id="id6678109" alt=""><image src="../../media/Clarinetto.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="clar8">
+	    <media id="id4982282" alt=""><image src="../../media/Clarinetto8.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="clar8dith">
+	    <media id="id2671726" alt=""><image src="../../media/Clarinetto8dith.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="FT-clar">
+	    <media id="id3487810" alt=""><image src="../../media/FT-Clarinetto.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="FT-clar8">
+	    <media id="id7254593" alt=""><image src="../../media/FT-Clarinetto8.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="FT-clar8dith">
+	    <media id="id6789227" alt=""><image src="../../media/FT-Clarinetto8dith.png" mime-type="image/png"/></media>
+	  </figure>
+ </para>
+
+<para id="noise_shapingp">Esistono inoltre dei metodi, che, sfruttando fattori percettivi quali
+il fatto che il nostro orecchio è più sensibile nella regione centrale
+della banda audio e meno nella regione acuta, permettono di rendere
+meno udibile l'effetto di una riquantizzazione. E' il caso del
+<term>noise shaping</term>. Come dice il nome, tale tecnica consiste
+nel "modellare" il rumore di quantizzazione.  In <link target-id="clar8dithNS"/> viene riportato il suono di clarinetto
+riquantizzato a 8 bit a cui oltre al dithering è stato applicato un
+algoritmo di noise-shaping. Il risultato, apparentemente devastante
+sulla forma d'onda, corrisponde in realtà ad un suono il cui spettro è
+molto più vicino a quello del suono originale a 16 bit fatta eccezione
+per un notevole aumento di energia nella regione molto acuta (<link target-id="FT-clar8dithNS"/>). Tale rumore ad alta frequenza determina
+questo "arruffamento" della forma d'onda. ovvero delle intense
+variazioni di ampiezza ad alta frequenza. Questo rumore però non è
+udibile quindi il risultato finale risulta migliore dei precedenti
+all'ascolto.
+
+<figure id="clar8dithNS">
+	    <media id="id6460794" alt=""><image src="../../media/Clarinetto8dithNS.png" mime-type="image/png"/></media>
+	  </figure>
+
+<figure id="FT-clar8dithNS">
+	    <media id="id5716031" alt=""><image src="../../media/FT-Clarinetto8dithNS.png" mime-type="image/png"/></media>
+	  </figure>
+
+Dal punto di vista operativo, si può pensare al noise shaping come ad
+un analogo audio dell'algoritmo di Floyd-Steinberg per la grafica. Nel
+caso audio la propagazione dell'errore avviene però nel tempo anziché
+nello spazio.  La forma più semplice di noise shaping si può ottenere
+mediante definizione dell'errore di quantizzazione
+	<equation id="eyy">
+	<m:math type="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">e</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:minus/>
+	    <m:apply>
+	      <m:ci type="fn">y</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	      <m:apply>
+		<m:ci type="fn">Q</m:ci>
+	    <m:apply>
+	      <m:ci type="fn">y</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math></equation> dove  <equation id="yxe"> <m:math type="block">	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">y</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:plus/>
+	    <m:apply>
+	      <m:ci type="fn">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn">e</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>n</m:ci>
+		  <m:mn>1</m:mn>
+		</m:apply>
+	    </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math></equation> e <m:math> <m:ci>x</m:ci> </m:math> è il segnale non
+	  quantizzato.  Ulteriori dettagli sul noise shaping si
+	  possono trovare presso la <link url="http://en.wikipedia.org/wiki/Noise_shaping">noise
+	  shaping</link> di Wikipedia.
+
+Quanto detto è verificabile negli esempi sonori 
+<link resource="./clarinetto.wav"> clarinetto</link> , <link resource="./clarinetto8.wav"> clarinetto a 8 bit</link>, <link resource="./clarinetto8dith.wav"> clarinetto a 8bit con dithering</link> e <link resource="./clarinetto8dithNs.wav"> clarinetto a 8 bit con noise shaping</link> che contengono rispettivamente i suoni di clarinetto relativi alle <link target-id="clar"/>, <link target-id="clar8"/>, <link target-id="clar8dith"/>, e <link target-id="clar8dithNS"/>. 
+  </para>
+</section>
+
+    <section id="histogram">
+      <title>Elaborazioni basate sull'istogramma.</title>
+      <definition id="istogrammad">
+	<term>Istogramma di una immagine</term>
+	<meaning id="id4887775">Rappresentazione grafica a barre verticali, in cui
+	ciascuna barra rappresenta il numero di pixel presenti
+	nell'immagine per una data intensità di grigio (o canale di
+	colore). <link url="http://en.wikipedia.org/wiki/Color_histogram">Definizione
+	Wikipedia.</link></meaning>
+      </definition>
+      <para id="histogramp">Tra gli <link url="http://www.processing.org/learning/topics/">esempi
+	di Processing</link>, si trova il codice <link url="http://www.processing.org/learning/topics/histogram.html">Histogram</link>
+	che sovrappone ad una immagine il proprio istogramma.
+      </para>
+      <para id="histogrampp">
+	L'istogramma offre una rappresentazione sintetica della
+	immagine in cui si perde l'informazione inerente la posizione
+	dei pixel e contano solo gli aspetti cromatici. Esso fornisce
+	informazioni sulla <term>gamma tonale</term> di una immagine
+	(quali intensità di grigio sono presenti) e sulla sua
+	<term>dinamica</term> (estensione della gamma
+	tonale). L'immagine di una scacchiera, per esempio, avrà una
+	gamma tonale che comprende solo due intensità di grigio
+	(bianco e nero) ma avrà gamma dinamica massima (in quanto il
+	bianco e il nero sono le due estremità della gamma dei grigi
+	rappresentabile).
+      </para>
+      <para id="histogramtp">
+	L'istogramma costituisce il punto di partenza per quelle
+	elaborazioni che mirano ad equilibrare o alterare il contenuto
+	cromatico di una immagine. In generale, si tratta di costruire
+	una mappa <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>o</m:mn>
+	      </m:msub>
+	  <m:apply>
+	      <m:ci type="fn">f</m:ci>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	  </m:apply>
+	  </m:apply>
+	</m:math> per i livelli di grigio (o di canale-colore) da
+	applicare per ogni pixel. L'istogramma può guidare la
+	costruzione di tale mappa. 
+      </para>
+      <section id="hist_transp">
+	<title>Traslazione ed espansione dell'istogramma</title>
+	<para id="hist_transpp">
+	Se la mappa è del tipo <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>o</m:mn>
+	      </m:msub>
+	  <m:apply>
+	      <m:plus/>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	      <m:ci>k</m:ci>
+	  </m:apply>
+	  </m:apply>
+	</m:math>
+	  l'istogramma risulta traslato verso una maggiore o minore
+	    brillantezza a seconda del segno di <m:math>
+	    <m:ci>k</m:ci> </m:math>. Invece, se la mappa è del tipo
+	    <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>o</m:mn>
+	      </m:msub>
+	  <m:apply>
+	      <m:times/>
+	      <m:ci>k</m:ci>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	  </m:apply>
+	  </m:apply>
+	</m:math> l'istogramma risulterà espanso o compresso, per
+	    valori di <m:math> <m:ci>k</m:ci> </m:math>
+	    rispettivamente minori o maggiori di <m:math>
+	    <m:mn>1</m:mn> </m:math>.
+	</para>
+	<para id="contrast_stretchingp">Tra questo tipo di operazioni di scaling lineare rientra il
+	    <term>contrast stretching</term>, il quale cerca di
+	    estendere la gamma dinamica di una immagine. L'intervallo
+	    di valori sul quale basare lo scalamento viene scelto
+	    sulla base dell'istogramma, ad esempio lasciando fuori le
+	    code della distribuzione corrispondenti al <m:math>
+	    <m:mn>10</m:mn> <m:ci>%</m:ci> </m:math> dei pixel più
+	    chiari e più scuri. 
+	</para>
+      </section>
+      <section id="non-linear_scaling">
+	<title>Scaling non lineare</title>
+	<para id="non-linear_scalingp">
+	  Più in generale, la mappa 
+	  <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>o</m:mn>
+	      </m:msub>
+	  <m:apply>
+	      <m:ci type="fn">f</m:ci>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	  </m:apply>
+	  </m:apply>
+	</m:math>
+	  può essere non-lineare, e ciò consente una maggiore
+	  flessibilità nella manipolazione dell'istogramma. Un utile
+	  strumento è quello che consente di manipolare
+	  interattivamente la mappa di scaling e di vedere subito i
+	  risultati sull'immagine e/o sull'istogramma.  Lo strumento
+	  <code>Color Tools/Curves</code>del programma di elaborazione
+	  di immagini <link url="http://www.gimp.org">Gimp</link> fa
+	  proprio questo, usando una spline interpolante. In
+	  Processing è possibile costruire uno strumento simile, come riportato in <link target-id="lenahist"/>
+	</para>
+	<example id="lenahist">
+	  <para id="lenahistp"> <link resource="histogram_t.html">Applet
+	  che consente di applicare uno scaling non lineare dei
+	  livelli di grigio e di analizzarne l'effetto mediante
+	  istogramma. </link>
+	  </para>
+	</example>
+      </section>
+      <section id="histogrameq">
+	<title>Equalizzazione dell'istogramma</title>
+	<para id="histogrameqp">Lo scaling non lineare è il mezzo per
+	  <term>equalizzare</term> l'istogramma, cioè per fargli
+	  assumere una forma desiderabile. Una immagine ha una gamma
+	  tonale equilibrata se tutti i livelli di grigio sono
+	  rappresentati e se la distribuzione è grossomodo
+	  uniforme. Cioè, si aspira ad avere un istogramma
+	  piatto. Senza entrare troppo a fondo nei dettagli
+	  matematici si può dire che la mappa nonlineare
+	  da usarsi per l'equalizzazione è ottenuta dalla
+	  <term>distribuzione cumulata</term> dell'istogramma
+	  dell'immagine
+	  <m:math>
+	  <m:apply>
+	    <m:eq/>
+	  <m:apply>
+	      <m:ci type="fn">f</m:ci>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	  </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:mn>0</m:mn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:msub>
+		    <m:mi>g</m:mi>
+		    <m:mn>i</m:mn>
+		  </m:msub>
+		</m:uplimit>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      </m:apply>
+	  </m:apply>
+	  </m:math>, dove <m:math> <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	  </m:math> è la frequenza, opportunamente scalata per una
+	    costante di normalizzazione, con cui compare il <m:math>
+	    <m:ci>k</m:ci> </m:math>-esimo livello di grigio.
+	</para>
+      </section>
+    <exercise id="histogramap">
+      <problem id="id2926122">
+	<para id="histogramapp">
+	    Si modifichi il codice Processing del <link target-id="lenahist"/> per aggiungere la operazione di
+	    equalizzazione dell'istogramma.
+	</para>
+      </problem>
+	<solution id="id5801282">
+	  <para id="histogramsp">
+	    <code id="id3903985" display="block">
+
+int grayValues = 256;
+int[] hist = new int[grayValues]; 
+int[] histc = new int[grayValues];
+PImage a; 
+
+void setup() {
+  background(255);
+  stroke(0,0,0);
+  size(300, 420); 
+  colorMode(RGB, width); 
+  framerate(5);
+  a = loadImage("lena.jpg"); 
+  image(a, 0, 0);
+}
+
+void draw() {
+    // calculate the histogram 
+  for (int i=0; i&lt;width; i++) { 
+    for (int j=0; j&lt;height; j++) { 
+      int c = constrain(int(red(get(i,j))), 0, grayValues-1);
+      hist[c]++;
+    } 
+  } 
+
+  // Find the largest value in the histogram 
+  float maxval = 0; 
+  for (int i=0; i&lt;grayValues; i++) { 
+    if(hist[i] &gt; maxval) { 
+      maxval = hist[i]; 
+    }  
+  } 
+
+  // Accumulate the histogram
+  histc[0] = hist[0];
+  for (int i=1; i&lt;grayValues; i++) { 
+    histc[i] = histc[i-1] + hist[i];    
+  } 
+  
+  // Normalize the histogram to values between 0 and "height" 
+  for (int i=0; i&lt;grayValues; i++) { 
+    hist[i] = int(hist[i]/maxval * height); 
+  } 
+
+  if (mousePressed == true) { //equalization
+    for (int i=1; i&lt;grayValues; i++) { 
+    println(float(histc[i])/histc[grayValues-1]*256);
+    } 
+    loadPixels();
+    println("click");
+    for (int i=0; i&lt;width; i++)
+      for (int j=0; j&lt;height; j++) {
+        //normalized cumulated histogram mapping
+        pixels[i+j*width] = color(
+          int(
+          float(histc[constrain(int(red(a.get(i,j))), 0, grayValues-1)])/
+            histc[grayValues-1]*256)); 
+      }
+    updatePixels();
+     }
+ 
+  // Draw half of the histogram 
+  stroke(50, 250, 0); 
+  strokeWeight(2);
+  for (int i=0; i&lt;grayValues; i++) { 
+    line(i, height, i, height-hist[i]); 
+  } 
+}
+
+</code>
+	  </para>
+	</solution>
+    </exercise>
+    </section>
+    <section id="edges_regions">
+      <title>Estrazione di contorni e segmentazione</title>
+      <section id="id1422207">
+	<title>Contorni</title>
+	<para id="contornip">
+	  Gli oggetti che popolano una scena rappresentata in una
+	  immagine sono usualmente individuabili dai loro contorni:
+	  profili filiformi che corrispondono ad una rapida variazione
+	  di colore o di intensità di grigio.  L'estrazione dei
+	  contorni è una delle operazioni tipiche dell'elaborazione di
+	  immagini. In analisi matematica, una rapida variazione di
+	  una funzione corrisponde ad un picco della funzione
+	  <term>derivata</term>. In elaborazione del segnale a tempo
+	  (e spazio) discreto, la derivata si può approssimare come
+	  operazione alle differenze, cioè come un filtro. I filtri
+	  che lasciano passare le variazioni repentine ed eliminano le
+	  variazioni lente sono di tipo passa-alto. Non stupisce
+	  quindi che per l'estrazione di contorni si usino maschere di
+	  convoluzione simili a quella vista in <link document="m12827" target-id="crispp">Elementary Filters</link>
+	  per l'edge crispening. Più correttamente, si può dire che in
+	  2D si cercano i punti di massima ampiezza del
+	  <term>gradiente</term>, che necessariamente sono punti in
+	  cui si annulla il <term>laplaciano</term> della immagine,
+	  cioè la derivata seconda spaziale. Il laplaciano può essere
+	  approssimato (a spazio discreto) mediante la maschera di
+	  convoluzione
+<m:math type="block">
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>1</m:mn>
+		  <m:mn>-4</m:mn>
+		  <m:mn>1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>1</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	</m:math>.  L'applicazione diretta del laplaciano è spesso non
+	  soddisfacente, in quanto il risultato è troppo sensibile al
+	  rumore e ai piccoli dettagli. E' quindi consigliabile
+	  combinare la maschera laplaciana con quella di un filtro
+	  passa-basso. La combinazione di laplaciano e filtro
+	  gaussiano (<term>LoG</term>) produce, nel caso <m:math>
+	  <m:mn>5</m:mn> </m:math> per <m:math> <m:mn>5</m:mn>
+	  </m:math>, la maschera
+<m:math type="block">
+	  <m:matrix>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-2</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-2</m:mn>
+		  <m:mn>16</m:mn>
+		  <m:mn>-2</m:mn>
+		  <m:mn>-1</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>-2</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+		  <m:mn>-1</m:mn>
+		  <m:mn>0</m:mn>
+		  <m:mn>0</m:mn>
+	    </m:matrixrow>
+	  </m:matrix>
+	</m:math>
+	  Nel programma Gimp è anche reallizzato un evidenziatore di
+	  contorni basato sulla differenza tra due filtraggi
+	  gaussiani, basati su due gaussiane di ampiezza diversa, che
+	  fa in modo che intervenga un effetto di inibizione al di
+	  fuori dai contorni principali, in modo simile a quanto
+	  sembra avvenire nel nostro sistema sensoriale.
+	</para>
+      </section>
+      <section id="id2724729">
+	<title>Regioni</title>
+	<para id="regionsp">In molte applicazioni è necessario isolare i diversi oggetti
+	  che popolano una scena, a partire dalle loro
+	  rappresentazioni come collezioni di pixel in una
+	  immagine. Ad esempio, può essere interessante isolare un
+	  oggetto in primo piano (<term>foreground</term>) dallo
+	  sfondo (<term>background</term>). In questo caso si parla di
+	  segmentazione o di estrazione di regioni. La maniera più
+	  semplice per isolare delle regioni è quella di farlo sulla
+	  base del colore, o dell'intensità di grigio. Anche in questo
+	  caso, l'operazione può essere guidata dall'istogramma, che
+	  può aiutarci a stabilire una soglia (<term>threshold</term>)
+	  di grigio. Tutti i pixel più scuri della soglia saranno
+	  mappati sul nero, e tutti i più chiari saranno mappati sul
+	  bianco. Ad esempio, se l'istogramma presenta due gobbe
+	  evidenti, ed è possibile attribuire una gobba al foreground
+	  (perché, per esempio, più chiaro) e l'altra gobba al
+	  background (perché, per esempio, più scuro), la soglia andrà
+	  scelta a metà tra le due gobbe. Talvolta è necessario
+	  stabilire una molteplicità di soglie, in modo da isolare
+	  regioni con diverse gamme di grigio. Per le immagini a
+	  colori, le soglie possono essere diverse nei diversi canali
+	  RGB. 
+	</para>
+      </section>
+    </section>
+    <exercise id="edgesex">
+      <problem id="id8512759">
+	<para id="edgesexp">
+	  Si applichi il filtro laplaciano e il filtro LoG all'immagine di Lena.
+	</para>
+      </problem>
+    </exercise>
+    <exercise id="regionf">
+      <problem id="id3881908">
+	<para id="regionfp">
+	  Si mostri come l'estrazione di figura da sfondo mediante
+	  threshold possa essere realizzata mediante una mappa non
+	  lineare <m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>o</m:mn>
+	      </m:msub>
+	  <m:apply>
+	      <m:ci type="fn">f</m:ci>
+	      <m:msub>
+		<m:mi>g</m:mi>
+		<m:mn>i</m:mn>
+	      </m:msub>
+	  </m:apply>
+	  </m:apply>
+	</m:math>. Che forma deve avere questa mappa?
+	</para>
+      </problem>
+      <solution id="id2391688">
+	<para id="regionfs">
+	  E' una mappa a gradino, con transizione da <m:math>
+	    <m:mn>0</m:mn> </m:math> a <m:math> <m:mn>255</m:mn>
+	    </m:math> collocata in corrispondenza della soglia scelta.
+	</para>
+      </solution>
+    </exercise>
+    <exercise id="regiongimp">
+      <problem id="id6797420">
+	<para id="regiongimpp">
+	  Si utilizzi un programma per l'elaborazione di immagini
+	  (es., <link url="http://www.gimp.org">Gimp</link>) per
+	  isolare (mediante soglia) le fratture nella immagine del
+	  <link document="m12837" resource="vetro.jpg">vetro
+	  rotto</link>.
+	</para>
+      </problem>
+    </exercise>
+
+
+<section id="Mulaw">
+      <title>Compressione di dinamica audio</title>
+        <para id="mu_law">Così come nel caso delle immagini, anche nell'audio si pone il
+problema della riduzione dei dati necessari per rappresentare un
+suono, pur mantenendo una qualità accettabile dal punto di vista
+percettivo. Cosa si intenda per "qualità accettabile" quando si
+riducono o, meglio, si comprimono i dati è cosa da stabilire. In
+genere i parametri di valutazione qualitativa degli standard di
+compressione audio sono di tipo statistico, basati sui risultati di
+test di ascolto fatti su di un campionario di ascoltatori,
+rappresentativi di una vasta gamma di utenti. Gli standard di
+compressione audio in genere si basano sull'ottimizzazione della
+dinamica del segnale, ovvero sull'ottimizzazione del numero di bit
+impiegati per la quantizzazione. Un ben noto esempio di standard di
+compressione è quello dell'mp3, nel quale vengono sfruttati fenomeni
+di psicoacustica, quali il fatto che i suoni forti mascherano (rendono
+inudibili) i suoni deboli. Nella riproduzione di suoni digitalizzati,
+quello che si vuole mascherare è il rumore di quantizzazione. Quindi,
+detto in modo molto semplificato, se il suono ha dinamica ampia (è
+forte) si può usare un passo di quantizzazione maggiore, in quanto il
+più intenso rumore di quantizzazione prodotto dalla suddivisione più
+grossolana dei livelli di quantizzazione è comunque mascherato dal
+suono riprodotto. Sempre semplificando in modo radicale le cose, si
+può dire che l'mp3 varia il passo di quantizzazione seguendo
+l'andamento della dinamica del segnale e in modo diverso in diverse
+bande di frequenza, permettendo così una riduzione anche di 20 volte
+il numero di dati rispetto ad una rappresentazione a dinamica fissa a
+16 bit.  Un'altra tecnica di compressione è data dalla mu-law
+(μ-law). Questo standard è utilizzato soprattutto nei sistemi audio e
+di comunicazione digitale in America del nord e in Giappone. In questo
+caso l'idea di base è di modificare il range dinamico di un segnale
+audio analogico prima della quantizzazione. Anche in questo caso ciò
+che giustifica questa tecnica di compressione è un fenomeno di
+psicoacustica, ovvero il fatto che la nostra percezione dell'intensità
+non è lineare ma di tipo logaritmico, il che significa che segue
+approssimativamente un andamento come quello mostrato in <link target-id="loudness"/>.
+</para>
+	  <figure id="loudness">
+	    <media id="id5335980" alt=""><image src="../../media/Loudness.png" mime-type="image/png"/></media>
+	  </figure>
+<para id="mulaw2">
+	Ciò che fa la mu-law è dunque ridurre il range dinamico del
+segnale mediante un'operazione di riscalamento delle ampiezza secondo
+la mappa descritta in <link target-id="mulaw"/>. Come si vede, l'effetto
+è quello di amplificare le ampiezze basse, riducendo il range di
+valori assunti dal segnale (prevalentemente valori alti di ampiezza) e
+incrementando pertanto il rapporto (la differenza di ampiezza) tra il
+suono che vogliamo riprodurre e il rumore di
+quantizzazione. Successivamente si effettua una quantizzazione lineare
+del segnale che è stato preliminarmente distorto in modo non
+lineare. Nel momento in cui si vuole riprodurre il segnale digitale,
+questo viene prima normalmente convertito in segnale analogico e poi
+trasformato mediante una curva di distorsione delle ampiezze che
+controbilanci la distorsione pre-quantizzazione di <link target-id="mulaw"/>. Il risultato globale, entro certi limiti, è vicino a
+quello di una quantizzazione del segnale non distorto.  Cambiando
+punto di vista, si può pensare all'intero processo come ad una
+quantizzazione di tipo non lineare del suono, ovvero una
+quantizzazione dove il passo è maggiore (più grossolano) per le
+ampiezze maggiori e minore (più dettagliato) per le ampiezze
+minori. Il che, almeno da un punto di vista qualitativo, corrisponde
+esattamente a come funziona il nostro sistema percettivo. Siamo più
+sensibili alle differenze di intensità tra suoni deboli e meno
+sensibili alle differenze tra suoni forti e molto forti.  Molto simile
+alla mu-law è la A-law usata invece nei sistemi digitali in Europa.
+</para>
+  <figure id="mulaw">
+	    <media id="id6516594" alt=""><image src="../../media/mu-law.png" mime-type="image/png"/></media>
+	  </figure>
+</section>
+
+  </content>
+  
+</document>

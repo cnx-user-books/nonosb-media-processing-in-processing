@@ -1,0 +1,1149 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Rappresentazione di Media in Processing</title>
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m12664</md:content-id>
+  <md:title>Rappresentazione di Media in Processing</md:title>
+  <md:abstract>Introduzione alla rappresentazione di suoni e immagini (colori, coordinate, ecc.) in Processing.</md:abstract>
+  <md:uuid>e74cac95-faea-4531-af40-b5092b0ca070</md:uuid>
+</metadata>
+<featured-links>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit below.
+       Changes to the links section in the source will not be saved. -->
+    <link-group type="supplemental">
+      <link url="http://cnx.rice.edu/content/m12983/latest/" strength="3">Media Representation in Processing (english version)</link>
+    </link-group>
+  <!-- WARNING! The 'featured-links' section is read only. Do not edit above.
+       Changes to the links section in the source will not be saved. -->
+</featured-links>
+<content>
+    <section id="elementi_visuali">
+      <title>Elementi Visuali</title>
+
+    <section id="coordinates">
+      <title>Coordinate </title>
+      <para id="coordinatep">L´elaborazione grafica in Processing
+	utilizza un sistema di coordinate cartesiane 3D, come
+	rappresentato in <link target-id="coordinatef"/>.
+	<figure id="coordinatef">
+	  <title>Sistema di coordinate</title>
+	  <media id="id6549369" alt=""><image src="../../media/coordinate.png" mime-type="image/png"/></media>
+	  <caption>Sistema di coordinate 3D in uso in Processing</caption>
+	</figure>
+	  L´elaborazione di immagini bidimensionali si effettua agendo
+	  sul piano X-Y, assumendo quindi la coordinata Z a zero.  La
+	  funzione <code>size()</code> definisce la dimensione della
+	  finestra di display e stabilisce quale <term>motore di
+	  rendering</term> sarà utilizzato per disegnare su tale
+	  finestra. Il motore di default è JAVA2D, cioè la libreria di
+	  grafica bidimensionale di Java. Un motore di grafica bidimensionale 
+          generalmente più veloce, specie per il trattamento di immagini, è P2D 
+          (Processing 2D).  Se si desidera operare sulle
+	  tre dimensioni è necessario impostare il rendering P3D
+	  (Processing 3D), particolarmente efficiente per la grafica
+	  su web, oppure OPENGL, che consente di delegare alla scheda
+	  grafica molte operazioni tipiche della grafica 3D. Inoltre, se si 
+          desidera produrre grafica vettoriale per stampe di alta qualità, è
+          presente l'opzione di rendering PDF.
+
+	</para>
+    </section>
+    <section id="immagini">
+      <title>Immagini</title>
+      <para id="immaginip">
+	In Processing, una immagine può essere assegnata ad un oggetto
+	di tipo <code>PImage</code>. La funzione
+	<code>loadImage("myImage")</code> preleva il file (gif o jpg)
+	<code>myImage</code>, contenente la codifica di una immagine,
+	e restituisce in uscita il contenuto in pixel della immagine
+	stessa, il quale può essere assegnato ad una variabile di tipo
+	<code>PImage</code>. Il file <code>myImage</code> deve essere
+	caricato nella cartella <code>data</code> della directory
+	avente lo stesso nome dello sketch Processing al quale si sta
+	lavorando.  <note id="id1164442146627">Quando si esegue il comando
+	<code>New</code>, Processing apre una cartella di nome
+	<code>sketch_???????</code>, all'interno di una directory
+	<code>Processing</code>, corrispondente al nome
+	assegnato dal sistema al file al quale si comincia a
+	lavorare. Tale cartella è accessibile tramite i comandi del
+	menu <code>Sketch/Add File</code> di Processing.</note> La classe
+	<code>PImage</code> rende accessibili, mediante i campi
+	<code>width</code> e <code>height</code>, rispettivamente la
+	larghezza e la altezza della immagine caricata. Il contenuto è
+	invece accessibile mediante il campo <code>pixels[]</code>.
+      </para>
+      <example id="gondolieri_ex1">
+	<title>Caricamento e visualizzazione di una immagine</title>
+	<code id="id8295048" display="block">
+	  size(400,300);
+	  PImage b;
+	  b = loadImage("gondoliers.jpg");
+	  println("width=" + b.width + " height=" + b.height);
+	  image(b, 0, 0, 400, 300); // position (0,0); width=400; height=300;
+	  image(b, 20, 10, 100, 80); // position (20,10); width=100; height=80;
+	</code>
+      </example>
+    </section>
+    <section id="colori">
+      <title>Colori</title>
+      <para id="colori_generalita">
+        Poiché i nostri ricettori oculari di colore
+        (<emphasis>coni</emphasis>), ciascuno sintonizzato su una
+        regione di lunghezze d'onda, sono in numero di tre, i modelli
+        di colore sono sempre riferiti ad uno spazio a tre
+        dimensioni. Nei modelli di colore di tipo additivo vengono
+        individuati tre assi coordinati, ciascuno corrispondente ad un
+        colore base, e mediante miscelazione di tre corrispondenti
+        fasci luminosi, si possono ottenere tutti i colori
+        appartenenti ad un volume (<emphasis>gamut</emphasis>)
+        individuato da tali assi. I tre colori base sono scelti in
+        maniera arbitraria o, più spesso, sulla base del campo di
+        applicazione (es., colore di una terna di fosfori o di
+        laser). Nei processi di stampa si usano modelli di tipo
+        sottrattivo, nei quali si parte da una superficie bianca e si
+        usano inchiostri primari per sottrarre colore dal
+        bianco. <note id="id1164441088118">Guida ai modelli di colore: <link url="http://en.wikipedia.org/wiki/color_space">
+        http://en.wikipedia.org/wiki/color_space</link>
+        </note>
+      </para>
+      <para id="color_type">
+	In Processing <code>color</code> è un tipo primitivo usato per
+	specificare il colore. E' realizzato mediante un numero di 32
+	bit, in cui il primo byte specifica il valore alpha, e gli
+	altri byte successivi specificano una terna nel modello RGB o
+	in quello HSB. La scelta di un modello piuttosto che
+	dell'altro è fatta mediante la funzione
+	<code>colorMode()</code>. I colori rappresentabili mediante
+	tre byte sono in numero di 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn>256</m:cn>
+	    <m:cn>256</m:cn>
+	    <m:cn>256</m:cn>
+	  </m:apply>
+	    <m:cn>16777216</m:cn>
+	  </m:apply>
+	</m:math> .
+      </para>
+      <section id="rgb">
+	<title>Modello RGB</title> 
+	<para id="rgbp">
+	  I colori si rappresentano con una terna di numeri, ciascuno
+	rappresentante rispettivamente le intensità dei colori primari
+	rosso (Red), verde (Green), e blu (Blue). Ciascun numero può
+	essere un intero senza segno e quindi assumere valori tra 0 e
+	255, oppure essere espresso come un numero floating point
+	compreso tra 0 e 1.0. Queste possibilità possono essere
+	specificate mediante la funzione <code>colorMode()</code>. Il
+	modello RGB è di tipo additivo. </para>
+      </section>
+      <section id="hsb">
+	<title>Modello HSB</title> 	
+	<para id="hsbp">I colori si rappresentano con una terna di numeri, ciascuno
+	rappresentante rispettivamente la tinta o lunghezza d'onda
+	dominante (Hue), la saturazione (Saturation), e l'intensità o
+	brillantezza (Brightness).<note id="id7165133">Spesso il modello viene
+	chiamato HSV, dove la V sta per Value.</note> La hue assume
+	valori in gradi tra 0 (rosso) e 360, essendo le diverse tinte
+	rappresentate lungo una circonferenza ed essendo il rosso
+	convenzionalmente situato a <m:math> <m:cn>0</m:cn>
+	<m:mtext>˚ </m:mtext> </m:math>. Saturation e
+	brightness variano tra 0 e 100. La saturazione è il grado di
+	purezza del colore. Se ad un colore puro viene aggiunta della
+	luce bianca il suo grado di purezza diminuisce, fino a che il
+	colore viene a trovarsi sulla scala dei grigi, in
+	corrispondenza di saturazione nulla. In termini fisici, la
+	brillantezza è proporzionale alla potenza spettrale. In
+	termini intuitivi, la brillantezza aumenta con la intensità
+	della luce. Lo spazio è ben rappresentato da un cilindro, con
+	hue (scala nominale) arrangiata lungo la circonferenza,
+	saturation (scala rapporto) arrangiata lungo il raggio, e
+	brightness (scala intervallo) arrangiata lungo l'asse. Oppure
+	si dà una rappresentazione bidimensionale dello spazio, come
+	nel <emphasis>color chooser</emphasis> del programma di
+	elaborazione di immagini <link url="http://www.gimp.org">Gimp</link>, rappresentato in <link target-id="gimp_color"/>. Lungo la circonferenza sono visibili i
+	tre colori primari (rosso, verde, e blu), che distano di
+	<m:math> <m:cn>120</m:cn> <m:mtext>˚ </m:mtext>
+	</m:math> l'uno dall'altro, separati dai tre colori secondari
+	(magenta, ciano, giallo). Ogni colore secondario è il
+	complementare del colore primario che gli sta di fronte nella
+	circonferenza. Ad esempio, se alla luce bianca si toglie la
+	componente verde, si ottiene una luce magenta. Il triangolo
+	inscritto nella circonferenza ha un vertice che punta alla
+	tinta di riferimento. Il lato opposto a tale vertice è
+	adagiato sulla scala dei grigi, e quindi rappresenta colori a
+	saturazione nulla e brillantezza variabile. Andando dal
+	vertice di riferimento al lato ad esso opposto si ha una
+	graduale diminuzione della saturazione.
+	<figure id="gimp_color">
+	  <title>Gimp color chooser</title>
+	  <media id="id1164438545077" alt=""><image src="../../media/gimp_color.gif" mime-type="image/gif"/></media>
+	  <caption>Color chooser del software Gimp</caption>
+	</figure>
+	</para>
+      </section>
+      <section id="alpha">
+	<title>Alpha channel</title> 
+	<para id="alphap">
+	  E' un byte di informazione usato per effettuare
+	interpolazione tra immagini, ad esempio allo scopo di rendere
+	la trasparenza. Esso si può ottenere, da una variabile di tipo
+	<code>color</code>, con il metodo <code>alpha()</code>. La
+	manipolazione dell'alpha channel si svolge mediante il metodo
+	<code>blend()</code> della classe <code>PImage</code>.
+	</para>
+      </section>
+      <example id="gondolieri_ex2">
+	<title>Caricamento e visualizzazione di una immagine con trasparenza</title>
+	<table id="gondolieri_table" frame="all" summary="">
+	<tgroup cols="2" align="left" colsep="1" rowsep="1">
+	<colspec colname="col1" colnum="1" colwidth="200"/>
+	<colspec colname="col2" colnum="2" colwidth="260"/>
+	<tbody>
+	<row>
+<!--	<entry><media type="image/tif" src="gondolieri.tiff">
+		  </media>
+	</entry> -->
+	<entry><media id="id1164439668960" alt=""><image src="../../media/gondolieri.gif" mime-type="image/gif"/></media>
+	</entry>
+	<entry>
+	<code id="id1164436200636" display="block">
+          
+size(400,300);
+PImage b = loadImage("gondoliers.jpg");
+PImage a = loadImage("gondoliers.jpg");
+float ramp = 0;
+for (int j = 0; j &lt; b.height; j++)
+ for (int i = 0; i &lt; b.width; i++) {
+   b.set(i, j, b.get(i,j) + 
+     color(0,0,0, 255 - (int)((1-ramp)*255)) );   
+   ramp = ramp + 1/(float)(b.width * b.height); 
+   }
+a.blend(b, 0, 0, b.width, b.height,  
+	80, 10, 450, 250, BLEND);
+image(a, 0, 0, 400, 300);
+          
+	</code>
+      </entry>
+      </row>
+      </tbody>
+      </tgroup>
+      </table>
+      </example>
+      <para id="conversione_modello_colore">
+	In Processing, è possibile assegnare un colore ad una
+	variabile di tipo <code>color</code> mediante la funzione
+	<code>color()</code>, essendo il modello precedentemente stato
+	definito mediante <code>colorMode()</code>. Le funzioni
+	<code>red()</code>, <code>green()</code>, <code>blue()</code>,
+	<code>hue()</code>, <code>saturation()</code>, e
+	<code>brightness()</code> consentono di passare da un modello
+	all'altro.
+	<code id="id7894780" display="block">
+	  colorMode(RGB);
+	  color c1 = color(102, 30,29);
+	  colorMode(HSB);
+	  color c2 = color(hue(c1), saturation(c1), brightness(c1));
+	  colorMode(RGB);
+	  color c3 = color(red(c2), green(c2), blue(c2));
+	  // le variabili c1, c2, c3 contengono codifica dello stesso colore
+	</code>
+      </para>
+      <section id="tinteggiatura">
+	<title>Tinteggiatura di una immagine</title> 
+	<para id="tinteggiaturap"> 
+	Una immagine può
+	essere tinteggiata con un colore e resa più o meno trasparente
+	mediante assegnazione di un valore alpha. La funzione da usare
+	a questo scopo è <code>tint()</code>. Ad esempio, per dare un
+	tono blu all'immagine incastonata nel <link target-id="gondolieri_ex1"/>, è sufficiente far precedere il
+	secondo comando <code>image()</code> da <code>tint(0, 153, 204,
+	126)</code> .
+	</para>
+     </section>
+    </section>
+    <section id="rotazioni_traslazioni">
+      <title>Traslazioni, Rotazioni, e Trasformazioni di Scala</title>
+      <para id="rappresentazione_punti"><title>Rappresentazione di Punti e Vettori</title>In computer
+	graphics, punti e vettori sono rappresentati in <definition id="coordinate_omogenee"> <term>Coordinate Omogenee</term>
+	<meaning id="id6190937">quaterne di numeri, in cui i primi tre vanno letti
+	nello spazio X-Y-Z, mentre il quarto denota un
+	<emphasis>vettore</emphasis> se assume valore 0, e denota un
+	<emphasis>punto</emphasis> se assume valore 1.</meaning>
+	</definition>
+	Una traslazione si ottiene sommando, in coordinate omogenee,
+	un vettore a un punto, ed il risultato è, ovviamente, un
+	punto. Oppure, si può vedere la traslazione come un prodotto
+	matrice-vettore (si veda <link document="m10090">Matrix
+	Arithmetic</link>), dove la matrice è
+	<m:math>
+	  <m:matrix>
+	    <m:matrixrow>
+	      <m:cn>1 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:ci><m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mn>x</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:cn>0 </m:cn>
+	      <m:cn>1 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:ci><m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mn>y</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>1 </m:cn>
+	      <m:ci><m:msub>
+		  <m:mi>t</m:mi>
+		  <m:mn>z</m:mn>
+		</m:msub>
+	      </m:ci>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>1 </m:cn>
+	    </m:matrixrow>
+	  </m:matrix>
+	</m:math>, e il vettore è quello che rappresenta il punto
+	<m:math>
+	  <m:vector>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	    <m:ci>z</m:ci>
+	    <m:cn>1</m:cn>
+	  </m:vector>
+	</m:math>.
+	Una rotazione antioraria di un angolo <m:math>
+	  <m:ci>θ</m:ci>
+	</m:math>
+ rispetto all'asse <m:math> <m:ci>z</m:ci> </m:math>
+	  (<emphasis>roll</emphasis> o rollio), viene realizzata
+	  mediante la matrice di rotazione
+	<m:math>
+	  <m:matrix>
+	    <m:matrixrow>
+	      <m:apply>
+		<m:cos/>
+		<m:ci>θ</m:ci>
+	      </m:apply>
+	      <m:apply>
+		  <m:minus/>
+		<m:apply>
+		<m:sin/>
+		<m:ci>θ</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:apply>
+		<m:sin/>
+		<m:ci>θ</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:cos/>
+		<m:ci>θ</m:ci>
+	      </m:apply>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>1 </m:cn>
+	      <m:cn>0 </m:cn>
+	    </m:matrixrow>
+	    <m:matrixrow>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>0 </m:cn>
+	      <m:cn>1 </m:cn>
+	    </m:matrixrow>
+	  </m:matrix>
+	</m:math>. Rotazioni rispetto agli assi <m:math>
+	  <m:ci>x</m:ci> </m:math> (<emphasis>pitch</emphasis> o
+	  beccheggio) e <m:math> <m:ci>y</m:ci> </m:math>
+	  (<emphasis>yaw</emphasis> o imbardata) si realizzano con
+	  matrici di rotazione di tipo analogo, e la rotazione
+	  rispetto ad un asse arbitrario si può realizzare mediante
+	  composizione (moltiplicazione a sinistra) di rotazioni
+	  elementari rispetto a ciascun asse.
+      </para>
+      <para id="traslazioni"><title>Traslazioni</title>
+	
+	La funzione <code>translate()</code> consente di spostare
+	  oggetti sulla finestra di immagine. Ammette due o tre
+	  argomenti, che sono rispettivamente gli spostamenti lungo le
+	  direzioni <m:math> <m:ci>x</m:ci> </m:math>, <m:math>
+	  <m:ci>y</m:ci> </m:math> (e <m:math> <m:ci>z</m:ci>
+	  </m:math>).
+      </para>
+      <para id="rotazioni"><title>Rotazioni</title>
+	 In due dimensioni, la funzione
+	<code>rotate()</code> consente di ruotare oggetti sulla
+	finestra di immagine. Ciò avviene mediante una moltiplicazione
+	(a sinistra) delle coordinate di ciascun pixel dell'oggetto
+	non ruotato per una matrice di rotazione. La rotazione avviene
+	sempre rispetto all'angolo superiore sinistro (coordinate
+	<m:math>
+	  <m:list>
+	    <m:cn>0</m:cn>
+	    <m:cn>0</m:cn>
+	  </m:list>
+ 	</m:math>), e quindi va opportunamente accompagnata da una
+ 	traslazione. L'angolo di rotazione viene fornito secondo la
+ 	misura in radianti. Si ricordi che
+	<m:math>
+	  <m:apply>
+	  <m:eq/>
+	    <m:mrow>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn>2 </m:cn>
+	    <m:pi/>
+	  </m:apply>
+	      <m:mtext>rad</m:mtext> 
+	    </m:mrow>
+	    <m:mrow>
+	      <m:cn>360</m:cn>
+	    <m:mtext>˚ </m:mtext> 
+	    </m:mrow>
+	  </m:apply>
+ 	</m:math>.  Ad esempio, si inserisca la rotazione
+<code>rotate(PI/3)</code> prima del secondo comando
+<code>image()</code> in <link target-id="gondolieri_ex1"/>.  In tre
+dimensioni, si possono usare le rotazioni elementari rispetto agli
+assi coordinati <code>rotateX()</code>, <code>rotateY()</code>, e
+<code>rotateZ()</code>.
+	</para>
+      <para id="scala"><title>Trasformazioni di Scala</title> La
+	funzione <code>scale()</code> consente di espandere o
+	contrarre un oggetto mediante moltiplicazione per una costante
+	delle coordinate dei punti che lo compongono. Se invocata con
+	due o tre parametri, gli scalamenti possono anche essere
+	diversi lungo i diversi assi cartesiani.
+      </para>
+    </section>
+      <section id="tipografia">
+	<title>Elementi tipografici</title> <para id="tipip">Ogni
+	strumento o linguaggio per la manipolazione di media offre
+	anche la possibilità di lavorare con la parola scritta e con i
+	suoi elementi visuali fondamentali: i caratteri
+	tipografici.</para> <para id="tipiaspettip">L'aspetto di un
+	<term url="http://en.wikipedia.org/wiki/Typeface">tipo</term>
+	di carattere ha due componenti principali: il
+	<term>font</term> e la dimensione.</para> <para id="fontsinprocessingp">Processing mette a disposizione la
+	classe <code>PFont</code> ed i metodi <code>loadFont()</code>
+	(per caricare un font ed assegnarlo ad un oggetto di classe
+	<code>PFont</code>) e <code>textFont()</code> (per attivare un
+	font con una specifica dimensione). Per poter essere caricato,
+	il font deve essere stato precedentemente inserito nella
+	directory <code>data</code> dello sketch corrente. Il tool
+	<code>Create Font</code>, accessibile dal menu
+	<code>Tools</code> di Processing, consente di creare le bitmap
+	dei caratteri che si andranno ad usare e ne colloca il file
+	relativo nella directory <code>data</code>. In seguito a
+	queste operazioni preliminari, il font può essere usato per
+	scrivere del testo, usando la funzione
+	<code>text()</code>. Questa consente di collocare una stringa
+	di caratteri nello spazio bidimensionale o tridimensionale,
+	eventualmente inserendola all'interno di una box
+	rettangolare. L'allineamento dei caratteri all'interno della
+	box è governato dalla <code>textAlign()</code>. Nella
+	configurazione di default, il testo scritto può essere
+	sottoposto a trasformazioni spaziali come ogni altro oggetto.
+	Per quanto riguarda il colore dei caratteri, esso può essere
+	impresso con la funzione <code>fill()</code>, come per ogni
+	altro oggetto grafico.
+	</para>
+      <example id="id8248898">
+	<title>Sovrapposizione di scritte</title>
+	<table id="pipposcritte" frame="all" summary="">
+	<tgroup cols="2" align="left" colsep="1" rowsep="1">
+	<colspec colname="col1" colnum="1" colwidth="100"/>
+	<colspec colname="col2" colnum="2" colwidth="340"/>
+	<tbody>
+	<row>
+	<entry><media id="id1164435013070" alt=""><image src="../../media/pippo.gif" mime-type="image/gif"/></media>
+	</entry>
+	<entry>
+	<code id="id1164442106208" display="block">
+
+PFont fonte;
+/*The font have been previously created 
+in the data folder*/
+fonte = loadFont("HoeflerText-Black-48.vlw");
+textFont(fonte, 12);
+fill(10, 20, 250, 80);
+textAlign(RIGHT);
+text("pippo pippo non lo sa", 10, 14, 35, 70);
+textFont(fonte, 24);
+fill(200, 0, 0, 100);
+text("ppnls", 25, 5, 50, 90);
+
+	</code>
+      </entry>
+      </row>
+      </tbody>
+      </tgroup>
+      </table>
+      </example>
+	<para id="fontdimp">Processing consente anche un controllo
+	completo dell'occupazione spaziale dei caratteri e della
+	distanza tra caratteri contigui (si veda <link target-id="element-22"/>). La funzione
+	<code>textWidth()</code> calcola l'estensione orizzontale di
+	una carattere o di una stringa. Essa può essere usata, insieme
+	alle coordinate esatte di posizionamento passate alla
+	<code>text()</code>, per controllare il <term url="http://en.wikipedia.org/wiki/Kerning">kerning</term> ed
+	il <term url="http://en.wikipedia.org/wiki/Tracking_%28typography%29">tracking</term>
+	tra caratteri. La <code>textSize()</code> consente di
+	ridefinire la dimensione dei caratteri. La
+	<code>textLeading()</code> ridefinisce la distanza in pixel
+	tra linee contigue di testo. Questa distanza si misura tra le
+	<emphasis>baseline</emphasis> su cui si adagiano le stringhe
+	di caratteri. Lettere quali "p" o "q" si estendono al di sotto
+	della baseline per una quantità di pixel calcolabile con
+	<code>textDescent()</code>. Invece, la
+	<code>textAscent()</code> restituisce l'estensione massima al
+	di sopra della baseline (tipicamente, l'altezza della lettera
+	"d").</para><figure id="element-22"><title>Metriche di tipo</title>
+ <media id="id1164439587557" alt=""><image src="../../media/font.png" mime-type="image/png"/></media>
+ <caption>Metriche di tipo</caption></figure>
+
+      </section>
+   </section>
+
+
+  <section id="elementi_uditivi">
+      <title> Elementi Uditivi</title>
+    <section id="suoni">
+    <title>Suoni</title> <para id="suonip">Processing affida la
+    gestione del suono a <link url="http://processing.org/reference/libraries/index.html">librerie</link>. Le
+    librerie audio più usate sono <link url="http://www.tree-axis.com/Ess/">Ess</link>, <link url="http://sonia.pitaru.com/">Sonia</link> e <link url="http://code.compartmental.net/tools/minim/">Minim</link>. Solo
+    quest'ultima è compresa nell'installazione base di Processing,
+    mentre Ess e Sonia devono essere installate. Di recente è stata
+    anche introdotta <link url="http://www.beadsproject.net/">Beads</link>, una libreria Java
+    ben strutturata e documentata, assai adatta alla costruzione di
+    algoritmi di elaborazione audio mediante concatenazione di oggetti
+    base.
+
+    Così come per le immagini, anche per poter elaborare o riprodurre
+    suoni i relativi file audio devono essere archiviati nella
+    directory <code>data</code> dello sketch corrente. 
+
+    La libreria <link url="http://sonia.pitaru.com/">Sonia</link> è la
+    più complessa da utilizzare, ma consente una elaborazione molto
+    dettagliata ed efficiente.  Tale libreria contiene, per esempio,
+    delle funzioni che permettono di riprodurre campioni audio
+    (<emphasis>sample playback</emphasis>), di eseguire un'analisi di
+    Fourier in tempo reale (ovvero un'analisi del suono che viene
+    captato da un microfono collegato al computer: <emphasis>realtime
+    FFT</emphasis>), nonchè di salvare dei file <code>.wav</code>
+    sul disco. Per poter utilizzare la libreria Sonia è
+    necessario scaricare il file <code>.zip</code> dal sito <link url="http://sonia.pitaru.com">Sonia</link>.  Bisogna poi
+    decomprimere il tutto e copiare la directory
+    <code>Sonia_?_?</code> dentro la directory
+    <code>Processing/libraries</code>. Infine, dopo aver riavviato
+    Processing, si deve aggiungere un comando <code>import</code>,
+    selezionandolo direttamente dal menu <code>Sketch / Import Library
+    / Sonia_?_?</code>. <note id="id5643482">Le applet prodotte con Sonia, per poter
+    essere eseguite all'interno di un browser, necessitano del plugin
+    JSyn di Phil Burk che può essere scaricato e installato dal
+    sito <link url="http://www.softsynth.com/jsyn/plugins/">http://www.softsynth.com/jsyn/plugins/</link>.</note>
+    La libreria <link url="http://code.compartmental.net/tools/minim/">Minim</link>,
+    basata su <link url="http://java.sun.com/j2se/1.5.0/docs/guide/sound/programmer_guide/contents.html">Java
+    Sound</link>, è di più immediata utilizzazione, ben documentata e
+    raccomandabile per quanti intendano lavorare con i suoni
+    utilizzando alcune primitive di alto livello, senza dover entrare nei dettagli dell'elaborazione numerica e della gestione dei buffer.
+    </para>
+     </section>
+
+
+      <section id="timbri"><title>Timbri</title> <para id="timbrop">In questa sezione  proveremo prima ad
+	utilizzare e poi ad analizzare un'applicazione per
+	l'esplorazione dei timbri, simile nella concezione al Color
+	Chooser di <link target-id="gimp_color"/>, denominata Sound
+	Chooser. Per adesso possiamo pensare al timbro di un suono
+	come al "colore" di un'immagine. O se si vuole possiamo
+	pensare al timbro come al diverso "colore" dei diversi
+	strumenti. Nelle lezioni successive vedremo con maggior precisione
+	a cosa corrispondono dal punto di vista fisico e percettivo
+	sia il colore sia il timbro.
+ 
+Nella applet Sound Chooser si
+	possono far suonare quattro suoni con timbri diversi, facendo click
+	con il mouse su uno qualsiasi dei raggi. Ciascuno dei raggi
+	corrisponde ad uno strumento musicale (timbro/colore)
+	diverso. Cambiando posizione lungo il raggio e facendo click,
+	è possible sentire come la brillantezza del timbro
+	corrispondente cambia. Più precisamente, mano a mano che si
+	procede verso il centro, il suono si fa più povero.
+	</para>
+
+<!--      </section>
+
+      <section id="trasformazioni"><name>Trasformazioni</name>  
+-->
+
+<para id="codicep">Vediamo ora in cosa consiste il codice
+	Processing, affiancato da Sonia, necessario per implementare il Sound Chooser nei
+	tratti salienti. Il comando <code>Sonia.start(this)</code> è
+	indispensabile per attivare il motore audio di Sonia. La linea
+	<code>Sample mySample1</code> dichiara una variabile atta a
+	contenere campioni audio. A tale variabile possono essere
+	applicati vari metodi, tra i quali il metodo <code>play</code>
+	per riprodurre il campione.  Nel <code>draw()</code> viene
+	definito l'aspetto grafico della applet.  Infine, tramite la
+	funzione <code>mouseReleased()</code> viene rilevato quando il
+	mouse viene rilasciato dopo essere stato premuto e in quale
+	area del cerchiello. A quel punto una successione di
+	condizioni <code>if</code> stabilisce quale strumento/timbro
+	debba essere riprodotto a seconda del punto di
+	interazione. Inoltre, all'interno della funzione
+	<code>mouseReleased()</code> viene invocata un'altra funzione:
+	<code>filtra()</code>. Questa funzione, che viene implementata alla fine
+	del listato di questa applet, esegue un filtraggio sul suono
+	che viene riprodotto. In particolare si tratta di un
+	filtraggio passa-basso, vale a dire che lascia passare le basse
+	frequenze ma non le alte. A seconda se il mouse viene
+	rilasciato più o meno vicino al centro, l'effetto del
+	filtraggio cambia. Più in particolare il filtraggio sarà più
+	drastico (le alte frequenze sono maggiormente attenuate, con
+	l'effetto di un maggior incupimento del suono) se il mouse
+	viene rilasciato in prossimità del centro e il suono risulterà
+	più povero (scolorito).
+
+	  Una realizzazione del Sound Chooser più snella mediante la libreria Minim è proposta nel problema <link target-id="minimproblem"/>, mentre il problema  <link target-id="beadsproblem"/> esplora la più recente libreria Beads.
+</para>
+
+<table id="sound_chooser" frame="all" summary="">
+	      <tgroup cols="2" align="left" colsep="1" rowsep="1">
+		<colspec colname="col1" colnum="1" colwidth="150"/>
+		<colspec colname="col2" colnum="2" colwidth="400"/>
+		<tbody>
+		  <row>
+		<entrytbl cols="1">
+		  <tbody>
+		    <row>
+		      <entry><link resource="./tromba.wav">Tromba</link></entry>
+		    </row>
+		    <row>
+		      <entry><link resource="./oboe.wav">Oboe</link></entry>
+		    </row>
+		    <row>
+		      <entry><link resource="./violino.wav">Violino</link></entry>
+		    </row>
+		    <row>
+		      <entry><link resource="./flauto.aif">Flauto</link></entry>
+		    </row>
+		    <row>
+		      <entry>
+		      <link resource="./sound_chooser.html">Applet: scelta di un
+		    timbro e controllo di brillantezza (brightness)
+		    </link> </entry>
+		    </row>
+		  </tbody>
+		</entrytbl>
+	<!--	    <entry>
+		      <link src="./soundch.html">Applet che
+permette di scegliere un timbro e modificarne la brillantezza (brightness) </link>
+		    </entry> -->
+		    <entry>
+	    <code id="id1164436238504" display="block">
+                 
+import pitaru.sonia_v2_9.*;
+
+Sample mySample1, mySample2, mySample3, mySample4;
+Sample mySample1F, mySample2F, mySample3F, mySample4F;
+
+float[] data1, data2, data3, data4;
+float[] data1F, data2F, data3F, data4F;
+
+int sr = 11025;  // sampling rate
+
+
+void setup()
+{
+  size(200, 200);
+  colorMode(HSB, 360, height, height);
+  Sonia.start(this);
+
+  mySample1 = new Sample("flauto.aif");
+    mySample2 = new Sample("oboe.wav");
+      mySample3 = new Sample("tromba.wav");
+        mySample4 = new Sample("violino.wav");
+
+  mySample1F = new Sample("flauto.aif");
+ // ... OMISSIS ...
+
+  data1  = new float[mySample1.getNumFrames()]; 
+	  // creates new arrays the length of the sample
+	  // for the original sound
+ // ... OMISSIS ...
+
+  data1F  = new float[mySample1.getNumFrames()]; 
+	  // creates new arrays the length of the sample
+	  // for the filtered sound
+// ... OMISSIS ...
+
+
+  mySample1.read(data1);
+// ... OMISSIS ...
+
+}
+
+void draw()
+{
+// ... OMISSIS ...
+}
+
+void mouseReleased()
+{
+
+float ro;
+float roLin;
+float wc;
+
+
+  // FLAUTO
+  if ((mouseX &gt; 95) &amp;&amp; (mouseX &lt; 105)&amp;&amp; (mouseY &gt; 50)&amp;&amp; (mouseY &lt; 90)) {
+
+    roLin = (mouseY-49.99)/41;
+    ro = pow(roLin,.33);
+    wc = 298*(TWO_PI/sr);
+    filtra(data1F, data1, wc, ro);
+
+    mySample1F.write(data1F);
+    mySample1F.play();
+  }
+// ... OMISSIS ...
+
+}
+
+//filtra = new function
+void filtra(float[] DATAF, float[] DATA, float WC, float RO) {
+
+  float G;
+  float RO2;
+  RO2 = pow(RO, 2);
+  G = (1-RO)*sqrt(1-2*RO*cos(2*WC)+RO2)*4; // (*4) is for having it louder
+ 
+  for(int i = 3; i &lt; DATA.length; i++){
+    DATAF[i] = G*DATA[i]+2*RO*cos(WC)*DATAF[i-1]-RO2*DATAF[i-2];
+	  //filtraggio ricorsivo
+  }
+}
+
+// safely stop the Sonia engine upon shutdown.
+public void stop(){
+  Sonia.stop();
+  super.stop();
+  }
+            
+             	      
+	    </code>
+		    </entry>
+		  </row>
+		</tbody>
+	      </tgroup>
+	    </table>   
+  </section>
+      <exercise id="gondolierproblem">
+	<problem id="id1164443967090">
+	  <para id="gprobp">
+	    Il contenuto di un oggetto <code>PImage</code> è
+	    accessibile mediante il suo campo <code>pixels[]</code>. I
+	    pixel della immagine, corrispondenti ad una lettura riga
+	    per riga, sono contenuti in questo array di dimensione
+	    <code>width*height</code>. Modificare il codice di <link target-id="gondolieri_ex2"/> in modo da utilizzare il campo
+	    <code>pixels[]</code> invece del metodo
+	    <code>get()</code>, senza cambiare il funzionamento del
+	    programma.
+	  </para>
+	</problem>
+	<solution id="id7452824">
+	  <para id="gsolp">
+	    Basta sostituire l'invocazione <code>b.set()</code> con la 
+	    <code id="id1164442016513" display="block">
+	       b.set(i,j,b.pixels[j*b.width+i]+ color(0,0,0, 255 - (int)((1-ramp)*255)) );
+	    </code>
+	  </para>
+	</solution>
+      </exercise>
+      <exercise id="soniaproblem1">
+	<problem id="id1164431322946">
+	  <para id="prob1p">Completare il codice riportato in 
+	  <link target-id="sound_chooser"/> per ottenere l'applet
+	  Sound Chooser completa.</para>
+	</problem>
+	<solution id="id1164441092352">
+	  <para id="sol1p"><link resource="./sound_chooser.pde">Codice sorgente
+Processing.  </link>
+	  </para>
+	</solution>
+      </exercise>
+      <exercise id="soniaproblem2">
+	<problem id="id6507241">
+	  <para id="prob2p">
+	    Aggiungere ai raggi del Sound Chooser del colore,
+	    sostituendo le <code>line</code> con dei <code>rect</code>
+	    e colorando le barrette ottenute con una variazione di
+	    brillantezza, crescente dal centro verso l'esterno.</para>
+	</problem>
+	<solution id="id1164436266548"><para id="sol2p"><link resource="./sound_chooser_color.html">Applet con codice sorgente
+Processing.  </link> </para>
+	</solution>
+      </exercise>
+      <exercise id="minimproblem">
+	<problem id="id8439377">
+	  <para id="probMin">
+	    Si provi a realizzare il Sound Chooser di problema <link target-id="soniaproblem1"/> con la libreria Minim. Si
+	    noti la maggiore compattezza e semplicità del
+	    codice. </para>
+	</problem>
+	<solution id="id1164433860024"><para id="solMin"> 
+	    <code id="id1164435215719" display="block">import ddf.minim.*;
+import ddf.minim.effects.*;
+
+Minim minim;
+AudioPlayer mySample1, mySample2, mySample3, mySample4;
+LowPassSP lpf1, lpf2, lpf3, lpf4;
+float cutoff1, cutoff2, cutoff3, cutoff4;
+
+void setup()
+{
+  size(200, 200);
+  colorMode(HSB, 360, height, height);
+  minim = new Minim(this);
+
+  mySample1 = minim.loadFile("flauto.aif");
+    mySample2 = minim.loadFile("oboe.wav");
+      mySample3 = minim.loadFile("tromba.wav");
+        mySample4 = minim.loadFile("violino.wav");
+        
+  lpf1 = new LowPassSP(4000, mySample1.sampleRate());
+  lpf2 = new LowPassSP(4000, mySample2.sampleRate());
+  lpf3 = new LowPassSP(4000, mySample3.sampleRate());
+  lpf4 = new LowPassSP(4000, mySample4.sampleRate());
+  mySample1.addEffect(lpf1);
+  mySample2.addEffect(lpf2);
+  mySample3.addEffect(lpf3);
+  mySample4.addEffect(lpf4);
+  
+}
+
+void draw()
+{
+  stroke(255);
+  strokeWeight(1);
+  fill(0, 88, 88);
+  ellipseMode(CORNER);
+  ellipse(50,50,100,100);
+
+  beginShape(LINES);
+  vertex(50, 100);
+  vertex(90, 100);
+
+  vertex(110, 100);
+  vertex(150, 100);
+
+  vertex(100, 50);
+  vertex(100, 90);
+
+  vertex(100, 110);
+  vertex(100, 150);
+  endShape();
+}
+
+void mouseReleased()
+{
+
+  // FLAUTO
+  if ((mouseX &gt; 95) &amp;&amp; (mouseX &lt; 105)&amp;&amp; (mouseY &gt; 50)&amp;&amp; (mouseY &lt; 90)) {  
+    cutoff1 = map(mouseY, 50, 90, 1000, 30);
+    lpf1.setFreq(cutoff1);
+    println(mouseY + " +  " +cutoff1);
+    mySample1.rewind();
+    mySample1.play();  
+  }
+
+  // OBOE
+  if ((mouseX &gt; 110) &amp;&amp; (mouseX &lt; 149)&amp;&amp; (mouseY &gt; 95)&amp;&amp; (mouseY &lt; 105)) {
+    cutoff2 = map(mouseX, 110, 149, 30, 1000);
+    lpf2.setFreq(cutoff2);
+    println(mouseX + " +  " +cutoff2);
+    mySample2.rewind();
+    mySample2.play(); 
+  }
+
+  // TROMBA
+  if ((mouseX &gt; 95) &amp;&amp; (mouseX &lt; 105)&amp;&amp; (mouseY &gt; 110)&amp;&amp; (mouseY &lt; 149)) {
+    cutoff3 = map(mouseY, 110, 149, 30, 1000);
+    lpf3.setFreq(cutoff3);
+    println(mouseY + " +  " +cutoff3);
+    mySample3.rewind();
+    mySample3.play();
+  }
+
+  // VIOLINO
+  if ((mouseX &gt; 50) &amp;&amp; (mouseX &lt; 90)&amp;&amp; (mouseY &gt; 95)&amp;&amp; (mouseY &lt; 105)) {
+    cutoff4 = map(mouseX, 50, 90, 1000, 30);
+    lpf4.setFreq(cutoff4);
+    println(mouseX + " +  " +cutoff4);
+    mySample4.rewind();
+    mySample4.play(); 
+  }
+}
+
+// safely stop the Minim engine upon shutdown.
+public void stop(){
+  mySample1.close();
+  mySample2.close();
+  mySample3.close();
+  mySample4.close();
+  minim.stop();
+  super.stop();
+  
+}
+
+	      	      
+	    </code>  
+	  </para>
+	</solution>
+      </exercise>
+
+
+      <exercise id="beadsproblem">
+	<problem id="beadsproblems">
+	  <para id="probBeads">
+	    Si provi a realizzare il Sound Chooser di problema <link target-id="soniaproblem1"/> con la libreria Beads. Il flusso di elaborazione del segnale risulta particolarmente leggibile.</para>
+	</problem>
+	<solution id="beadssolution"><para id="solBeads"> 
+	    <code id="beadssolutions" display="block">
+import beads.*;
+
+AudioContext ac;
+
+String sourceFile; //path to audio file
+SamplePlayer mySample1, mySample2, mySample3, mySample4;
+Gain g;
+Glide cutoff1, cutoff2, cutoff3, cutoff4;
+OnePoleFilter lpf1, lpf2, lpf3, lpf4;
+
+void setup() {
+  size(200, 200);
+  colorMode(HSB, 360, height, height);
+  
+  ac = new AudioContext();
+
+  sourceFile = sketchPath("") + "data/flauto.aif";  
+  try {
+    mySample1 = new SamplePlayer(ac, new Sample(sourceFile));
+  } 
+  catch (Exception e) {
+    println("Exception while attempting to load sample.");
+    e.printStackTrace(); // description of error
+    exit();
+  }
+  mySample1.setKillOnEnd(false);
+  
+  sourceFile = sketchPath("") + "data/oboe.wav";  
+  try {
+    mySample2 = new SamplePlayer(ac, new Sample(sourceFile));
+  } 
+  catch (Exception e) {
+    println("Exception while attempting to load sample.");
+    e.printStackTrace(); // description of error
+    exit();
+  }
+  mySample2.setKillOnEnd(false);  sourceFile = sketchPath("") + "data/flauto.aif";  
+
+  sourceFile = sketchPath("") + "data/tromba.wav";  
+  try {
+    mySample3 = new SamplePlayer(ac, new Sample(sourceFile));
+  } 
+  catch (Exception e) {
+    println("Exception while attempting to load sample.");
+    e.printStackTrace(); // description of error
+    exit();
+  }
+  mySample3.setKillOnEnd(false);  sourceFile = sketchPath("") + "data/flauto.aif";  
+
+  sourceFile = sketchPath("") + "data/violino.wav";  
+  try {
+    mySample4 = new SamplePlayer(ac, new Sample(sourceFile));
+  } 
+  catch (Exception e) {
+    println("Exception while attempting to load sample.");
+    e.printStackTrace(); // description of error
+    exit();
+  }
+  mySample4.setKillOnEnd(false);
+  
+  cutoff1 = new Glide(ac, 1000, 20);
+  lpf1 = new OnePoleFilter(ac, cutoff1);
+  lpf1.addInput(mySample1);
+  cutoff2 = new Glide(ac, 1000, 20);
+  lpf2 = new OnePoleFilter(ac, cutoff2);
+  lpf2.addInput(mySample2);
+  cutoff3 = new Glide(ac, 1000, 20);
+  lpf3 = new OnePoleFilter(ac, cutoff3);
+  lpf3.addInput(mySample3);
+  cutoff4 = new Glide(ac, 1000, 20);
+  lpf4 = new OnePoleFilter(ac, cutoff4);
+  lpf4.addInput(mySample4);
+  
+  g = new Gain(ac, 1, 1);
+  g.addInput(lpf1);
+  g.addInput(lpf2);
+  g.addInput(lpf3);
+  g.addInput(lpf4);
+  ac.out.addInput(g);
+  ac.start();
+  background(0);
+}
+
+
+void draw()
+{
+  stroke(255);
+  strokeWeight(1);
+  fill(0, 88, 88);
+  ellipseMode(CORNER);
+  ellipse(50,50,100,100);
+
+  beginShape(LINES);
+  vertex(50, 100);
+  vertex(90, 100);
+
+  vertex(110, 100);
+  vertex(150, 100);
+
+  vertex(100, 50);
+  vertex(100, 90);
+
+  vertex(100, 110);
+  vertex(100, 150);
+  endShape();
+}
+
+void mouseReleased(){
+  // FLAUTO
+  if ((mouseX &gt; 95) &amp;&amp; (mouseX &lt; 105)&amp;&amp; (mouseY &gt; 50)&amp;&amp; (mouseY &lt; 90)) {  
+    cutoff1.setValue(map(mouseY, 50, 90, 1000, 30));
+    mySample1.setToLoopStart();
+    mySample1.start();
+  }
+
+  // OBOE
+  if ((mouseX &gt; 110) &amp;&amp; (mouseX &lt; 149)&amp;&amp; (mouseY &gt; 95)&amp;&amp; (mouseY &lt; 105)) {
+    cutoff2.setValue(map(mouseX, 110, 149, 30, 1000));
+    mySample2.setToLoopStart();
+    mySample2.start();
+  }
+
+  // TROMBA
+  if ((mouseX &gt; 95) &amp;&amp; (mouseX &lt; 105)&amp;&amp; (mouseY &gt; 110)&amp;&amp; (mouseY &lt; 149)) {
+    cutoff3.setValue(map(mouseY, 110, 149, 30, 1000));
+    mySample3.setToLoopStart();
+    mySample3.start();
+  }
+
+  // VIOLINO
+  if ((mouseX &gt; 50) &amp;&amp; (mouseX &lt; 90)&amp;&amp; (mouseY &gt; 95)&amp;&amp; (mouseY &lt; 105)) {
+    cutoff4.setValue(map(mouseX, 50, 90, 1000, 30));
+    mySample4.setToLoopStart();
+    mySample4.start();
+  }
+}
+ 	    </code>  
+	  </para>
+	</solution>
+      </exercise>
+
+
+<exercise id="eip-439"><title>Font vettoriali</title><problem id="fv">
+  <para id="fvp">
+	    Processing incoraggia l'uso di font codificati come bitmap
+	    in un file dall'estensione <code>.vlw</code>. Questo rende
+	    Processing indipendente dai font effettivamente installati
+	    in una macchina specifica. Tuttavia, è possibile
+	    utilizzare font vettoriali (ad esempio, di tipo
+	    <code>TrueType</code>) inserendone i file (ad esempio, con
+	    estensione <code>.ttf</code>) nella cartella <code>Data</code>. Si
+	    provi ad utilizzare un font di questo tipo mediante la
+	    funzione <code>createFont()</code>. Rinunciando alla
+	    garanzia di comportamento uguale anche su macchine
+	    diverse, si può anche passare come parametro a questa
+	    funzione il nome di un font installato nella macchina e
+	    non presente nella directory <code>Data</code>. Infine, in
+	    modalità di rendering <code>JAVA2D</code> è possibile
+	    anche usare i font logici, scrivendo <code>Serif</code>,
+	    <code>SansSerif</code>, <code>Monospaced</code>,
+	    <code>Dialog</code>, o <code>DialogInput</code> al posto
+	    della stringa di specificazione del font passata come
+	    argomento a <code>createFont()</code>. Anche in questo caso non
+	    è necessario caricare alcun font nella cartella
+	    <code>Data</code>. La corrispondenza tra font logico e
+	    font fisico realmente utilizzato sarà in generale diversa
+	    a seconda dei font installati in un dato sistema. Si
+	    provino i cinque font logici sulla propria macchina.
+  </para>
+</problem>
+	<solution id="fvs">
+	  <para id="fvsp"> Questo è un esempio di
+	    soluzione. Verificate la presenza dei font nella vostra
+	    macchina e nella cartella <code>Data</code>.
+
+	    <code id="fvscode" display="block">
+size(200,200, JAVA2D);
+PFont fonte;
+fonte = loadFont("HoeflerText-Black-48.vlw"); // font precedentemente creato e 
+                                              // inserito in Data
+textFont(fonte, 12);
+fill(10, 20, 250, 80);
+textAlign(RIGHT);
+text("pippo pippo non lo sa", 10, 14,  35, 70);
+textFont(fonte, 94);
+textAlign(LEFT);
+fill(200, 0, 0, 100);
+text("ppnls", 25, 5, 150, 190);
+fonte = createFont("Serif", 10, false); // logical font di Java
+textFont(fonte, 80);
+fill(0, 200, 0, 170);
+rotate(PI/6);
+text("LO SO", 20, 20, 280, 280);
+fonte = createFont("cmsy10", 10, true); // font installato nel sistema
+textFont(fonte, 80);
+fill(0, 20, 150, 170);
+rotate(PI/12);
+text("ECCO", 20, 20, 280, 280);
+fonte = createFont("grunge.ttf", 10, true); // font vettoriale nella cartella Data
+textFont(fonte, 80);
+fill(100, 100, 0, 170);
+rotate(-PI/6);
+text("qui", 20, 20, 280, 280);
+	    </code>
+
+	  </para>
+	</solution>
+
+</exercise>
+</section>
+</content>
+  
+</document>
