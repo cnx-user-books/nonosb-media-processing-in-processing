@@ -1,12 +1,13 @@
-<col:collection xmlns="http://cnx.rice.edu/collxml" xmlns:col="http://cnx.rice.edu/collxml" xml:lang="it">
+<?xml version="1.0"?>
+<col:collection xmlns="http://cnx.rice.edu/collxml" xmlns:col="http://cnx.rice.edu/collxml" xml:lang="it" authors="Davide Rocchesso">
   <metadata xmlns:md="http://cnx.rice.edu/mdml" mdml-version="0.5">
     <md:content-id>col10299</md:content-id>
     <md:title>Elaborazione di Media in Processing</md:title>
     <md:language>it</md:language>
     <md:license url="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</md:license>
     <md:uuid>c0f1d122-99c3-4ec6-a33a-f76eb0e8c9ab</md:uuid>
-<md:slug>elaborazione-di-media-in-processing</md:slug>
-</metadata>
+    <md:slug>elaborazione-di-media-in-processing</md:slug>
+  </metadata>
   <col:content>
     <col:module document="m12614"/>
     <col:module document="m12664"/>
